@@ -126,16 +126,16 @@ def rename_columns(dataframes, column_dict):
 
 if __name__ == '__main__':
     # Get parameters from the config, used for connecting to the server
-    tm_params = 'mssql+pymssql://' + tm_user + ':' + tm_password + '@' + tm_host + ':' + tm_port + '/' + tm_name
-    pg_params = 'postgresql://' + pg_user + ':' + pg_password + '@' + pg_host + ':' + pg_port + '/' + pg_name
+    tm_params = 'mssql+pymssql://' + TM_USER + ':' + TM_PASSWORD + '@' + TM_HOST + ':' + TM_PORT + '/' + TM_DBNAME
+    pg_params = 'postgresql://' + PG_USER + ':' + PG_PASSWORD + '@' + PG_HOST + ':' + PG_PORT + '/' + PG_DBNAME
 
     # Initiate engine, used for all queries
     tm_engine = create_engine(tm_params)
     pg_engine = create_engine('sqlite:///sqlite3.db')
 
-    table_dataframes = extract_dataframes(tm_engine, extract_dict)
-    regular_dict, composite_dict = create_dictionaries(table_dataframes, regular_primary_keys, composite_primary_keys)
-    fix_foreign_keys(table_dataframes, regular_foreign_keys, composite_foreign_keys, regular_dict, composite_dict)
-    rename_columns(table_dataframes, new_column_names)
-    rename_tables(table_dataframes, new_table_names)
+    table_dataframes = extract_dataframes(tm_engine, EXTRACT_DICT)
+    regular_dict, composite_dict = create_dictionaries(table_dataframes, REGULAR_PRIMARY_KEYS, COMPOSITE_PRIMARY_KEYS)
+    fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict)
+    rename_columns(table_dataframes, NEW_COLUMN_NAMES)
+    rename_tables(table_dataframes, NEW_TABLE_NAMES)
     insert_dataframes(pg_engine, table_dataframes)

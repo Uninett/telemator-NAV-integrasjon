@@ -1,37 +1,37 @@
-#################################################
-# Information for Telemator SQL Server (Import) #
-#################################################
+##################################################
+# Information for Telemator SQL Server (Extract) #
+##################################################
 
 # Server to connect to
-tm_host = ''
+TM_HOST = ''
 # Port number
-tm_port = ''
+TM_PORT = ''
 
 # Username
-tm_user = ''
+TM_USER = ''
 # Password
-tm_password = ''
+TM_PASSWORD = ''
 
 # Name of database to use
-tm_name = ''
+TM_DBNAME = ''
 
 
 ############################################
-# Information for Postgres Server (Export) #
+# Information for Postgres Server (Inserrt) #
 ############################################
 
 # Server to connect to
-pg_host = ''
+PG_HOST = ''
 # Port number
-pg_port = ''
+PG_PORT = ''
 
 # Username
-pg_user = ''
+PG_USER = ''
 # Password
-pg_password = ''
+PG_PASSWORD = ''
 
 # Name of database to use
-pg_name = ''
+PG_DBNAME = ''
 
 
 ################################
@@ -39,7 +39,7 @@ pg_name = ''
 ################################
 
 # Dictionary with lists of which columns to get for each table
-extract_dict = {
+EXTRACT_DICT = {
     'KabReg': ['RowKey', 'Cable', 'End_A', 'End_B'],
     'EndReg': ['RowKey', 'End'],
     'KabTer': ['RowKey', 'Cable', 'IsEnd_A', 'FromCore', 'End', 'IsDraft'],
@@ -51,19 +51,19 @@ extract_dict = {
                }
 
 # Single-column primary key for each table
-regular_primary_keys = {
+REGULAR_PRIMARY_KEYS = {
     'KabReg': 'Cable',
     'EndReg': 'End',
     'SbReg': 'Circuit',
 }
 
 # Composite primary key for each table
-composite_primary_keys = {
+COMPOSITE_PRIMARY_KEYS = {
     'UtsUtg': ('Port', 'End')
 }
 
 # List of single-column foreign keys associated with each table
-regular_foreign_keys = {
+REGULAR_FOREIGN_KEYS = {
     'KabReg': ['End_A', 'End_B'],
     'KabTer': ['Cable', 'End'],
     'LedRut': ['Cable', 'Circuit'],
@@ -73,12 +73,12 @@ regular_foreign_keys = {
                }
 
 # List of composite foreign keys associated with each table
-composite_foreign_keys = {
+COMPOSITE_FOREIGN_KEYS = {
     'UtsTilk': ['Port', 'End'],
 }
 
 # List of tables to be renamed with the new name
-new_table_names = {
+NEW_TABLE_NAMES = {
     'KabReg': 'cables',
     'EndReg': 'ends',
     'KabTer': 'terminations',
@@ -90,7 +90,7 @@ new_table_names = {
 }
 
 # List of new column names
-new_column_names = {
+NEW_COLUMN_NAMES = {
     'Cable': 'cable',
     'RowKey': 'id',
     'Circuit': 'circuit',
