@@ -41,7 +41,7 @@ PG_DBNAME = ''
 # Dictionary with lists of which columns to get for each table
 EXTRACT_DICT = {
     'KabReg': ['RowKey', 'Cable', 'End_A', 'End_B'],
-    'EndReg': ['RowKey', 'End'],
+    'EndReg': ['RowKey', 'End', 'EqLinkToPt', 'IsEquipm'],
     'KabTer': ['RowKey', 'Cable', 'IsEnd_A', 'FromCore', 'End', 'IsDraft'],
     'LedRut': ['RowKey', 'Cable', 'Core', 'Circuit', 'Remark'],
     'SbReg': ['RowKey', 'Circuit', 'Type', 'Speed'],
@@ -69,8 +69,19 @@ REGULAR_FOREIGN_KEYS = {
     'LedRut': ['Cable', 'Circuit'],
     'UtsTilk': ['Circuit'],
     'UtsTlf': ['Circuit', 'End'],
-    'UtsUtg': ['End']
+    'UtsUtg': ['End'],
+    'EndReg': ['EqLinkToPt']
                }
+
+# Mapping from column name to which model to use as foreign key
+COLUMN_TO_FOREIGN_KEY = {
+    'End': 'End',
+    'End_A': 'End',
+    'End_B': 'End',
+    'Cable': 'Cable',
+    'Circuit': 'Circuit',
+    'EqLinkToPt': 'End',
+}
 
 # List of composite foreign keys associated with each table
 COMPOSITE_FOREIGN_KEYS = {
@@ -79,14 +90,14 @@ COMPOSITE_FOREIGN_KEYS = {
 
 # List of tables to be renamed with the new name
 NEW_TABLE_NAMES = {
-    'KabReg': 'cables',
-    'EndReg': 'ends',
-    'KabTer': 'terminations',
-    'LedRut': 'routing_cables',
-    'SbReg': 'circuits',
-    'UtsTilk': 'connections',
-    'UtsTlf': 'circuit_ends',
-    'UtsUtg': 'ports'
+    'KabReg': 'cable',
+    'EndReg': 'end',
+    'KabTer': 'termination',
+    'LedRut': 'routing_cable',
+    'SbReg': 'circuit',
+    'UtsTilk': 'connection',
+    'UtsTlf': 'circuit_end',
+    'UtsUtg': 'port'
 }
 
 # List of new column names
@@ -108,4 +119,6 @@ NEW_COLUMN_NAMES = {
     'Port': 'port',
     'Parallel': 'parallel',
     'Label': 'label',
+    'EqLinkToPt': 'location',
+    'IsEquipm': 'is_equipment',
 }
