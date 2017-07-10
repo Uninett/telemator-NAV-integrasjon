@@ -72,7 +72,7 @@ def create_dictionaries(dataframes, regular_primaries, composite_primaries):
     return regular_dict(dataframes, regular_primaries), composite_dict(dataframes, composite_primaries)
 
 
-def fix_foreign_keys(dataframes, regular_foreign_keys, composite_foreign_keys, regular_dict, composite_dict):
+def fix_foreign_keys(dataframes, regular_foreign_keys, composite_foreign_keys, regular_dict, composite_dict, column_mapping):
     """
     Updates the foreign key fields with the proper values (the unique id of the referenced object)
     :param dataframes: Dictionary of dataframes
@@ -82,13 +82,13 @@ def fix_foreign_keys(dataframes, regular_foreign_keys, composite_foreign_keys, r
     :param composite_dict: Dictionary of composite objects, indexed by old id
     :return:
     """
-    def fix_regular_keys(dataframes, keys, dict):
+    def fix_regular_keys(dataframes, keys, dict, column_mapping):
         for key in keys:
             for i, row in dataframes[key].iterrows():
                 for column in keys[key]:
                     if (row[column] == None):
                         continue
-                    dataframes[key].set_value(i, column, dict[column.split('_')[0]][row[column]])
+                    dataframes[key].set_value(i, column, dict[column_mapping[column]][row[column]])
 
     def fix_composite_keys(dataframes, keys, dict):
         for key in keys:
@@ -100,7 +100,7 @@ def fix_foreign_keys(dataframes, regular_foreign_keys, composite_foreign_keys, r
             del dataframes[key][column2]
 
     fix_composite_keys(dataframes, composite_foreign_keys, composite_dict)
-    fix_regular_keys(dataframes, regular_foreign_keys, regular_dict)
+    fix_regular_keys(dataframes, regular_foreign_keys, regular_dict, column_mapping)
 
 
 def rename_tables(dataframes, name_dict):
@@ -124,6 +124,82 @@ def rename_columns(dataframes, column_dict):
         dataframes[key].rename(columns=column_dict, inplace=True)
 
 
+def generate_circuitdetails(dataframes):
+    """
+    Function for generating details for circuits, as hown in the telemator application
+    :param dataframes: Dictionary of the dataframes used in the script
+    :return: Dataframe of the circuit_details generated
+    """
+    circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'end'])
+    counter = 1
+    for i,row in dataframes['circuit'].iterrows():
+        circuit_id = row['id']
+        start = None
+        stop = None
+        cables = []
+        routing_cables = []
+        routing_cableids = []
+        #print('Cables:')
+        #print(dataframes['cable'])
+        #print('Circuits')
+        #print(dataframes['circuit_end'])
+        for j, routingrow in dataframes['routing_cable'].iterrows():
+            if (routingrow['circuit'] == circuit_id):
+                routing_cables.append(routingrow)
+                routing_cableids.append(routingrow['cable'])
+        for j, cablerow in dataframes['cable'].iterrows():
+            if cablerow['id'] in routing_cableids:
+                cables.append(cablerow)
+        for j, circuitendrow in dataframes['circuit_end'].iterrows():
+            if circuitendrow['circuit'] == circuit_id:
+                if circuitendrow['parallel'] == 1:
+                    start = circuitendrow['end']
+                elif circuitendrow['parallel'] == 2:
+                    stop = circuitendrow['end']
+        #print('Start: ' + str(start))
+        #print('Stop: ' + str(stop))
+        #print('Cables: ' + str(cables))
+        if start == None or stop == None:
+            continue
+        current = start
+        details = [current]
+        while current != stop:
+            #print(current)
+            current_row = None
+            for j, endrow in dataframes['end'].iterrows():
+                if endrow['id'] == current:
+                    current_row = endrow
+            # Check if room
+            if current_row['is_equipment'] == 0:
+                #print('Room!' + str(len(cables)))
+                if len(cables) == 0:
+                    current = stop
+                else:
+                    for cableindex, cablerow in enumerate(cables):
+                        #print(cablerow)
+                        if cablerow['end_a'] == current:
+                            current = cablerow['end_b']
+                        elif cablerow['end_b'] == current:
+                            current = cablerow['end_a']
+                        else:
+                            continue
+                        del cables[cableindex]
+                        break
+            # Check if equipment
+            elif current_row['is_equipment'] == 1:
+                #print('Equipment!')
+                current = current_row['location']
+            # Just in case
+            else:
+                'Did something stupid'
+            details.append(current)
+        #print(details)
+        for index, detail in enumerate(details):
+            circuit_details.loc[counter] = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index, 'end': detail})
+            counter += 1
+    return circuit_details
+
+
 if __name__ == '__main__':
     # Get parameters from the config, used for connecting to the server
     tm_params = 'mssql+pymssql://' + TM_USER + ':' + TM_PASSWORD + '@' + TM_HOST + ':' + TM_PORT + '/' + TM_DBNAME
@@ -135,7 +211,10 @@ if __name__ == '__main__':
 
     table_dataframes = extract_dataframes(tm_engine, EXTRACT_DICT)
     regular_dict, composite_dict = create_dictionaries(table_dataframes, REGULAR_PRIMARY_KEYS, COMPOSITE_PRIMARY_KEYS)
-    fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict)
+    fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_FOREIGN_KEY)
     rename_columns(table_dataframes, NEW_COLUMN_NAMES)
     rename_tables(table_dataframes, NEW_TABLE_NAMES)
-    insert_dataframes(pg_engine, table_dataframes)
+    #table_dataframes['circuit_detail'] = circuitdetails(table_dataframes)
+    print(generate_circuitdetails(table_dataframes))
+
+    #insert_dataframes(pg_engine, table_dataframes)
