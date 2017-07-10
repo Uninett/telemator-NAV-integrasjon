@@ -188,7 +188,7 @@ def generate_circuitdetails(dataframes):
             # Check if equipment
             elif current_row['is_equipment'] == 1:
                 #print('Equipment!')
-                current = current_row['location']
+                current = current_row['room']
             # Just in case
             else:
                 'Did something stupid'
