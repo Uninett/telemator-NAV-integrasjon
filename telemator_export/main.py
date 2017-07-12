@@ -139,10 +139,6 @@ def generate_circuitdetails(dataframes):
         cables = []
         routing_cables = []
         routing_cableids = []
-        #print('Cables:')
-        #print(dataframes['cable'])
-        #print('Circuits')
-        #print(dataframes['circuit_end'])
         for j, routingrow in dataframes['routing_cable'].iterrows():
             if (routingrow['circuit'] == circuit_id):
                 routing_cables.append(routingrow)
@@ -156,27 +152,20 @@ def generate_circuitdetails(dataframes):
                     start = circuitendrow['end']
                 elif circuitendrow['parallel'] == 2:
                     stop = circuitendrow['end']
-        #print('Start: ' + str(start))
-        #print('Stop: ' + str(stop))
-        #print('Cables: ' + str(cables))
         if start == None or stop == None:
             continue
         current = start
         details = [current]
         while current != stop:
-            #print(current)
             current_row = None
             for j, endrow in dataframes['end'].iterrows():
                 if endrow['id'] == current:
                     current_row = endrow
-            # Check if room
             if current_row['is_equipment'] == 0:
-                #print('Room!' + str(len(cables)))
                 if len(cables) == 0:
                     current = stop
                 else:
                     for cableindex, cablerow in enumerate(cables):
-                        #print(cablerow)
                         if cablerow['end_a'] == current:
                             current = cablerow['end_b']
                         elif cablerow['end_b'] == current:
@@ -185,15 +174,12 @@ def generate_circuitdetails(dataframes):
                             continue
                         del cables[cableindex]
                         break
-            # Check if equipment
             elif current_row['is_equipment'] == 1:
-                #print('Equipment!')
                 current = current_row['room']
             # Just in case
             else:
                 'Did something stupid'
             details.append(current)
-        #print(details)
         for index, detail in enumerate(details):
             circuit_details.loc[counter] = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index, 'end': detail})
             counter += 1
@@ -207,14 +193,13 @@ if __name__ == '__main__':
 
     # Initiate engine, used for all queries
     tm_engine = create_engine(tm_params)
-    pg_engine = create_engine('sqlite:///sqlite3.db')
+    pg_engine = create_engine(pg_params)
 
     table_dataframes = extract_dataframes(tm_engine, EXTRACT_DICT)
-    regular_dict, composite_dict = create_dictionaries(table_dataframes, REGULAR_PRIMARY_KEYS, COMPOSITE_PRIMARY_KEYS)
+    regular_dict, composite_dict = create_dictionaries(table_dataframes, PREVIOUS_REGULAR_PRIMARY_KEYS, PREVIOUS_COMPOSITE_PRIMARY_KEYS)
     fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_FOREIGN_KEY)
     rename_columns(table_dataframes, NEW_COLUMN_NAMES)
     rename_tables(table_dataframes, NEW_TABLE_NAMES)
-    #table_dataframes['circuit_detail'] = circuitdetails(table_dataframes)
-    print(generate_circuitdetails(table_dataframes))
+    table_dataframes['circuit_detail'] = generate_circuitdetails(table_dataframes)
 
-    #insert_dataframes(pg_engine, table_dataframes)
+    insert_dataframes(pg_engine, table_dataframes)
