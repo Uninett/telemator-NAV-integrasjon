@@ -1,0 +1,45 @@
+# nav-telemator
+
+Contribution for Telemator additions in NAV
+
+## Local files
+
+`etc/python/local_settings.py`
+
+    LOCAL_SETTINGS = True
+    from nav.django.settings import *
+
+    TEMPLATE_LOADERS = (
+        'django.template.loaders.app_directories.Loader',
+        'django.template.loaders.filesystem.Loader'
+    )
+
+    INSTALLED_APPS += (
+        'navtelemator',
+    )
+
+`etc/python/local_urls.py`
+
+    from django.conf.urls import url, patterns
+    from navtelemator.views.circuit import get_security_state_metric
+    urlpatterns = patterns(
+        '',
+        url(r'^ajax/open/navuds/getstatemetric', get_security_state_metric,
+            name='contrib-nav-uds-metric'),
+    )
+
+## Developement
+
+`hg clone ssh://hg@bitbucket.org/bredal/nav-uds`
+
+### Build
+
+`python ./setup.py build sdist`
+
+### Install
+
+`pip install dist/*`
+
+### Uninstall
+
+`pip uninstall nav-contrib-telemator`
