@@ -102,6 +102,9 @@ class End(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('room-info', args=[str(self.name)])
+
 
 class Port(models.Model):
     id = models.AutoField(db_column='id', primary_key=True)

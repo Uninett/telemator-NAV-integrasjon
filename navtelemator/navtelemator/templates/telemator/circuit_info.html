@@ -6,7 +6,7 @@
     </tr>
     {% for circuit_detail in circuit_details %}
     <tr>
-        <td>{{circuit_detail.end}}</td>
+        <td><a href="{{ circuit_detail.end.get_absolute_url }}">{{circuit_detail.end}}</a></td>
         <td>{{circuit_detail.index}}</td>
     </tr>
     {% endfor %}
