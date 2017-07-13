@@ -3,8 +3,8 @@ from django.db import models
 
 
 class Cable(models.Model):
-    id = models.AutoField(db_column='id', primary_key=True)  # Field name made lowercase.
-    name = models.CharField(db_column='cable', max_length=30)
+    id = models.AutoField(db_column='id')  # Field name made lowercase.
+    name = models.CharField(db_column='cable', max_length=30, primary_key=True)
     end_a = models.ForeignKey('End', db_column='end_a')  # Field name made lowercase.
     end_b = models.ForeignKey('End', db_column='end_b')  # Field name made lowercase.
 
@@ -20,7 +20,7 @@ class Cable(models.Model):
 
 
 class Circuit(models.Model):
-    id = models.AutoField(db_column='id', primary_key=True)
+    id = models.AutoField(db_column='id')
     name = models.CharField(db_column='circuit', max_length=30, primary_key=True)  # Field name made lowercase.
     type = models.CharField(db_column='type', max_length=10, blank=True, null=True)  # Field name made lowercase.
     speed = models.CharField(db_column='speed', max_length=10, blank=True, null=True)  # Field name made lowercase.
@@ -91,7 +91,7 @@ class Connection(models.Model):
 
 
 class End(models.Model):
-    id = models.AutoField(db_column='id', primary_key=True)
+    id = models.AutoField(db_column='id')
     name = models.CharField(db_column='end', max_length=30, primary_key=True)  # Field name made lowercase.
     room = models.ForeignKey('End', db_column='room', blank=True, null=True)  # Field name made lowercase.
 

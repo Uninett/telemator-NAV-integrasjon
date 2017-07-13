@@ -1,0 +1,13 @@
+<h1>{{circuit.name}}</h1>
+<table>
+    <tr>
+        <th>End</th>
+        <th>Step</th>
+    </tr>
+    {% for circuit_detail in circuit_details %}
+    <tr>
+        <td>{{circuit_detail.end}}</td>
+        <td>{{circuit_detail.index}}</td>
+    </tr>
+    {% endfor %}
+</table>

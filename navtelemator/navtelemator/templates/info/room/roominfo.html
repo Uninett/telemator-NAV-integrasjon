@@ -65,6 +65,11 @@
                 Sensors in racks
               </a>
             </li>
+            <li aria-controls="circuits">
+            <a href="{% url 'room-info-circuits' room.id %}">
+                Circuits through room
+            </a>
+            </li>
         </ul>
 
         <div id="roominfo">
@@ -78,6 +83,8 @@
         <div id="sensors"></div>  {# sensors #}
 
         <div id="racks"></div>
+
+        <div id="circuits"></div>
 
     </div>
 
