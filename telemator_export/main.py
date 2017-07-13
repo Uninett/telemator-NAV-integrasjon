@@ -86,7 +86,9 @@ def fix_foreign_keys(dataframes, regular_foreign_keys, composite_foreign_keys, r
         for key in keys:
             for i, row in dataframes[key].iterrows():
                 for column in keys[key]:
-                    if (row[column] == None):
+                    if column_mapping[column] not in dict:
+                        continue
+                    elif (row[column] == None):
                         continue
                     dataframes[key].set_value(i, column, dict[column_mapping[column]][row[column]])
 
@@ -114,6 +116,23 @@ def rename_tables(dataframes, name_dict):
             dataframes[name_dict[key]] = dataframes.pop(key)
 
 
+def lowercase_values(dataframes, column_mapping, lowercase_list):
+    """
+    Converts the values in a table to lowercase
+    :param dataframes: Dictionary of dataframes to iterate over
+    :param column_mapping: Mapping from column to object type
+    :param lowercase_list: Dict with columns to be converted, indexed by table name
+    :return:
+    """
+    for key in dataframes:
+        for i, row in dataframes[key].iterrows():
+            for column_name in row.index:
+                if column_name not in column_mapping or row.loc[column_name] == None:
+                    continue
+                if column_mapping[column_name] in lowercase_list:
+                    dataframes[key].set_value(i, column_name, row.loc[column_name].lower())
+
+
 def rename_columns(dataframes, column_dict):
     """
     Rename the columns of the given dataframes
@@ -133,7 +152,7 @@ def generate_circuitdetails(dataframes):
     circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'end'])
     counter = 1
     for i,row in dataframes['circuit'].iterrows():
-        circuit_id = row['id']
+        circuit_id = row['circuit']
         start = None
         stop = None
         cables = []
@@ -144,7 +163,7 @@ def generate_circuitdetails(dataframes):
                 routing_cables.append(routingrow)
                 routing_cableids.append(routingrow['cable'])
         for j, cablerow in dataframes['cable'].iterrows():
-            if cablerow['id'] in routing_cableids:
+            if cablerow['cable'] in routing_cableids:
                 cables.append(cablerow)
         for j, circuitendrow in dataframes['circuit_end'].iterrows():
             if circuitendrow['circuit'] == circuit_id:
@@ -159,7 +178,7 @@ def generate_circuitdetails(dataframes):
         while current != stop:
             current_row = None
             for j, endrow in dataframes['end'].iterrows():
-                if endrow['id'] == current:
+                if endrow['end'] == current:
                     current_row = endrow
             if current_row['is_equipment'] == 0:
                 if len(cables) == 0:
@@ -181,7 +200,7 @@ def generate_circuitdetails(dataframes):
                 'Did something stupid'
             details.append(current)
         for index, detail in enumerate(details):
-            circuit_details.loc[counter] = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index, 'end': detail})
+            circuit_details.loc[counter] = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'end': detail})
             counter += 1
     return circuit_details
 
@@ -196,8 +215,9 @@ if __name__ == '__main__':
     pg_engine = create_engine(pg_params)
 
     table_dataframes = extract_dataframes(tm_engine, EXTRACT_DICT)
+    lowercase_values(table_dataframes, COLUMN_TO_OBJECT, LOWERCASE_OBJECTS)
     regular_dict, composite_dict = create_dictionaries(table_dataframes, PREVIOUS_REGULAR_PRIMARY_KEYS, PREVIOUS_COMPOSITE_PRIMARY_KEYS)
-    fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_FOREIGN_KEY)
+    fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_OBJECT)
     rename_columns(table_dataframes, NEW_COLUMN_NAMES)
     rename_tables(table_dataframes, NEW_TABLE_NAMES)
     table_dataframes['circuit_detail'] = generate_circuitdetails(table_dataframes)
