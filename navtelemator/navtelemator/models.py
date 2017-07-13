@@ -38,7 +38,7 @@ class Circuit(models.Model):
         return circuits
 
     def get_absolute_url(self):
-        return reverse('circuit-info', args=[str(self.id)])
+        return reverse('circuit-info', args=[str(self.name)])
 
 
 class CircuitDetail(models.Model):
