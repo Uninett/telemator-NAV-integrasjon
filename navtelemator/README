@@ -4,6 +4,8 @@ Contribution for Telemator additions in NAV
 
 ## Local files
 
+The following needs to be added to the settings and urls, preferedly in their respective local files.
+
 `etc/python/local_settings.py`
 
     LOCAL_SETTINGS = True
@@ -21,16 +23,11 @@ Contribution for Telemator additions in NAV
 `etc/python/local_urls.py`
 
     from django.conf.urls import url, patterns
-    from navtelemator.views.circuit import get_security_state_metric
+    import navtelemator
     urlpatterns = patterns(
         '',
-        url(r'^ajax/open/navuds/getstatemetric', get_security_state_metric,
-            name='contrib-nav-uds-metric'),
+        (r'^telemator/', include('navtelemator.urls')),
     )
-
-## Developement
-
-`hg clone ssh://hg@bitbucket.org/bredal/nav-uds`
 
 ### Build
 
