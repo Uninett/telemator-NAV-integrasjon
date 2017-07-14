@@ -40,3 +40,9 @@ The following needs to be added to the settings and urls, preferedly in their re
 ### Uninstall
 
 `pip uninstall nav-contrib-telemator`
+
+### Hacks
+
+Because I couldn't get local-files working, I instead added the values to their respective file.
+
+The url include is added on the end of the list with the other includes, and navtelemator was added at the START of the installed apps (it caused a problem when added at the end. Propably because they are loaded in order.
