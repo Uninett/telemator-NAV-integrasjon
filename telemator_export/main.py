@@ -129,7 +129,7 @@ def lowercase_values(dataframes, column_mapping, lowercase_list):
             for column_name in row.index:
                 if column_name not in column_mapping or row.loc[column_name] == None:
                     continue
-                if column_mapping[column_name] in lowercase_list:
+                if column_name in lowercase_list or column_mapping[column_name] in lowercase_list:
                     dataframes[key].set_value(i, column_name, row.loc[column_name].lower())
 
 
