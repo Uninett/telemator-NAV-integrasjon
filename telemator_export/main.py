@@ -2,6 +2,7 @@
 
 from sqlalchemy import create_engine, inspect
 from config import *
+from db import *
 import pandas as pd
 
 

@@ -24,6 +24,7 @@ class Circuit(models.Model):
     name = models.CharField(db_column='circuit', max_length=30, primary_key=True)  # Field name made lowercase.
     type = models.CharField(db_column='type', max_length=10, blank=True, null=True)  # Field name made lowercase.
     speed = models.CharField(db_column='speed', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    alias = models.CharField(db_column='alias', max_length=25, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
