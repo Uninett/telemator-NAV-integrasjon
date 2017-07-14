@@ -1,39 +1,3 @@
-##################################################
-# Information for Telemator SQL Server (Extract) #
-##################################################
-
-# Server to connect to
-TM_HOST = ''
-# Port number
-TM_PORT = '1433'
-
-# Username
-TM_USER = ''
-# Password
-TM_PASSWORD = ''
-
-# Name of database to use
-TM_DBNAME = ''
-
-
-############################################
-# Information for Postgres Server (Inserrt) #
-############################################
-
-# Server to connect to
-PG_HOST = ''
-# Port number
-PG_PORT = '5432'
-
-# Username
-PG_USER = ''
-# Password
-PG_PASSWORD = ''
-
-# Name of database to use
-PG_DBNAME = ''
-
-
 ################################
 # Information about extraction #
 ################################
@@ -44,7 +8,7 @@ EXTRACT_DICT = {
     'EndReg': ['RowKey', 'End', 'EqLinkToPt', 'IsEquipm'],
     'KabTer': ['RowKey', 'Cable', 'IsEnd_A', 'FromCore', 'End', 'IsDraft'],
     'LedRut': ['RowKey', 'Cable', 'Core', 'Circuit', 'Remark'],
-    'SbReg': ['RowKey', 'Circuit', 'Type', 'Speed'],
+    'SbReg': ['RowKey', 'Circuit', 'Type', 'Speed', 'Reference'],
     'UtsTilk': ['RowKey', 'Pin', 'Port', 'End', 'Circuit'],
     'UtsTlf': ['RowKey', 'Circuit', 'Parallel', 'End'],
     'UtsUtg': ['RowKey', 'End', 'Port', 'Label', 'Remark', 'Type']
@@ -118,7 +82,8 @@ NEW_COLUMN_NAMES = {
     'Label': 'label',
     'EqLinkToPt': 'room',
     'IsEquipm': 'is_equipment',
+    'Reference': 'alias',
 }
 
 # Dict of columns to be lowercased
-LOWERCASE_OBJECTS = ['End']
+LOWERCASE_OBJECTS = ['End', 'Reference']
