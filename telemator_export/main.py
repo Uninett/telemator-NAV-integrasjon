@@ -152,8 +152,10 @@ def generate_circuitdetails(dataframes):
     """
     circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'end'])
     counter = 1
+    maxloops = 10
     for i,row in dataframes['circuit'].iterrows():
         circuit_id = row['circuit']
+        print(circuit_id)
         start = None
         stop = None
         cables = []
@@ -176,11 +178,20 @@ def generate_circuitdetails(dataframes):
             continue
         current = start
         details = [current]
+        loopcounter = 0
         while current != stop:
+            loopcounter += 1
+            if loopcounter == 11:
+                break
             current_row = None
+            found_row = False
             for j, endrow in dataframes['end'].iterrows():
                 if endrow['end'] == current:
                     current_row = endrow
+                    found_row = True
+                    break
+            if found_row == False:
+                break
             if current_row['is_equipment'] == 0:
                 if len(cables) == 0:
                     current = stop
@@ -200,6 +211,8 @@ def generate_circuitdetails(dataframes):
             else:
                 'Did something stupid'
             details.append(current)
+        if loopcounter == 11:
+            continue
         for index, detail in enumerate(details):
             circuit_details.loc[counter] = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'end': detail})
             counter += 1
@@ -216,11 +229,18 @@ if __name__ == '__main__':
     pg_engine = create_engine(pg_params)
 
     table_dataframes = extract_dataframes(tm_engine, EXTRACT_DICT)
+    print('Extract complete')
     lowercase_values(table_dataframes, COLUMN_TO_OBJECT, LOWERCASE_OBJECTS)
+    print('Made values lowercase')
     regular_dict, composite_dict = create_dictionaries(table_dataframes, PREVIOUS_REGULAR_PRIMARY_KEYS, PREVIOUS_COMPOSITE_PRIMARY_KEYS)
+    print('Created dictionaries')
     fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_OBJECT)
+    print('Fixed foreign keys')
     rename_columns(table_dataframes, NEW_COLUMN_NAMES)
+    print('Renamed columns')
     rename_tables(table_dataframes, NEW_TABLE_NAMES)
+    print('Renamed tables')
     table_dataframes['circuit_detail'] = generate_circuitdetails(table_dataframes)
-
+    print('Generated circuitdetails')
+    print ('Inserting dataframes')
     insert_dataframes(pg_engine, table_dataframes)

@@ -4,14 +4,15 @@
 
 # Dictionary with lists of which columns to get for each table
 EXTRACT_DICT = {
-    'KabReg': ['RowKey', 'Cable', 'End_A', 'End_B'],
+    'KabReg': ['RowKey', 'Cable', 'End_A', 'End_B', 'Owner'],
     'EndReg': ['RowKey', 'End', 'EqLinkToPt', 'IsEquipm'],
     'KabTer': ['RowKey', 'Cable', 'IsEnd_A', 'FromCore', 'End', 'IsDraft'],
     'LedRut': ['RowKey', 'Cable', 'Core', 'Circuit', 'Remark'],
     'SbReg': ['RowKey', 'Circuit', 'Type', 'Speed', 'Reference'],
     'UtsTilk': ['RowKey', 'Pin', 'Port', 'End', 'Circuit'],
     'UtsTlf': ['RowKey', 'Circuit', 'Parallel', 'End'],
-    'UtsUtg': ['RowKey', 'End', 'Port', 'Label', 'Remark', 'Type']
+    'UtsUtg': ['RowKey', 'End', 'Port', 'Label', 'Remark', 'Type'],
+    'ElmOwner': ['RowKey', 'Owner', 'Name', 'Email', 'Type']
                }
 
 # Single-column primary key for each table
@@ -58,7 +59,8 @@ NEW_TABLE_NAMES = {
     'SbReg': 'circuit',
     'UtsTilk': 'connection',
     'UtsTlf': 'circuit_end',
-    'UtsUtg': 'port'
+    'UtsUtg': 'port',
+    'ElmOwner': 'owner'
 }
 
 # Dict of new column names
@@ -83,6 +85,9 @@ NEW_COLUMN_NAMES = {
     'EqLinkToPt': 'room',
     'IsEquipm': 'is_equipment',
     'Reference': 'alias',
+    'Owner': 'owner',
+    'Email': 'email',
+    'Name': 'name',
 }
 
 # Dict of columns to be lowercased
