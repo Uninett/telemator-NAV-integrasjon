@@ -46,3 +46,11 @@ The following needs to be added to the settings and urls, preferedly in their re
 Because I couldn't get local-files working, I instead added the values to their respective file.
 
 The url include is added on the end of the list with the other includes, and navtelemator was added at the START of the installed apps (it caused a problem when added at the end. Propably because they are loaded in order.
+
+# telemator-export
+
+Script for exporting data from telemator and inserting it into another database.
+
+## Issues
+
+Sometimes it returns a KeyError. This is most like because of a race condiction or such, as often the next try will run just fine.

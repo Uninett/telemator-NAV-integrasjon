@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block base_content %}
+<table>
+    <tr>
+        <th>Name</th>
+        <td>{{ owner.name }}</td>
+    </tr>
+    <tr>
+        <th>ID</th>
+        <td>{{ owner.owner }}</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>{{ owner.type }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ owner.email }}</td>
+      </tr>
+</table>
+{% endblock %}

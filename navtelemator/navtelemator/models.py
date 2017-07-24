@@ -7,6 +7,7 @@ class Cable(models.Model):
     name = models.CharField(db_column='cable', max_length=30, primary_key=True)
     end_a = models.ForeignKey('End', db_column='end_a')  # Field name made lowercase.
     end_b = models.ForeignKey('End', db_column='end_b')  # Field name made lowercase.
+    owner = models.ForeignKey('Owner', db_column='owner', max_length=10, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -16,7 +17,7 @@ class Cable(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('cable-info', args=[str(self.id)])
+        return reverse('cable-info', args=[str(self.name)])
 
 
 class Circuit(models.Model):
@@ -105,6 +106,21 @@ class End(models.Model):
 
     def get_absolute_url(self):
         return reverse('room-info', args=[str(self.name)])
+
+
+class Owner(models.Model):
+    id = models.AutoField(db_column='id')  # Field name made lowercase.
+    owner = models.CharField(db_column='owner', max_length=10, primary_key=True)  # Field name made lowercase.
+    name = models.CharField(db_column='name', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    type = models.CharField(db_column='type', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    email = models.CharField(db_column='email', max_length=50, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'owner'
+
+    def get_absolute_url(self):
+        return reverse('owner-info', args=[str(self.owner)])
 
 
 class Port(models.Model):
