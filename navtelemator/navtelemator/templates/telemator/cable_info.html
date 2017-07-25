@@ -3,25 +3,19 @@
 <table>
       <tr>
           <th>Name</th>
-          <td>{{ cable.id }}</td>
+          <td>{{ cable.name }}</td>
       </tr>
       <tr>
           <th>End A</th>
-          <td>{{ cable.end_a.id }}</td>
+          <td><a href="{{ cable.end_a.get_absolute_url }}">{{cable.end_a.name}}</a></td>
       </tr>
       <tr>
           <th>End B</th>
-          <td>
-              {{ cable.end_b.id }}
-          </td>
+          <td><a href="{{ cable.end_b.get_absolute_url }}">{{cable.end_b.name}}</a></td>
       </tr>
       <tr>
         <th>Owner</th>
-        <td>
-            <a href="{{ cable.owner.get_absolute_url }}">
-                {{ cable.owner.name }}
-            </a>
-        </td>
+        <td><a href="{{ cable.owner.get_absolute_url }}">{{ cable.owner.name }}</a></td>
       </tr>
     </table>
 {% endblock %}

@@ -88,7 +88,7 @@ class CircuitSearchProvider(SearchProvider):
             Q(name__icontains=self.query) )
         for result in results:
             self.results.append(SearchResult(
-                reverse('circuit-info', kwargs={'circuitid': result.id}),
+                reverse('circuit-info', kwargs={'circuitid': result.name}),
                 result)
             )
 
@@ -110,6 +110,6 @@ class CableSearchProvider(SearchProvider):
 
         for result in results:
             self.results.append(SearchResult(
-                reverse('circuit-info', kwargs={'circuitid': result.id}),
+                reverse('cable-info', kwargs={'cableid': result.name}),
                 result)
             )
