@@ -12,6 +12,7 @@ from nav.models.manage import (Room, Netbox, Interface, Vlan,
 from nav.util import is_valid_ip
 from nav.web.ipdevinfo.views import is_valid_hostname
 from nav.web.info.prefix.views import get_query_results as get_prefix_results
+from navtelemator.models import Circuit
 
 
 class SearchForm(forms.Form):
@@ -73,18 +74,21 @@ class SearchProvider(object):
 
 
 class CircuitSearchProvider(SearchProvider):
-    """Searchprovider for rooms"""
+    """Searchprovider for circuits"""
     name = "Circuits"
     headers = [
         ('Circuit', 'name'),
-        ('Alias', 'reference')
+        ('Alias', 'alias')
     ]
-    link = 'Roomid'
+    link = 'Circuit'
 
     def fetch_results(self):
-        results = Room.objects.filter(id__icontains=self.query).order_by("id")
+        results = Circuit.objects.filter(id__icontains=self.query).order_by("id")
+        results = Circuit.objects.filter(
+            Q(alias__icontains=self.query) |
+            Q(name__icontains=self.query) )
         for result in results:
             self.results.append(SearchResult(
-                reverse('room-info', kwargs={'roomid': result.id}),
+                reverse('circuit-info', kwargs={'circuitid': result.id}),
                 result)
             )
