@@ -96,6 +96,7 @@ class End(models.Model):
     id = models.AutoField(db_column='id')
     name = models.CharField(db_column='end', max_length=30, primary_key=True)  # Field name made lowercase.
     room = models.ForeignKey('End', db_column='room', blank=True, null=True)  # Field name made lowercase.
+    equipment = models.DecimalField(db_column='is_equipment', max_digits=1, decimal_places=0)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -105,6 +106,8 @@ class End(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        if self.equipment == 1:
+            return reverse('ipdevinfo-details-by-name', args=[str(self.name)])
         return reverse('room-info', args=[str(self.name)])
 
 
