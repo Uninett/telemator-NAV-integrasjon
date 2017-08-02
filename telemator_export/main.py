@@ -6,6 +6,33 @@ from db import *
 import pandas as pd
 
 
+def main():
+    # Get parameters from the config, used for connecting to the server
+    tm_params = 'mssql+pymssql://' + TM_USER + ':' + TM_PASSWORD + '@' + TM_HOST + ':' + TM_PORT + '/' + TM_DBNAME
+    pg_params = 'postgresql://' + PG_USER + ':' + PG_PASSWORD + '@' + PG_HOST + ':' + PG_PORT + '/' + PG_DBNAME
+
+    # Initiate engine, used for all queries
+    tm_engine = create_engine(tm_params)
+    pg_engine = create_engine(pg_params)
+
+    table_dataframes = extract_dataframes(tm_engine, EXTRACT_DICT)
+    print('Extract complete')
+    lowercase_values(table_dataframes, COLUMN_TO_OBJECT, LOWERCASE_OBJECTS)
+    print('Made values lowercase')
+    regular_dict, composite_dict = create_dictionaries(table_dataframes, PREVIOUS_REGULAR_PRIMARY_KEYS, PREVIOUS_COMPOSITE_PRIMARY_KEYS)
+    print('Created dictionaries')
+    fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_OBJECT)
+    print('Fixed foreign keys')
+    rename_columns(table_dataframes, NEW_COLUMN_NAMES)
+    print('Renamed columns')
+    rename_tables(table_dataframes, NEW_TABLE_NAMES)
+    print('Renamed tables')
+    table_dataframes['circuit_detail'] = generate_circuitdetails(table_dataframes)
+    print('Generated circuitdetails')
+    print ('Inserting dataframes')
+    insert_dataframes(pg_engine, table_dataframes)
+
+
 def print_columns(engine, table_name):
     """
     Function for printing the columns of a table
@@ -155,6 +182,9 @@ def generate_circuitdetails(dataframes):
     maxloops = 10
     for i,row in dataframes['circuit'].iterrows():
         circuit_id = row['circuit']
+        if circuit_id.startswith('TEMPLATE'):
+            dataframes['circuit'].drop(i, inplace=True)
+            continue
         print(circuit_id)
         start = None
         stop = None
@@ -174,12 +204,15 @@ def generate_circuitdetails(dataframes):
                     start = circuitendrow['end']
                 elif circuitendrow['parallel'] == 2:
                     stop = circuitendrow['end']
-        if start == None or stop == None:
+        if start == None and stop == None:
             continue
         current = start
         details = [current]
         loopcounter = 0
         while current != stop:
+            # If there is no stop, just add the start
+            if stop == None:
+                break
             loopcounter += 1
             if loopcounter == 11:
                 break
@@ -220,27 +253,4 @@ def generate_circuitdetails(dataframes):
 
 
 if __name__ == '__main__':
-    # Get parameters from the config, used for connecting to the server
-    tm_params = 'mssql+pymssql://' + TM_USER + ':' + TM_PASSWORD + '@' + TM_HOST + ':' + TM_PORT + '/' + TM_DBNAME
-    pg_params = 'postgresql://' + PG_USER + ':' + PG_PASSWORD + '@' + PG_HOST + ':' + PG_PORT + '/' + PG_DBNAME
-
-    # Initiate engine, used for all queries
-    tm_engine = create_engine(tm_params)
-    pg_engine = create_engine(pg_params)
-
-    table_dataframes = extract_dataframes(tm_engine, EXTRACT_DICT)
-    print('Extract complete')
-    lowercase_values(table_dataframes, COLUMN_TO_OBJECT, LOWERCASE_OBJECTS)
-    print('Made values lowercase')
-    regular_dict, composite_dict = create_dictionaries(table_dataframes, PREVIOUS_REGULAR_PRIMARY_KEYS, PREVIOUS_COMPOSITE_PRIMARY_KEYS)
-    print('Created dictionaries')
-    fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_OBJECT)
-    print('Fixed foreign keys')
-    rename_columns(table_dataframes, NEW_COLUMN_NAMES)
-    print('Renamed columns')
-    rename_tables(table_dataframes, NEW_TABLE_NAMES)
-    print('Renamed tables')
-    table_dataframes['circuit_detail'] = generate_circuitdetails(table_dataframes)
-    print('Generated circuitdetails')
-    print ('Inserting dataframes')
-    insert_dataframes(pg_engine, table_dataframes)
+    main()
