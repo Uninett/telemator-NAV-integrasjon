@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, inspect
 from config import *
 from db import *
 import pandas as pd
+from pandas.io import sql
 
 
 def main():
@@ -29,8 +30,15 @@ def main():
     print('Renamed tables')
     table_dataframes['circuit_detail'] = generate_circuitdetails(table_dataframes)
     print('Generated circuitdetails')
-    print ('Inserting dataframes')
+    delete_tables(table_dataframes, pg_engine)
+    print('Deleted old tables')
+    print('Inserting dataframes')
     insert_dataframes(pg_engine, table_dataframes)
+
+
+def delete_tables(datatables, engine):
+    for key in datatables:
+        sql.execute('DROP TABLE IF EXISTS "%s"'%key, engine)
 
 
 def print_columns(engine, table_name):
