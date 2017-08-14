@@ -12,7 +12,7 @@ from nav.models.manage import (Room, Netbox, Interface, Vlan,
 from nav.util import is_valid_ip
 from nav.web.ipdevinfo.views import is_valid_hostname
 from nav.web.info.prefix.views import get_query_results as get_prefix_results
-from navtelemator.models import Circuit, Cable
+from navtelemator.models import Circuit, Cable, Owner
 
 
 class SearchForm(forms.Form):
@@ -85,7 +85,8 @@ class CircuitSearchProvider(SearchProvider):
     def fetch_results(self):
         results = Circuit.objects.filter(
             Q(alias__icontains=self.query) |
-            Q(name__icontains=self.query) )
+            Q(name__icontains=self.query) |
+            Q(owner__name__icontains=self.query))
         for result in results:
             self.results.append(SearchResult(
                 reverse('circuit-info', kwargs={'circuitid': result.name}),
@@ -111,5 +112,26 @@ class CableSearchProvider(SearchProvider):
         for result in results:
             self.results.append(SearchResult(
                 reverse('cable-info', kwargs={'cableid': result.name}),
+                result)
+            )
+
+
+class OwnerSearchProvider(SearchProvider):
+    """Searchprovider for owners"""
+    name = "Owners"
+    headers = [
+        ('Owner', 'name'),
+        ('ID', 'owner')
+    ]
+    link = 'Owner'
+
+    def fetch_results(self):
+        results = Owner.objects.filter(
+            Q(name__icontains=self.query) |
+            Q(owner__icontains=self.query))
+
+        for result in results:
+            self.results.append(SearchResult(
+                reverse('owner-info', kwargs={'ownerid': result.owner}),
                 result)
             )

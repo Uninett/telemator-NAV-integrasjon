@@ -26,6 +26,7 @@ class Circuit(models.Model):
     type = models.CharField(db_column='type', max_length=10, blank=True, null=True)  # Field name made lowercase.
     speed = models.CharField(db_column='speed', max_length=10, blank=True, null=True)  # Field name made lowercase.
     alias = models.CharField(db_column='alias', max_length=25, blank=True, null=True)  # Field name made lowercase.
+    owner = models.ForeignKey('Owner', db_column='owner', max_length=10, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

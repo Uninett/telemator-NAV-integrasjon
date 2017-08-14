@@ -8,7 +8,7 @@ EXTRACT_DICT = {
     'EndReg': ['RowKey', 'End', 'EqLinkToPt', 'IsEquipm'],
     'KabTer': ['RowKey', 'Cable', 'IsEnd_A', 'FromCore', 'End', 'IsDraft'],
     'LedRut': ['RowKey', 'Cable', 'Core', 'Circuit', 'Remark'],
-    'SbReg': ['RowKey', 'Circuit', 'Type', 'Speed', 'Reference'],
+    'SbReg': ['RowKey', 'Circuit', 'Type', 'Speed', 'Reference', 'Owner'],
     'UtsTilk': ['RowKey', 'Pin', 'Port', 'End', 'Circuit'],
     'UtsTlf': ['RowKey', 'Circuit', 'Parallel', 'End'],
     'UtsUtg': ['RowKey', 'End', 'Port', 'Label', 'Remark', 'Type'],
@@ -90,5 +90,5 @@ NEW_COLUMN_NAMES = {
     'Name': 'name',
 }
 
-# Dict of columns to be lowercased
+# List of columns to be lowercased
 LOWERCASE_OBJECTS = ['End', 'Reference']
