@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from navtelemator.search import CircuitSearchProvider, SearchForm, CableSearchProvider
+from navtelemator.search import CircuitSearchProvider, SearchForm, CableSearchProvider, OwnerSearchProvider
 from nav.web.utils import create_title
 
 # def index(request):
@@ -27,7 +27,7 @@ def index(request):
 
     searchproviders = []
 
-    navpath = [('Home', '/'), ('Search', reverse('info-search'))]
+    navpath = [('Home', '/'), ('Search', reverse('telemator-search'))]
     titles = navpath
 
     if "query" in request.GET:
@@ -56,7 +56,8 @@ def process_form(form):
         return []
 
     searchproviders = [CircuitSearchProvider(query),
-                       CableSearchProvider(query)]
+                       CableSearchProvider(query),
+                       OwnerSearchProvider(query)]
     providers_with_result = has_results(searchproviders)
 
     return providers_with_result

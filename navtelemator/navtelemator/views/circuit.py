@@ -15,6 +15,18 @@ def room_circuits(request, roomid):
                   }
                   )
 
+def netbox_circuits(request, netbox_sysname):
+    #room = get_object_or_404(Room, id=roomid)
+    circuit_details = CircuitDetail.objects.filter(end=netbox_sysname)
+    #cables = Cable.objects.all()
+    #cables = [{id: "Kabel1"}, {id:"Kabel2"}]
+    return render(request,
+                  'info/room/roominfo_circuits.html',
+                  {
+                      'circuit_details': circuit_details
+                  }
+                  )
+
 
 def render_circuit(request, circuitid):
     circuit = get_object_or_404(Circuit, name=circuitid)

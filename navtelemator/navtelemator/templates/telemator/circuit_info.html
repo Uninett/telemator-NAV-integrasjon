@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block base_content %}
-<h1>{{circuit.name}}</h1>
+<h3>{{circuit.name}}</h3>
+<table>
+    <tr>
+        <th>Owner</th>
+        <td><a href="{{ cable.owner.get_absolute_url }}">{{ circuit.owner.name }}</a></td>
+    </tr>
+</table>
+
+<h5>List of steps in circuit</h5>
 <table>
     <tr>
         <th>End</th>
