@@ -1,14 +1,16 @@
 from django.shortcuts import render, get_object_or_404
 
-from navtelemator.models import Cable
+from navtelemator.models import Cable, RoutingCable
 
 
 def render_cable(request, cableid):
     cable = get_object_or_404(Cable, name=cableid)
+    routingcables = RoutingCable.objects.filter(cable=cableid) & RoutingCable.objects.filter(core=1)
     return render(request,
                   'telemator/cable_info.html',
                   {
                       'cable': cable,
+                      'routingcables': routingcables
                   }
                   )
 

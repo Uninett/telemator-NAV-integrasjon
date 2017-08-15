@@ -26,4 +26,17 @@
         <td>{{cable.comment}}</td>
     </tr>
     </table>
+<h5>Circuits on this Cable</h5>
+<table>
+    <tr>
+        <th>Circuit</th>
+        <th>Reference</th>
+    </tr>
+    {% for routingcable in routingcables %}
+    <tr>
+        <td><a href="{{ routingcable.circuit.get_absolute_url }}">{{routingcable.circuit}}</a></td>
+        <td>{{routingcable.circuit.alias}}</td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}

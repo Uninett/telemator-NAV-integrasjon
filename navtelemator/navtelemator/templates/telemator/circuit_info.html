@@ -6,6 +6,10 @@
         <th>Owner</th>
         <td><a href="{{ cable.owner.get_absolute_url }}">{{ circuit.owner.name }}</a></td>
     </tr>
+    <tr>
+        <th>Reference</th>
+        <td>{{circuit.alias}}</td>
+    </tr>
 </table>
 
 <h5>List of steps in circuit</h5>
@@ -18,6 +22,19 @@
     <tr>
         <td><a href="{{ circuit_detail.end.get_absolute_url }}">{{circuit_detail.end}}</a></td>
         <td>{{circuit_detail.index}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<h5>List of cables in circuit</h5>
+<table>
+    <tr>
+        <th>Cable</th>
+        <th>Reference</th>
+    </tr>
+    {% for routingcable in routingcables %}
+    <tr>
+        <td><a href="{{ routingcable.cable.get_absolute_url }}">{{routingcable.cable}}</a></td>
+        <td>{{routingcable.cable.alias}}</td>
     </tr>
     {% endfor %}
 </table>
