@@ -11,3 +11,16 @@ def render_cable(request, cableid):
                       'cable': cable,
                   }
                   )
+
+def room_cables(request, roomid):
+    #room = get_object_or_404(Room, id=roomid)
+    cables = Cable.objects.filter(end_a=roomid) | Cable.objects.filter(end_b=roomid)
+    #cables = Cable.objects.all()
+    #cables = [{id: "Kabel1"}, {id:"Kabel2"}]
+    return render(request,
+                  'info/room/roominfo_cables.html',
+                  {
+                      'cables': cables,
+                      'roomid': roomid
+                  }
+                  )

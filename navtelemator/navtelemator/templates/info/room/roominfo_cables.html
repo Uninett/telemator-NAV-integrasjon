@@ -1,0 +1,21 @@
+<table>
+    <tr>
+        <th>Cable</th>
+        <th>End A</th>
+        <th>End B</th>
+        <th>Reference</th>
+    </tr>
+    {% for cable in cables %}
+    <tr>
+        <td><a href="{{ cable.get_absolute_url }}">{{cable}}</a></td>
+        {% if cable.end_a.name == roomid %}
+        <td>{{cable.end_a}}</td>
+        <td><a href="{{ cable.end_b.get_absolute_url }}">{{cable.end_b}}</a></td>
+        {% else %}
+                <td><a href="{{ cable.end_a.get_absolute_url }}">{{cable.end_a}}</a></td>
+                <td>{{cable.end_b}}</td>
+        {% endif %}
+        <td>{{cable.alias}}</td>
+    </tr>
+    {% endfor %}
+</table>

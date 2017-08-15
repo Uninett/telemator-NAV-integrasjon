@@ -5,6 +5,10 @@
           <th>Name</th>
           <td>{{ cable.name }}</td>
       </tr>
+          <tr>
+          <th>Reference</th>
+          <td>{{ cable.alias }}</td>
+      </tr>
       <tr>
           <th>End A</th>
           <td><a href="{{ cable.end_a.get_absolute_url }}">{{cable.end_a.name}}</a></td>
@@ -17,5 +21,9 @@
         <th>Owner</th>
         <td><a href="{{ cable.owner.get_absolute_url }}">{{ cable.owner.name }}</a></td>
       </tr>
+    <tr>
+        <th>Comment</th>
+        <td>{{cable.comment}}</td>
+    </tr>
     </table>
 {% endblock %}
