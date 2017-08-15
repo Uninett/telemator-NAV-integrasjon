@@ -8,6 +8,8 @@ class Cable(models.Model):
     end_a = models.ForeignKey('End', db_column='end_a')  # Field name made lowercase.
     end_b = models.ForeignKey('End', db_column='end_b')  # Field name made lowercase.
     owner = models.ForeignKey('Owner', db_column='owner', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    comment = models.TextField(db_column='comment', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
+    alias = models.CharField(db_column='alias', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

@@ -30,6 +30,8 @@ def main():
     print('Renamed tables')
     table_dataframes['circuit_detail'] = generate_circuitdetails(table_dataframes)
     print('Generated circuitdetails')
+    extract_cable_alias(table_dataframes)
+    print('Extracted cable name')
     delete_tables(table_dataframes, pg_engine)
     print('Deleted old tables')
     print('Inserting dataframes')
@@ -258,6 +260,19 @@ def generate_circuitdetails(dataframes):
             circuit_details.loc[counter] = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'end': detail})
             counter += 1
     return circuit_details
+
+
+def extract_cable_alias(dataframes):
+    result = {}
+    for i, row in dataframes['cable'].iterrows():
+        if row['comment']:
+            try:
+                result[i] = row['comment'].split('\nSambandsnavn:')[1]
+            except IndexError:
+                result[i] = None
+        else:
+            result[i] = None
+    dataframes['cable']['alias'] = pd.Series(result)
 
 
 if __name__ == '__main__':

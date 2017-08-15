@@ -4,7 +4,7 @@
 
 # Dictionary with lists of which columns to get for each table
 EXTRACT_DICT = {
-    'KabReg': ['RowKey', 'Cable', 'End_A', 'End_B', 'Owner'],
+    'KabReg': ['RowKey', 'Cable', 'End_A', 'End_B', 'Owner', 'RemarkM'],
     'EndReg': ['RowKey', 'End', 'EqLinkToPt', 'IsEquipm'],
     'KabTer': ['RowKey', 'Cable', 'IsEnd_A', 'FromCore', 'End', 'IsDraft'],
     'LedRut': ['RowKey', 'Cable', 'Core', 'Circuit', 'Remark'],
@@ -88,6 +88,7 @@ NEW_COLUMN_NAMES = {
     'Owner': 'owner',
     'Email': 'email',
     'Name': 'name',
+    'RemarkM': 'comment'
 }
 
 # List of columns to be lowercased
