@@ -151,6 +151,7 @@ class RoutingCable(models.Model):
     cable = models.ForeignKey('Cable', db_column='cable')  # Field name made lowercase.
     core = models.IntegerField(db_column='core')  # Field name made lowercase.
     circuit = models.ForeignKey('Circuit', db_column='circuit', blank=True, null=True)  # Field name made lowercase.
+    wire = models.CharField(db_column='wire', max_length=1, blank=True, null=True)  # Field name made lowercase.
     remark = models.CharField(db_column='remark', max_length=40, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:

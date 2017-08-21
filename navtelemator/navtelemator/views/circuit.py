@@ -30,7 +30,7 @@ def netbox_circuits(request, netbox_sysname):
 
 def render_circuit(request, circuitid):
     circuit = get_object_or_404(Circuit, name=circuitid)
-    routingcables = RoutingCable.objects.filter(circuit=circuitid) & RoutingCable.objects.filter(core=1)
+    routingcables = RoutingCable.objects.filter(circuit=circuitid).filter(wire='A')
     circuit_details = CircuitDetail.objects.filter(circuit=circuitid)
     return render(request,
                   'telemator/circuit_info.html',
