@@ -37,6 +37,9 @@ The following needs to be added to the settings and urls, preferedly in their re
 
 `pip install dist/*`
 
+To both install and extract the data from Telemator, copy telemator_export to your nav-installation, and the dist-folder from the build process inside it.
+Then, edit db.py to have the correct values for both databases (NAV in docker uses postgres as hostname) and run install.sh which will both install necessary packages, and export and import the telemator data
+
 ### Uninstall
 
 `pip uninstall nav-contrib-telemator`
