@@ -32,8 +32,8 @@ def main():
     print('Generated circuitdetails')
     extract_cable_alias(table_dataframes)
     print('Extracted cable name')
-    delete_tables(table_dataframes, pg_engine)
-    print('Deleted old tables')
+    #delete_tables(table_dataframes, pg_engine)
+    #print('Deleted old tables')
     print('Inserting dataframes')
     insert_dataframes(pg_engine, table_dataframes)
 
@@ -77,7 +77,7 @@ def insert_dataframes(engine, dataframes):
     :param dataframes: Dictionary of dataframes to be inserted
     """
     for key in dataframes:
-        dataframes[key].to_sql(key, engine, index=False)
+        dataframes[key].to_sql(key, engine, index=False, if_exists='replace')
 
 
 def create_dictionaries(dataframes, regular_primaries, composite_primaries):
