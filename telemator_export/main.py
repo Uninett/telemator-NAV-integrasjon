@@ -187,15 +187,7 @@ def generate_circuitdetails(dataframes):
     :param dataframes: Dictionary of the dataframes used in the script
     :return: Dataframe of the circuit_details generated
     """
-    circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'end'])
-    counter = 1
-    maxloops = 10
-    for i,row in dataframes['circuit'].iterrows():
-        circuit_id = row['circuit']
-        if circuit_id.startswith('TEMPLATE'):
-            dataframes['circuit'].drop(i, inplace=True)
-            continue
-        print(circuit_id)
+    def get_objects_and_ids(dataframes, circuit_id):
         start = None
         stop = None
         cables = []
@@ -214,52 +206,72 @@ def generate_circuitdetails(dataframes):
                     start = circuitendrow['end']
                 elif circuitendrow['parallel'] == 2:
                     stop = circuitendrow['end']
-        if start == None and stop == None:
-            continue
-        current = start
-        details = [current]
-        loopcounter = 0
-        while current != stop:
-            # If there is no stop, just add the start
-            if stop == None:
+        return cables, routing_cables, routing_cableids, start, stop
+
+    def get_current_row(current):
+        current_row = None
+        found_row = False
+        for j, endrow in dataframes['end'].iterrows():
+            if endrow['end'] == current:
+                current_row = endrow
+                found_row = True
                 break
-            loopcounter += 1
-            if loopcounter == 11:
-                break
-            current_row = None
-            found_row = False
-            for j, endrow in dataframes['end'].iterrows():
-                if endrow['end'] == current:
-                    current_row = endrow
-                    found_row = True
-                    break
-            if found_row == False:
-                break
-            if current_row['is_equipment'] == 0:
-                if len(cables) == 0:
-                    current = stop
-                else:
-                    for cableindex, cablerow in enumerate(cables):
-                        if cablerow['end_a'] == current:
-                            current = cablerow['end_b']
-                        elif cablerow['end_b'] == current:
-                            current = cablerow['end_a']
-                        else:
-                            continue
-                        del cables[cableindex]
-                        break
-            elif current_row['is_equipment'] == 1:
-                current = current_row['room']
-            # Just in case
+        return current_row, found_row
+
+    def get_next_element(current, current_row, cables, stop):
+        if current_row['is_equipment'] == 0:
+            if len(cables) == 0:
+                current = stop
             else:
-                'Did something stupid'
-            details.append(current)
-        if loopcounter == 11:
-            continue
-        for index, detail in enumerate(details):
-            circuit_details.loc[counter] = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'end': detail})
-            counter += 1
-    return circuit_details
+                for cableindex, cablerow in enumerate(cables):
+                    if cablerow['end_a'] == current:
+                        current = cablerow['end_b']
+                    elif cablerow['end_b'] == current:
+                        current = cablerow['end_a']
+                    else:
+                        continue
+                    del cables[cableindex]
+                    break
+        elif current_row['is_equipment'] == 1:
+            current = current_row['room']
+        return current, cables
+
+    def generate():
+        circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'end'])
+        counter = 1
+        maxloops = 10
+        for i,row in dataframes['circuit'].iterrows():
+            circuit_id = row['circuit']
+            if circuit_id.startswith('TEMPLATE'):
+                dataframes['circuit'].drop(i, inplace=True)
+                continue
+            print(circuit_id)
+            cables, routing_cables, routing_cableids, start, stop = get_objects_and_ids(dataframes, circuit_id)
+            if start == None and stop == None:
+                continue
+            current = start
+            details = [current]
+            loopcounter = 0
+            while current != stop:
+                # If there is no stop, just add the start
+                if stop == None:
+                    break
+                loopcounter += 1
+                if loopcounter == 11:
+                    break
+                current_row, found_row = get_current_row(current)
+                if found_row == False:
+                    break
+                current, cables = get_next_element(current, current_row, cables, stop)
+                details.append(current)
+            if loopcounter == 11:
+                continue
+            for index, detail in enumerate(details):
+                circuit_details.loc[counter] = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'end': detail})
+                counter += 1
+        return circuit_details
+
+    return generate()
 
 
 def extract_cable_alias(dataframes):
