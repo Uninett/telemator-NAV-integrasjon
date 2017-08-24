@@ -4,4 +4,4 @@ __pycache__/
 *.pyc
 build/
 dist/
-telemator_export/db.py
+telemator_export/local_db_settings.py

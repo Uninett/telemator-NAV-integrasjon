@@ -32,3 +32,11 @@ PG_PASSWORD = ''
 
 # Name of database to use
 PG_DBNAME = ''
+
+try:
+    LOCAL_DB_SETTINGS
+except NameError:
+    try:
+        from local_db_settings import *
+    except ImportError:
+        pass

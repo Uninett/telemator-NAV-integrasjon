@@ -6,7 +6,7 @@ Contribution for Telemator additions in NAV
 
 The following needs to be added to the settings and urls, preferedly in their respective local files.
 
-`etc/python/local_settings.py`
+`/etc/nav/python/local_settings.py`
 
     LOCAL_SETTINGS = True
     from nav.django.settings import *
@@ -20,9 +20,9 @@ The following needs to be added to the settings and urls, preferedly in their re
         'navtelemator',
     )
 
-`etc/python/local_urls.py`
+`/etc/nav/python/local_urls.py`
 
-    from django.conf.urls import url, patterns
+    from django.conf.urls import url, patterns, include
     import navtelemator
     urlpatterns = patterns(
         '',
@@ -36,6 +36,9 @@ The following needs to be added to the settings and urls, preferedly in their re
 ### Install
 
 `pip install dist/*`
+
+To both install and extract the data from Telemator, copy telemator_export to your nav-installation, and the dist-folder from the build process inside it.
+Then, edit db.py to have the correct values for both databases (NAV in docker uses postgres as hostname) and run install.sh which will both install necessary packages, and export and import the telemator data
 
 ### Uninstall
 
