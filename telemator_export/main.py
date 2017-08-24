@@ -77,7 +77,7 @@ def insert_dataframes(engine, dataframes):
     :param dataframes: Dictionary of dataframes to be inserted
     """
     for key in dataframes:
-        dataframes[key].to_sql(key, engine, index=False, if_exists='replace')
+        dataframes[key].to_sql(key, engine, index=False, if_exists='replace', schema='telemator')
 
 
 def create_dictionaries(dataframes, regular_primaries, composite_primaries):
