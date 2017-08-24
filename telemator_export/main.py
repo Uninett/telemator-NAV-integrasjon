@@ -5,6 +5,8 @@ from config import *
 from db import *
 import pandas as pd
 from pandas.io import sql
+from sqlalchemy.schema import CreateSchema
+from sqlalchemy.sql import exists, select
 
 
 def main():
@@ -34,9 +36,18 @@ def main():
     print('Extracted cable name')
     #delete_tables(table_dataframes, pg_engine)
     #print('Deleted old tables')
+    print('Creating schema')
+    create_schema(pg_engine)
+    print('Add schema to search path')
+    add_schema_to_search(pg_engine)
     print('Inserting dataframes')
     insert_dataframes(pg_engine, table_dataframes)
 
+def create_schema(engine):
+    return engine.execute("CREATE SCHEMA IF NOT EXISTS telemator;")
+
+def add_schema_to_search(engine):
+    return engine.execute("ALTER DATABASE nav SET search_path TO manage, profiles, logger, arnold, radius, telemator;")
 
 def delete_tables(datatables, engine):
     for key in datatables:
@@ -245,7 +256,7 @@ def generate_circuitdetails(dataframes):
             if circuit_id.startswith('TEMPLATE'):
                 dataframes['circuit'].drop(i, inplace=True)
                 continue
-            print(circuit_id)
+            #print(circuit_id)
             cables, routing_cables, routing_cableids, start, stop = get_objects_and_ids(dataframes, circuit_id)
             if start == None and stop == None:
                 continue

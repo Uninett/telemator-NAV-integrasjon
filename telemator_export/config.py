@@ -65,7 +65,6 @@ NEW_TABLE_NAMES = {
     'UtsTilk': 'connection',
     'UtsTlf': 'circuit_end',
     'UtsUtg': 'port',
-
 }
 
 # Dict of new column names
@@ -100,3 +99,5 @@ NEW_COLUMN_NAMES = {
 
 # List of columns to be lowercased
 LOWERCASE_OBJECTS = ['End', 'Reference']
+
+SCHEMA = 'telemator'
