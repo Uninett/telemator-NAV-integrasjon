@@ -47,7 +47,18 @@ def create_schema(engine):
     return engine.execute("CREATE SCHEMA IF NOT EXISTS telemator;")
 
 def add_schema_to_search(engine):
-    return engine.execute("ALTER DATABASE nav SET search_path TO manage, profiles, logger, arnold, radius, telemator;")
+    required_namespaces = [SCHEMA]
+    result = engine.execute("SHOW search_path")
+    search_path = result.fetchone()[0]
+    print(search_path)
+    schemas = [s.strip() for s in search_path.split(',')]
+    add_schemas = [wanted
+                   for wanted in required_namespaces
+                   if wanted not in schemas]
+    if add_schemas:
+        schemas.extend(add_schemas)
+        schemalist = ", ".join(schemas)
+        engine.execute('ALTER DATABASE %s SET search_path TO %s' % (PG_DBNAME, schemalist))
 
 def delete_tables(datatables, engine):
     for key in datatables:
