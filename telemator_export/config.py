@@ -4,15 +4,17 @@
 
 # Dictionary with lists of which columns to get for each table
 EXTRACT_DICT = {
-    'KabReg': ['RowKey', 'Cable', 'End_A', 'End_B', 'Owner', 'RemarkM'],
+    'AboReg': ['RowKey', 'CustId', 'Name'],
+    'ElmOwner': ['RowKey', 'Owner', 'Name', 'Email', 'Type'],
     'EndReg': ['RowKey', 'End', 'EqLinkToPt', 'IsEquipm'],
+    'KabReg': ['RowKey', 'Cable', 'End_A', 'End_B', 'Owner', 'RemarkM'],
     'KabTer': ['RowKey', 'Cable', 'IsEnd_A', 'FromCore', 'End', 'IsDraft'],
+    'KuSbLink': ['RowKey', 'CustId', 'Circuit'],
     'LedRut': ['RowKey', 'Cable', 'Core', 'Circuit', 'Wire', 'Remark'],
     'SbReg': ['RowKey', 'Circuit', 'Type', 'Speed', 'Reference', 'Owner'],
     'UtsTilk': ['RowKey', 'Pin', 'Port', 'End', 'Circuit'],
     'UtsTlf': ['RowKey', 'Circuit', 'Parallel', 'End'],
     'UtsUtg': ['RowKey', 'End', 'Port', 'Label', 'Remark', 'Type'],
-    'ElmOwner': ['RowKey', 'Owner', 'Name', 'Email', 'Type']
                }
 
 # Single-column primary key for each table
@@ -26,22 +28,22 @@ PREVIOUS_COMPOSITE_PRIMARY_KEYS = {
 
 # List of single-column foreign keys associated with each table
 REGULAR_FOREIGN_KEYS = {
+    'EndReg': ['EqLinkToPt'],
     'KabReg': ['End_A', 'End_B'],
     'KabTer': ['Cable', 'End'],
     'LedRut': ['Cable', 'Circuit'],
     'UtsTilk': ['Circuit'],
     'UtsTlf': ['Circuit', 'End'],
     'UtsUtg': ['End'],
-    'EndReg': ['EqLinkToPt']
                }
 
 # Mapping from column name to which model to use as foreign key
 COLUMN_TO_OBJECT = {
+    'Cable': 'Cable',
+    'Circuit': 'Circuit',
     'End': 'End',
     'End_A': 'End',
     'End_B': 'End',
-    'Cable': 'Cable',
-    'Circuit': 'Circuit',
     'EqLinkToPt': 'End',
 }
 
@@ -52,44 +54,48 @@ COMPOSITE_FOREIGN_KEYS = {
 
 # List of tables to be renamed with the new name
 NEW_TABLE_NAMES = {
-    'KabReg': 'cable',
+    'AboReg': 'customer',
+    'ElmOwner': 'owner',
     'EndReg': 'end',
+    'KabReg': 'cable',
     'KabTer': 'termination',
+    'KuSbLink': 'customer_circuit',
     'LedRut': 'routing_cable',
     'SbReg': 'circuit',
     'UtsTilk': 'connection',
     'UtsTlf': 'circuit_end',
     'UtsUtg': 'port',
-    'ElmOwner': 'owner'
+
 }
 
 # Dict of new column names
 NEW_COLUMN_NAMES = {
     'Cable': 'cable',
-    'RowKey': 'id',
     'Circuit': 'circuit',
+    'Core': 'core',
+    'CustId': 'customer',
+    'Email': 'email',
+    'End': 'end',
     'End_A': 'end_a',
     'End_B': 'end_b',
-    'IsEnd_A': 'is_end_a',
+    'EqLinkToPt': 'room',
     'FromCore': 'from_core',
-    'End': 'end',
     'IsDraft': 'is_draft',
-    'Type': 'type',
-    'Core': 'core',
-    'Remark': 'remark',
-    'Speed': 'speed',
+    'IsEnd_A': 'is_end_a',
+    'IsEquipm': 'is_equipment',
+    'Label': 'label',
+    'Name': 'name',
+    'Owner': 'owner',
     'Pin': 'pin',
     'Port': 'port',
     'Parallel': 'parallel',
-    'Label': 'label',
-    'EqLinkToPt': 'room',
-    'IsEquipm': 'is_equipment',
     'Reference': 'alias',
-    'Owner': 'owner',
-    'Email': 'email',
-    'Name': 'name',
+    'Remark': 'remark',
     'RemarkM': 'comment',
-    'Wire': 'wire'
+    'RowKey': 'id',
+    'Speed': 'speed',
+    'Type': 'type',
+    'Wire': 'wire',
 }
 
 # List of columns to be lowercased
