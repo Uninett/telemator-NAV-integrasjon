@@ -10,6 +10,6 @@ INSTALLED_APPS += (
     'navtelemator',
 )
 
-SEARCHPROVIDERS += ['navtelemator.search.CircuitSearchProvider',
-                       'navtelemator.search.CableSearchProvider',
-                       'navtelemator.search.OwnerSearchProvider']
+#SEARCHPROVIDERS += ['navtelemator.search.CircuitSearchProvider',
+#                       'navtelemator.search.CableSearchProvider',
+#                       'navtelemator.search.OwnerSearchProvider']
