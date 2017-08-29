@@ -12,6 +12,20 @@
     </tr>
 </table>
 
+<h5>List of customers</h5>
+<table>
+    <tr>
+        <th>Customer</th>
+        <th>Name</th>
+    </tr>
+    {% for customer_circuit in customer_circuits %}
+    <tr>
+        <td><a href="{{ customer_circuit.customer.get_absolute_url }}">{{customer_circuit.customer}}</a></td>
+        <td>{{customer_circuit.customer.name}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
 <h5>List of steps in circuit</h5>
 <table>
     <tr>

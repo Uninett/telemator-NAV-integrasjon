@@ -95,6 +95,34 @@ class Connection(models.Model):
         return u'Port %s Pin %s' % (self.port, self.pin)
 
 
+class Customer(models.Model):
+    id = models.AutoField(db_column='id')  # Field name made lowercase.
+    customer = models.CharField(db_column='customer', max_length=18, primary_key=True)  # Field name made lowercase.
+    name = models.CharField(db_column='name', max_length=40, blank=True, null=True)  # Field name made lowercase.
+    department = models.CharField(db_column='department', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    address = models.CharField(db_column='address', max_length=45, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'customer'
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('customer-info', args=[str(self.customer)])
+
+
+class CustomerCircuit(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)  # Field name made lowercase.
+    customer = models.ForeignKey('Customer', db_column='customer', max_length=18)  # Field name made lowercase.
+    circuit = models.ForeignKey('Circuit', db_column='circuit', max_length=30)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'customer_circuit'
+
+
 class End(models.Model):
     id = models.AutoField(db_column='id')
     name = models.CharField(db_column='end', max_length=30, primary_key=True)  # Field name made lowercase.

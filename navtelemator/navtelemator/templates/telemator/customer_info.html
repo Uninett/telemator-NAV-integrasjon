@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block base_content %}
+<table>
+    <tr>
+        <th>Name</th>
+        <td>{{ customer.name }}</td>
+    </tr>
+    <tr>
+        <th>ID</th>
+        <td>{{ customer.customer }}</td>
+    </tr>
+    <tr>
+        <th>Department</th>
+        <td>{{ customer.department }}</td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>{{ customer.address }}</td>
+    </tr>
+</table>
+<h5>List of circuits</h5>
+<table>
+    <tr>
+        <th>Circuit</th>
+        <th>Reference</th>
+    </tr>
+    {% for customer_circuit in customer_circuits %}
+    <tr>
+        <td><a href="{{ customer_circuit.circuit.get_absolute_url }}">{{customer_circuit.circuit}}</a></td>
+        <td>{{customer_circuit.circuit.alias}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

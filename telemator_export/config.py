@@ -4,7 +4,7 @@
 
 # Dictionary with lists of which columns to get for each table
 EXTRACT_DICT = {
-    'AboReg': ['RowKey', 'CustId', 'Name'],
+    'AboReg': ['RowKey', 'CustId', 'Name', 'Department', 'Addr2'],
     'ElmOwner': ['RowKey', 'Owner', 'Name', 'Email', 'Type'],
     'EndReg': ['RowKey', 'End', 'EqLinkToPt', 'IsEquipm'],
     'KabReg': ['RowKey', 'Cable', 'End_A', 'End_B', 'Owner', 'RemarkM'],
@@ -69,10 +69,12 @@ NEW_TABLE_NAMES = {
 
 # Dict of new column names
 NEW_COLUMN_NAMES = {
+    'Addr2': 'address',
     'Cable': 'cable',
     'Circuit': 'circuit',
     'Core': 'core',
     'CustId': 'customer',
+    'Department': 'department',
     'Email': 'email',
     'End': 'end',
     'End_A': 'end_a',

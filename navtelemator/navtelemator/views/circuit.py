@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 
-from navtelemator.models import CircuitDetail, Circuit, CircuitEnd, RoutingCable
+from navtelemator.models import CircuitDetail, Circuit, CircuitEnd, RoutingCable, CustomerCircuit
 
 
 def room_circuits(request, roomid):
@@ -32,12 +32,14 @@ def render_circuit(request, circuitid):
     circuit = get_object_or_404(Circuit, name=circuitid)
     routingcables = RoutingCable.objects.filter(circuit=circuitid).filter(wire='A')
     circuit_details = CircuitDetail.objects.filter(circuit=circuitid)
+    customer_circuits = CustomerCircuit.objects.filter(circuit=circuitid)
     return render(request,
                   'telemator/circuit_info.html',
                   {
                       'circuit': circuit,
                       'circuit_details': circuit_details,
-                      'routingcables': routingcables
+                      'routingcables': routingcables,
+                      'customer_circuits': customer_circuits
                   }
                   )
 
