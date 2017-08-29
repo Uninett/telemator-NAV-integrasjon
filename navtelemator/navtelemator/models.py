@@ -50,7 +50,9 @@ class CircuitDetail(models.Model):
     id = models.AutoField(db_column='id', primary_key=True)
     circuit = models.ForeignKey('Circuit', db_column='circuit')
     index = models.IntegerField(db_column='index')
-    end = models.ForeignKey('End', db_column='end')
+    type = models.CharField(db_column='type')
+    name = models.ForeignKey('End', db_column='name')
+    interface = models.CharField(db_column='interface')
 
     class Meta:
         managed = False

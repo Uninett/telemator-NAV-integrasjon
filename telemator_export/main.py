@@ -259,7 +259,7 @@ def generate_circuitdetails(dataframes):
         return current, cables
 
     def generate():
-        circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'end'])
+        circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'type', 'name', 'interface'])
         counter = 1
         maxloops = 10
         for i,row in dataframes['circuit'].iterrows():
@@ -289,7 +289,8 @@ def generate_circuitdetails(dataframes):
             if loopcounter == 11:
                 continue
             for index, detail in enumerate(details):
-                circuit_details.loc[counter] = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'end': detail})
+                row = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'type':'end', 'name': detail, 'interface': None})
+                circuit_details.loc[counter] = row
                 counter += 1
         return circuit_details
 

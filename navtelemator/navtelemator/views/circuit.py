@@ -5,7 +5,7 @@ from navtelemator.models import CircuitDetail, Circuit, CircuitEnd, RoutingCable
 
 def room_circuits(request, roomid):
     #room = get_object_or_404(Room, id=roomid)
-    circuit_details = CircuitDetail.objects.filter(end=roomid)
+    circuit_details = CircuitDetail.objects.filter(name=roomid)
     #cables = Cable.objects.all()
     #cables = [{id: "Kabel1"}, {id:"Kabel2"}]
     return render(request,
@@ -17,7 +17,7 @@ def room_circuits(request, roomid):
 
 def netbox_circuits(request, netbox_sysname):
     #room = get_object_or_404(Room, id=roomid)
-    circuit_details = CircuitDetail.objects.filter(end=netbox_sysname)
+    circuit_details = CircuitDetail.objects.filter(name=netbox_sysname)
     #cables = Cable.objects.all()
     #cables = [{id: "Kabel1"}, {id:"Kabel2"}]
     return render(request,
