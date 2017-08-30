@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse, logging
 from sqlalchemy import create_engine, inspect
 from config import *
 from db import *
@@ -18,39 +19,49 @@ def main():
     tm_engine = create_engine(tm_params)
     pg_engine = create_engine(pg_params)
 
+    args = parse_args()
+    logging.basicConfig(level=logging.getLevelName(args.logging))
+
+    logging.info('Extracting data')
     table_dataframes = extract_dataframes(tm_engine, EXTRACT_DICT)
-    print('Extract complete')
+    logging.info('Converting strings to lowercase')
     lowercase_values(table_dataframes, COLUMN_TO_OBJECT, LOWERCASE_OBJECTS)
-    print('Made values lowercase')
+    logging.info('Creating dictionaries for foreign keys')
     regular_dict, composite_dict = create_dictionaries(table_dataframes, PREVIOUS_REGULAR_PRIMARY_KEYS, PREVIOUS_COMPOSITE_PRIMARY_KEYS)
-    print('Created dictionaries')
+    logging.info('Fixing foreign keys')
     fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_OBJECT)
-    print('Fixed foreign keys')
+    logging.info('Renaming columns')
     rename_columns(table_dataframes, NEW_COLUMN_NAMES)
-    print('Renamed columns')
+    logging.info('Renaming table names')
     rename_tables(table_dataframes, NEW_TABLE_NAMES)
-    print('Renamed tables')
+    logging.info('Generating circuitdetails')
     table_dataframes['circuit_detail'] = generate_circuitdetails(table_dataframes)
-    print('Generated circuitdetails')
+    logging.info('Extracting cable reference from comment')
     extract_cable_alias(table_dataframes)
-    print('Extracted cable name')
-    #delete_tables(table_dataframes, pg_engine)
-    #print('Deleted old tables')
-    print('Creating schema')
+    logging.info('Creating schema for telemator')
     create_schema(pg_engine)
-    print('Add schema to search path')
+    logging.info('Add schema to search path')
     add_schema_to_search(pg_engine)
-    print('Inserting dataframes')
+    logging.info('Inserting dataframes')
     insert_dataframes(pg_engine, table_dataframes)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Exports, transforms and loads Telemator data into postgres")
+    arg = parser.add_argument
+    arg("-l", "--log", help='Set the log-level. 10 = debug, 50=critical', choices=[10, 20, 30, 40, 50], dest='logging', default=40)
+    return parser.parse_args()
+
 
 def create_schema(engine):
     return engine.execute("CREATE SCHEMA IF NOT EXISTS telemator;")
+
 
 def add_schema_to_search(engine):
     required_namespaces = [SCHEMA]
     result = engine.execute("SHOW search_path")
     search_path = result.fetchone()[0]
-    print(search_path)
+    #print(search_path)
     schemas = [s.strip() for s in search_path.split(',')]
     add_schemas = [wanted
                    for wanted in required_namespaces
@@ -59,6 +70,7 @@ def add_schema_to_search(engine):
         schemas.extend(add_schemas)
         schemalist = ", ".join(schemas)
         engine.execute('ALTER DATABASE %s SET search_path TO %s' % (PG_DBNAME, schemalist))
+
 
 def delete_tables(datatables, engine):
     for key in datatables:
@@ -148,7 +160,7 @@ def fix_foreign_keys(dataframes, regular_foreign_keys, composite_foreign_keys, r
                 for column in keys[key]:
                     if column_mapping[column] not in dict:
                         continue
-                    elif (row[column] == None):
+                    elif row[column] is None:
                         continue
                     dataframes[key].set_value(i, column, dict[column_mapping[column]][row[column]])
 
@@ -187,7 +199,7 @@ def lowercase_values(dataframes, column_mapping, lowercase_list):
     for key in dataframes:
         for i, row in dataframes[key].iterrows():
             for column_name in row.index:
-                if column_name not in column_mapping or row.loc[column_name] == None:
+                if column_name not in column_mapping or row.loc[column_name] is None:
                     continue
                 if column_name in lowercase_list or column_mapping[column_name] in lowercase_list:
                     dataframes[key].set_value(i, column_name, row.loc[column_name].lower())
@@ -216,7 +228,7 @@ def generate_circuitdetails(dataframes):
         routing_cables = []
         routing_cableids = []
         for j, routingrow in dataframes['routing_cable'].iterrows():
-            if (routingrow['circuit'] == circuit_id):
+            if routingrow['circuit'] == circuit_id:
                 routing_cables.append(routingrow)
                 routing_cableids.append(routingrow['cable'])
         for j, cablerow in dataframes['cable'].iterrows():
@@ -262,34 +274,36 @@ def generate_circuitdetails(dataframes):
         circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'type', 'name', 'interface'])
         counter = 1
         maxloops = 10
-        for i,row in dataframes['circuit'].iterrows():
+        for i, row in dataframes['circuit'].iterrows():
             circuit_id = row['circuit']
             if circuit_id.startswith('TEMPLATE'):
                 dataframes['circuit'].drop(i, inplace=True)
                 continue
             #print(circuit_id)
             cables, routing_cables, routing_cableids, start, stop = get_objects_and_ids(dataframes, circuit_id)
-            if start == None and stop == None:
+            if start is None and stop is None:
                 continue
             current = start
             details = [current]
             loopcounter = 0
+            type = None
             while current != stop:
                 # If there is no stop, just add the start
-                if stop == None:
+                if stop is None:
                     break
                 loopcounter += 1
                 if loopcounter == 11:
                     break
                 current_row, found_row = get_current_row(current)
-                if found_row == False:
+                if not found_row:
                     break
                 current, cables = get_next_element(current, current_row, cables, stop)
                 details.append(current)
             if loopcounter == 11:
                 continue
             for index, detail in enumerate(details):
-                row = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'type':'end', 'name': detail, 'interface': None})
+                row = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'type': 'end',
+                                 'name': detail, 'interface': None})
                 circuit_details.loc[counter] = row
                 counter += 1
         return circuit_details
