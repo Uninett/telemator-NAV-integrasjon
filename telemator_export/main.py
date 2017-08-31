@@ -11,6 +11,10 @@ from sqlalchemy.sql import exists, select
 
 
 def main():
+    """
+    Main function, used for calling all other functions
+    :return:
+    """
     # Get parameters from the config, used for connecting to the server
     tm_params = 'mssql+pymssql://' + TM_USER + ':' + TM_PASSWORD + '@' + TM_HOST + ':' + TM_PORT + '/' + TM_DBNAME
     pg_params = 'postgresql://' + PG_USER + ':' + PG_PASSWORD + '@' + PG_HOST + ':' + PG_PORT + '/' + PG_DBNAME
@@ -47,17 +51,31 @@ def main():
 
 
 def parse_args():
+    """
+    Function for parsing arguments given
+    :return: Dictionary of arguments
+    """
     parser = argparse.ArgumentParser(description="Exports, transforms and loads Telemator data into postgres")
     arg = parser.add_argument
-    arg("-l", "--log", help='Set the log-level. 10 = debug, 50=critical', choices=[10, 20, 30, 40, 50], dest='logging', default=40)
+    arg("-l", "--log", help='Set the log-level. 10 = debug, 50=critical', type=int, choices=[10, 20, 30, 40, 50], dest='logging', default=40)
     return parser.parse_args()
 
 
 def create_schema(engine):
-    return engine.execute("CREATE SCHEMA IF NOT EXISTS telemator;")
+    """
+    Function for creating a schema for telemator in postgres
+    :param engine: Engine to be used while creating the schema
+    :return: Result of the sql query
+    """
+    return engine.execute('CREATE SCHEMA IF NOT EXISTS "%s";' % SCHEMA)
 
 
 def add_schema_to_search(engine):
+    """
+    Add the telemator schema to the search path in nav
+    :param engine: Engine to be used when altering the database
+    :return:
+    """
     required_namespaces = [SCHEMA]
     result = engine.execute("SHOW search_path")
     search_path = result.fetchone()[0]
@@ -73,8 +91,14 @@ def add_schema_to_search(engine):
 
 
 def delete_tables(datatables, engine):
+    """
+    Delete the tables which we have dataframes for
+    :param datatables: Dictionary of dataframes
+    :param engine: Engine to be deleted from
+    :return:
+    """
     for key in datatables:
-        sql.execute('DROP TABLE IF EXISTS "%s"'%key, engine)
+        sql.execute('DROP TABLE IF EXISTS "%s"' % key, engine)
 
 
 def print_columns(engine, table_name):
@@ -222,14 +246,18 @@ def generate_circuitdetails(dataframes):
     :return: Dataframe of the circuit_details generated
     """
     def get_objects_and_ids(dataframes, circuit_id):
+        """
+        Generate list of necessary objects to be used by the function
+        :param dataframes: Dictionary of dataframes to be processed
+        :param circuit_id: Circuit to filter on
+        :return: List of cables associated with circuit and start and stop of circuit
+        """
         start = None
         stop = None
         cables = []
-        routing_cables = []
         routing_cableids = []
         for j, routingrow in dataframes['routing_cable'].iterrows():
             if routingrow['circuit'] == circuit_id:
-                routing_cables.append(routingrow)
                 routing_cableids.append(routingrow['cable'])
         for j, cablerow in dataframes['cable'].iterrows():
             if cablerow['cable'] in routing_cableids:
@@ -240,9 +268,14 @@ def generate_circuitdetails(dataframes):
                     start = circuitendrow['end']
                 elif circuitendrow['parallel'] == 2:
                     stop = circuitendrow['end']
-        return cables, routing_cables, routing_cableids, start, stop
+        return cables, start, stop
 
     def get_current_row(current):
+        """
+        Get the data of the given device or room
+        :param current: Name of device or room
+        :return: Row with the corresponding data and a boolean for whether it was found
+        """
         current_row = None
         found_row = False
         for j, endrow in dataframes['end'].iterrows():
@@ -253,6 +286,14 @@ def generate_circuitdetails(dataframes):
         return current_row, found_row
 
     def get_next_element(current, current_row, cables, stop):
+        """
+        Get the next element in the circuit
+        :param current: Name of the previous step
+        :param current_row: Row for the current step
+        :param cables: List of cables not yet traversed
+        :param stop: Name of the end to stop at
+        :return: Name of current step and list of remaining cables
+        """
         if current_row['is_equipment'] == 0:
             if len(cables) == 0:
                 current = stop
@@ -271,6 +312,10 @@ def generate_circuitdetails(dataframes):
         return current, cables
 
     def generate():
+        """
+        Main function to generate circuit_details
+        :return: Dataframe with the circuit_details
+        """
         circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'type', 'name', 'interface'])
         counter = 1
         maxloops = 10
@@ -280,7 +325,7 @@ def generate_circuitdetails(dataframes):
                 dataframes['circuit'].drop(i, inplace=True)
                 continue
             #print(circuit_id)
-            cables, routing_cables, routing_cableids, start, stop = get_objects_and_ids(dataframes, circuit_id)
+            cables, start, stop = get_objects_and_ids(dataframes, circuit_id)
             if start is None and stop is None:
                 continue
             current = start
@@ -312,6 +357,11 @@ def generate_circuitdetails(dataframes):
 
 
 def extract_cable_alias(dataframes):
+    """
+    Extract the cable alias from the comment associated with it
+    :param dataframes: Dictionary of dataframes
+    :return:
+    """
     result = {}
     for i, row in dataframes['cable'].iterrows():
         if row['comment']:
