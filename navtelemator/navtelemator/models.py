@@ -52,7 +52,8 @@ class CircuitDetail(models.Model):
     index = models.IntegerField(db_column='index')
     type = models.CharField(db_column='type')
     name = models.ForeignKey('End', db_column='name')
-    interface = models.CharField(db_column='interface')
+    interface_id = models.IntegerField(db_column='interface_id')
+    interface_name = models.CharField(db_column='interface_name')
 
     class Meta:
         managed = False

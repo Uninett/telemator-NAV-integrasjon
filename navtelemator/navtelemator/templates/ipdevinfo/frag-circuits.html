@@ -3,13 +3,17 @@
         <tr>
         <th>Circuit</th>
         <th>Step</th>
-            <th>Reference</th>
+        <th>Reference</th>
+        <th>Interface ID</th>
+        <th>Interface name</th>
     </tr>
     {% for circuit_detail in circuit_details %}
     <tr>
         <td><a href="{{ circuit_detail.circuit.get_absolute_url }}">{{circuit_detail.circuit}}</a></td>
         <td>{{circuit_detail.index}}</td>
         <td>{{circuit_detail.circuit.alias}}</td>
+        <td>{{circuit_detail.interface_id}}</td>
+        <td>{{circuit_detail.interface_name}}</td>
     </tr>
     {% endfor %}
         </table>

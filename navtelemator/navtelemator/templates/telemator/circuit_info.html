@@ -29,13 +29,17 @@
 <h5>List of steps in circuit</h5>
 <table>
     <tr>
-        <th>End</th>
         <th>Step</th>
+        <th>End</th>
+        <th>Interface ID</th>
+        <th>Interface name</th>
     </tr>
     {% for circuit_detail in circuit_details %}
     <tr>
-        <td><a href="{{ circuit_detail.name.get_absolute_url }}">{{circuit_detail.name}}</a></td>
         <td>{{circuit_detail.index}}</td>
+        <td><a href="{{ circuit_detail.name.get_absolute_url }}">{{circuit_detail.name}}</a></td>
+        <td>{{circuit_detail.interface_id}}</td>
+        <td>{{circuit_detail.interface_name}}</td>
     </tr>
     {% endfor %}
 </table>

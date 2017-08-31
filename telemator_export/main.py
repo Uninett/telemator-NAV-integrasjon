@@ -30,10 +30,10 @@ def main():
     table_dataframes = extract_dataframes(tm_engine, EXTRACT_DICT)
     logging.info('Converting strings to lowercase')
     lowercase_values(table_dataframes, COLUMN_TO_OBJECT, LOWERCASE_OBJECTS)
-    logging.info('Creating dictionaries for foreign keys')
-    regular_dict, composite_dict = create_dictionaries(table_dataframes, PREVIOUS_REGULAR_PRIMARY_KEYS, PREVIOUS_COMPOSITE_PRIMARY_KEYS)
-    logging.info('Fixing foreign keys')
-    fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_OBJECT)
+    #logging.info('Creating dictionaries for foreign keys')
+    #regular_dict, composite_dict = create_dictionaries(table_dataframes, PREVIOUS_REGULAR_PRIMARY_KEYS, PREVIOUS_COMPOSITE_PRIMARY_KEYS)
+    #logging.info('Fixing foreign keys')
+    #fix_foreign_keys(table_dataframes, REGULAR_FOREIGN_KEYS, COMPOSITE_FOREIGN_KEYS, regular_dict, composite_dict, COLUMN_TO_OBJECT)
     logging.info('Renaming columns')
     rename_columns(table_dataframes, NEW_COLUMN_NAMES)
     logging.info('Renaming table names')
@@ -256,6 +256,7 @@ def generate_circuitdetails(dataframes):
         stop = None
         cables = []
         routing_cableids = []
+        connections = []
         for j, routingrow in dataframes['routing_cable'].iterrows():
             if routingrow['circuit'] == circuit_id:
                 routing_cableids.append(routingrow['cable'])
@@ -316,7 +317,7 @@ def generate_circuitdetails(dataframes):
         Main function to generate circuit_details
         :return: Dataframe with the circuit_details
         """
-        circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'type', 'name', 'interface'])
+        circuit_details = pd.DataFrame(columns=['id', 'circuit', 'index', 'type', 'name', 'interface_id', 'interface_name'])
         counter = 1
         maxloops = 10
         for i, row in dataframes['circuit'].iterrows():
@@ -324,12 +325,21 @@ def generate_circuitdetails(dataframes):
             if circuit_id.startswith('TEMPLATE'):
                 dataframes['circuit'].drop(i, inplace=True)
                 continue
-            #print(circuit_id)
+            logging.debug(circuit_id)
             cables, start, stop = get_objects_and_ids(dataframes, circuit_id)
             if start is None and stop is None:
                 continue
             current = start
-            details = [current]
+            details = []
+            port_id = None
+            port_name = None
+            for j, connectionrow in dataframes['connection'].iterrows():
+                if connectionrow['end'] == current and connectionrow['wire'] == 'A':
+                    port_id = connectionrow['port']
+            for j, portrow in dataframes['port'].iterrows():
+                if portrow['end'] == current and portrow['port'] == port_id:
+                    port_name = portrow['label']
+            details.append([current, port_id, port_name])
             loopcounter = 0
             type = None
             while current != stop:
@@ -343,12 +353,18 @@ def generate_circuitdetails(dataframes):
                 if not found_row:
                     break
                 current, cables = get_next_element(current, current_row, cables, stop)
-                details.append(current)
+                for j, connectionrow in dataframes['connection'].iterrows():
+                    if connectionrow['end'] == current and connectionrow['wire'] == 'A':
+                        port_id = connectionrow['port']
+                for j, portrow in dataframes['port'].iterrows():
+                    if portrow['end'] == current and portrow['port'] == port_id:
+                        port_name = portrow['label']
+                details.append([current, port_id, port_name])
             if loopcounter == 11:
                 continue
             for index, detail in enumerate(details):
                 row = pd.Series({'id': counter, 'circuit': circuit_id, 'index': index + 1, 'type': 'end',
-                                 'name': detail, 'interface': None})
+                                 'name': detail[0], 'interface_id': detail[1], 'interface_name': detail[2]})
                 circuit_details.loc[counter] = row
                 counter += 1
         return circuit_details

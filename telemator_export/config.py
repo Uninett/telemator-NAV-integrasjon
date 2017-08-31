@@ -12,7 +12,7 @@ EXTRACT_DICT = {
     'KuSbLink': ['RowKey', 'CustId', 'Circuit'],
     'LedRut': ['RowKey', 'Cable', 'Core', 'Circuit', 'Wire', 'Remark'],
     'SbReg': ['RowKey', 'Circuit', 'Type', 'Speed', 'Reference', 'Owner'],
-    'UtsTilk': ['RowKey', 'Pin', 'Port', 'End', 'Circuit'],
+    'UtsTilk': ['RowKey', 'Pin', 'Port', 'End', 'Circuit', 'Wire'],
     'UtsTlf': ['RowKey', 'Circuit', 'Parallel', 'End'],
     'UtsUtg': ['RowKey', 'End', 'Port', 'Label', 'Remark', 'Type'],
                }
