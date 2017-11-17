@@ -25,6 +25,13 @@ The following needs to be added to the settings and urls, preferedly in their re
     INSTALLED_APPS += (
         'navtelemator',
     )
+        
+    # Telemator search providers
+    SEARCHPROVIDERS += (
+        'navtelemator.search.CircuitSearchProvider',
+        'navtelemator.search.CableSearchProvider',
+        'navtelemator.search.OwnerSearchProvider',
+    )
 
 `/etc/nav/python/local_urls.py`
 
