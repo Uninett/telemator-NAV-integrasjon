@@ -33,6 +33,21 @@ The following needs to be added to the settings and urls, preferedly in their re
         'navtelemator.search.OwnerSearchProvider',
     )
 
+    ### Telemator Config ###
+    # Server to connect to
+    TM_HOST = ''
+    # Port number
+    TM_PORT = '1433'
+
+    # Username
+    TM_USER = ''
+    # Password
+    TM_PASSWORD = ''
+
+    # Name of database to use
+    TM_DBNAME = ''
+
+
 `/etc/nav/python/local_urls.py`
 
     from django.conf.urls import url, patterns, include

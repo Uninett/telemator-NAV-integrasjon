@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block base_content %}
-<h3>{{circuit.name}}</h3>
+<h3>{{circuit.Circuit}}</h3>
 <table>
     <tr>
         <th>Owner</th>
-        <td><a href="{{ cable.owner.get_absolute_url }}">{{ circuit.owner.name }}</a></td>
+        <td><a href="{{ circuit.owner.get_absolute_url }}">{{ circuit.owner.Owner }}</a></td>
     </tr>
     <tr>
         <th>Reference</th>
-        <td>{{circuit.alias}}</td>
+        <td>{{circuit.Reference}}</td>
     </tr>
 </table>
 
@@ -18,14 +18,14 @@
         <th>Customer</th>
         <th>Name</th>
     </tr>
-    {% for customer_circuit in customer_circuits %}
+    {% for customer in circuit.customers %}
     <tr>
-        <td><a href="{{ customer_circuit.customer.get_absolute_url }}">{{customer_circuit.customer}}</a></td>
-        <td>{{customer_circuit.customer.name}}</td>
+        <td><a href="{{ customer.customer.get_absolute_url }}">{{customer.customer.CustId}}</a></td>
+        <td>{{customer.customer.Name}}</td>
     </tr>
     {% endfor %}
 </table>
-
+    {% comment %}
 <h5>List of steps in circuit</h5>
 <table>
     <tr>
@@ -43,6 +43,7 @@
     </tr>
     {% endfor %}
 </table>
+{% endcomment %}
 <h5>List of cables in circuit</h5>
 <table>
     <tr>
@@ -51,9 +52,11 @@
     </tr>
     {% for routingcable in routingcables %}
     <tr>
-        <td><a href="{{ routingcable.cable.get_absolute_url }}">{{routingcable.cable}}</a></td>
-        <td>{{routingcable.cable.alias}}</td>
+        <td><a href="{{ routingcable.cable.get_absolute_url }}">{{routingcable.Cable}}</a></td>
+        <td>{{routingcable.cable.Reference}}</td>
     </tr>
     {% endfor %}
 </table>
+
+
 {% endblock %}

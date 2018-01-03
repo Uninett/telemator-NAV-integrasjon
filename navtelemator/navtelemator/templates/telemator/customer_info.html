@@ -3,19 +3,23 @@
 <table>
     <tr>
         <th>Name</th>
-        <td>{{ customer.name }}</td>
+        <td>{{ customer.Name }}</td>
     </tr>
     <tr>
         <th>ID</th>
-        <td>{{ customer.customer }}</td>
+        <td>{{ customer.CustId }}</td>
     </tr>
     <tr>
         <th>Department</th>
-        <td>{{ customer.department }}</td>
+        <td>{{ customer.Department }}</td>
     </tr>
     <tr>
         <th>Address</th>
-        <td>{{ customer.address }}</td>
+        <td>{{ customer.Addr2 }}</td>
+    </tr>
+        <tr>
+        <th>KIND</th>
+        <td><a href="https://kind.cs.uninett.no/org/edit_org.html?id={{customer.CustId}};">Link</a> </td>
     </tr>
 </table>
 <h5>List of circuits</h5>
@@ -24,10 +28,10 @@
         <th>Circuit</th>
         <th>Reference</th>
     </tr>
-    {% for customer_circuit in customer_circuits %}
+    {% for circuit in customer.circuits %}
     <tr>
-        <td><a href="{{ customer_circuit.circuit.get_absolute_url }}">{{customer_circuit.circuit}}</a></td>
-        <td>{{customer_circuit.circuit.alias}}</td>
+        <td><a href="{{ circuit.circuit.get_absolute_url }}">{{circuit.circuit.Circuit}}</a></td>
+        <td>{{circuit.circuit.Reference}}</td>
     </tr>
     {% endfor %}
 </table>

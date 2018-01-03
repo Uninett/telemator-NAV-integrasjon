@@ -1,11 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-
-from navtelemator.models import Cable, RoutingCable
+from django.shortcuts import render
+from navtelemator import services
 
 
 def render_cable(request, cableid):
-    cable = get_object_or_404(Cable, name=cableid)
-    routingcables = RoutingCable.objects.filter(cable=cableid) & RoutingCable.objects.filter(core=1)
+    cable = services.get_cable_by_id(cableid)
+    routingcables = services.get_routingcables_by_cable(cableid)
     return render(request,
                   'telemator/cable_info.html',
                   {
@@ -15,10 +14,7 @@ def render_cable(request, cableid):
                   )
 
 def room_cables(request, roomid):
-    #room = get_object_or_404(Room, id=roomid)
-    cables = Cable.objects.filter(end_a=roomid) | Cable.objects.filter(end_b=roomid)
-    #cables = Cable.objects.all()
-    #cables = [{id: "Kabel1"}, {id:"Kabel2"}]
+    cables = services.get_cables_by_end(roomid)
     return render(request,
                   'info/room/roominfo_cables.html',
                   {

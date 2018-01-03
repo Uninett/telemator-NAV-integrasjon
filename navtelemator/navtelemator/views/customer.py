@@ -1,15 +1,12 @@
-from django.shortcuts import get_object_or_404, render
-
-from navtelemator.models import Customer, CustomerCircuit
+from django.shortcuts import render
+from navtelemator import services
 
 
 def render_customer(request, customerid):
-    customer = get_object_or_404(Customer, customer=customerid)
-    customer_circuits = CustomerCircuit.objects.filter(customer=customerid)
+    customer = services.get_customer_by_id(customerid)
     return render(request,
                   'telemator/customer_info.html',
                   {
                       'customer': customer,
-                      'customer_circuits': customer_circuits
                   }
                   )

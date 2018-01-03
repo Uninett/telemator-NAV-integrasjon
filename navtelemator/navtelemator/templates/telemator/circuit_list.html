@@ -3,12 +3,12 @@
 <table>
     <tr>
         <th>Circuit</th>
-        <th>Alias</th>
+        <th>Reference</th>
     </tr>
     {% for circuit in circuits %}
     <tr>
-        <td><a href="{{ circuit.get_absolute_url }}">{{circuit}}</a></td>
-        <td>{{circuit.alias}}</td>
+        <td><a href="{{ circuit.get_absolute_url }}">{{circuit.Circuit}}</a></td>
+        <td>{{circuit.Reference}}</td>
     </tr>
     {% endfor %}
 </table>

@@ -26,7 +26,5 @@ setup(name='nav-contrib-telemator',
       author_email='bflugon@gmail.com',
       url='http://www.example.com',
       packages=['navtelemator'],
-#      install_requires=[
-#          'django',
-#      ],
+      install_requires=['sqlalchemy','pymssql',],
       include_package_data=True)

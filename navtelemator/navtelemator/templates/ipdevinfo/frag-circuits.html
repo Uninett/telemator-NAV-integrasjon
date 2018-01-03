@@ -2,18 +2,22 @@
     <table>
         <tr>
         <th>Circuit</th>
+            {% comment %}
         <th>Step</th>
         <th>Reference</th>
+            {% endcomment %}
         <th>Interface ID</th>
         <th>Interface name</th>
     </tr>
     {% for circuit_detail in circuit_details %}
     <tr>
-        <td><a href="{{ circuit_detail.circuit.get_absolute_url }}">{{circuit_detail.circuit}}</a></td>
+        <td><a href="{{ circuit_detail.0.circuit.get_absolute_url }}">{{circuit_detail.0.Circuit}}</a></td>
+        {% comment %}
         <td>{{circuit_detail.index}}</td>
         <td>{{circuit_detail.circuit.alias}}</td>
-        <td>{{circuit_detail.interface_id}}</td>
-        <td>{{circuit_detail.interface_name}}</td>
+        {% endcomment %}
+        <td>{{circuit_detail.1.Port}}</td>
+        <td>{{circuit_detail.1.Label}}</td>
     </tr>
     {% endfor %}
         </table>

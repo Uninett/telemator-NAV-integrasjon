@@ -3,27 +3,27 @@
 <table>
       <tr>
           <th>Name</th>
-          <td>{{ cable.name }}</td>
+          <td>{{ cable.Cable }}</td>
       </tr>
           <tr>
           <th>Reference</th>
-          <td>{{ cable.alias }}</td>
+          <td>{{ cable.reference }}</td>
       </tr>
       <tr>
           <th>End A</th>
-          <td><a href="{{ cable.end_a.get_absolute_url }}">{{cable.end_a.name}}</a></td>
+          <td><a href="{{ cable.end_a.get_absolute_url }}">{{cable.end_a.End}}</a></td>
       </tr>
       <tr>
           <th>End B</th>
-          <td><a href="{{ cable.end_b.get_absolute_url }}">{{cable.end_b.name}}</a></td>
+          <td><a href="{{ cable.end_b.get_absolute_url }}">{{cable.end_b.End}}</a></td>
       </tr>
       <tr>
         <th>Owner</th>
-        <td><a href="{{ cable.owner.get_absolute_url }}">{{ cable.owner.name }}</a></td>
+        <td><a href="{{ cable.owner.get_absolute_url }}">{{ cable.owner.Name }}</a></td>
       </tr>
     <tr>
         <th>Comment</th>
-        <td>{{cable.comment}}</td>
+        <td>{{cable.RemarkM}}</td>
     </tr>
     </table>
 <h5>Circuits on this Cable</h5>
@@ -34,8 +34,8 @@
     </tr>
     {% for routingcable in routingcables %}
     <tr>
-        <td><a href="{{ routingcable.circuit.get_absolute_url }}">{{routingcable.circuit}}</a></td>
-        <td>{{routingcable.circuit.alias}}</td>
+        <td><a href="{{ routingcable.circuit.get_absolute_url }}">{{routingcable.Circuit}}</a></td>
+        <td>{{routingcable.circuit.Reference}}</td>
     </tr>
     {% endfor %}
 </table>
