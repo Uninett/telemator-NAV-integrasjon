@@ -55,7 +55,7 @@ def get_customer_by_id(custid):
     return session.query(Customer).filter(Customer.CustId == custid).one()
 
 
-#def get_customer_by_name(name):
+# def get_customer_by_name(name):
 #   return session.query(Customer).filter(Customer.CustId == name).all()
 
 
