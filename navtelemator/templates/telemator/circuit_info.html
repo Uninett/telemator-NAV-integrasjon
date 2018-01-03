@@ -58,5 +58,17 @@
     {% endfor %}
 </table>
 
+<h5>List of netboxes in circuit</h5>
+<table>
+    <tr>
+        <th>Netbox</th>
+    </tr>
+    {% for connection in connections %}
+    <tr>
+        <td><a href="{{ connection.End.get_absolute_url }}">{{connection.End}}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
 
 {% endblock %}

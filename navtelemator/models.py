@@ -356,6 +356,8 @@ class End(Base):
     AccToSiteM = Column(String(collation='Danish_Norwegian_CI_AS'))
     MapRef = Column(String(1, 'Danish_Norwegian_CI_AS'))
 
+    ports = relationship('Port', back_populates='end')
+
     def get_absolute_url(self):
         if self.IsEquipm == 1:
             return reverse('ipdevinfo-details-by-name', args=[str(self.End.lower())])
@@ -401,7 +403,7 @@ class Port(Base):
     )
 
     RowKey = Column(Integer, primary_key=True)
-    End = Column(String(30, 'Danish_Norwegian_CI_AS'), nullable=False)
+    End = Column(String(30, 'Danish_Norwegian_CI_AS'), ForeignKey('EndReg.End'), nullable=False)
     Card = Column(String(22, 'Danish_Norwegian_CI_AS'), nullable=False)
     Port = Column(Numeric(4, 0), nullable=False)
     Label = Column(String(254, 'Danish_Norwegian_CI_AS'))
@@ -442,6 +444,8 @@ class Port(Base):
     InsUser = Column(String(20, 'Danish_Norwegian_CI_AS'))
     UpdWhen = Column(DateTime)
     UpdUser = Column(String(20, 'Danish_Norwegian_CI_AS'))
+
+    end = relationship('End', back_populates='ports')
 
 
 class RoutingCable(Base):

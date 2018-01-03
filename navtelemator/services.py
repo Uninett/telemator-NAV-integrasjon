@@ -58,6 +58,9 @@ def get_customer_by_id(custid):
 # def get_customer_by_name(name):
 #   return session.query(Customer).filter(Customer.CustId == name).all()
 
+def get_connections_by_circuit(circuit):
+    return session.query(Connection).filter(Connection.Circuit == circuit, Connection.Wire == 'A')
+
 
 def get_owner_by_id(owner):
     return session.query(Owner).filter(Owner.Owner == owner).one()

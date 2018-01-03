@@ -1,13 +1,14 @@
 <div id="circuits">
     <table>
         <tr>
-        <th>Circuit</th>
-            {% comment %}
-        <th>Step</th>
-        <th>Reference</th>
-            {% endcomment %}
-        <th>Interface ID</th>
-        <th>Interface name</th>
+            <th>Circuit</th>
+                {% comment %}
+            <th>Step</th>
+            <th>Reference</th>
+                {% endcomment %}
+            <th>Interface ID</th>
+            <th>Interface name</th>
+            <th>Channel</th>
     </tr>
     {% for circuit_detail in circuit_details %}
     <tr>
@@ -18,6 +19,7 @@
         {% endcomment %}
         <td>{{circuit_detail.1.Port}}</td>
         <td>{{circuit_detail.1.Label}}</td>
+        <td>{{circuit_detail.1.Channel}}</td>
     </tr>
     {% endfor %}
         </table>
