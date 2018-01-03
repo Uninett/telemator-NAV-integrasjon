@@ -13,6 +13,7 @@ def render_cable(request, cableid):
                   }
                   )
 
+
 def room_cables(request, roomid):
     cables = services.get_cables_by_end(roomid)
     return render(request,

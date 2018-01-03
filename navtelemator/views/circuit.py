@@ -11,6 +11,7 @@ def room_circuits(request, roomid):
                   }
                   )
 
+
 def netbox_circuits(request, netbox_sysname):
     circuit_details = services.get_circuit_details_by_netbox(netbox_sysname)
     return render(request,
@@ -29,7 +30,7 @@ def render_circuit(request, circuitid):
                   'telemator/circuit_info.html',
                   {
                       'circuit': circuit,
-                      #'circuit_details': circuit_details,
+                      # 'circuit_details': circuit_details,
                       'routingcables': routingcables,
                   }
                   )
