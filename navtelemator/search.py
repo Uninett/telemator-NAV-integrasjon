@@ -3,7 +3,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms_foundation.layout import Layout, Row, Column, Submit, Field
 from django.core.urlresolvers import reverse
 from collections import namedtuple
-from navtelemator.new_models import Circuit, Cable, Owner
+from navtelemator.models import Circuit, Cable, Owner
 from navtelemator import services
 from sqlalchemy import or_
 

@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
-from navtelemator.new_models import Cable, Circuit, Connection, Customer, Owner, Port, RoutingCable
+from navtelemator.models import Cable, Circuit, Connection, Customer, Owner, Port, RoutingCable
 from django.conf import settings
 
 TM_USER = getattr(settings, "TM_USER", None)
