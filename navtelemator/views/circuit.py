@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from navtelemator.models import CircuitDetail, CircuitEnd, RoutingCable, CustomerCircuit
 from navtelemator import services
 
 

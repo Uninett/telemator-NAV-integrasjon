@@ -93,8 +93,9 @@ class CircuitSearchProvider(SearchProvider):
                 result)
             )
 
+
 class CableSearchProvider(SearchProvider):
-    """Searchprovider for circuits"""
+    """Searchprovider for cables"""
     name = "Cables"
     headers = [
         ('Cable', 'name'),
