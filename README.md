@@ -28,8 +28,8 @@ The following needs to be added to the settings and urls, preferedly in their re
         
     # Telemator search providers
     SEARCHPROVIDERS += (
-        'navtelemator.search.CircuitSearchProvider',
         'navtelemator.search.CableSearchProvider',
+        'navtelemator.search.CircuitSearchProvider',
         'navtelemator.search.OwnerSearchProvider',
     )
 
