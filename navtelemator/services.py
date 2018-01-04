@@ -22,20 +22,20 @@ session = Session()
 
 
 def get_cable_by_id(cable):
-    logger.info('get_cable_by_id gave length called')
+    logger.info('get_cable_by_id gave length called with %s', cable)
     result = session.query(Cable).filter(Cable.Cable == cable).one()
     logger.info('get_cable_by_id gave length: %d', len(result))
     return result
 
 def get_cables_by_end(end):
-    logger.info('get_cables_by_end called')
+    logger.info('get_cables_by_end called with %s', end)
     result = session.query(Cable).filter(or_(Cable.End_A == end, Cable.End_B == end)).all()
     logger.info('get_cables_by_end gave length: %d', len(result))
     return result
 
 
 def get_circuit_by_id(circuit):
-    logger.info('get_circuit_by_id called')
+    logger.info('get_circuit_by_id called with %s', circuit)
     result = session.query(Circuit).filter(Circuit.Circuit == circuit.upper()).one()
     logger.info('get_circuit_by_id gave length: %d', len(result))
     return result
@@ -50,7 +50,7 @@ def get_circuit_details():
 
 
 def get_circuit_details_by_netbox(end):
-    logger.info('get_circuit_details_by_netbox called')
+    logger.info('get_circuit_details_by_netbox called with %s', end)
     result = session.query(Connection, Port).filter(Connection.End == end, Connection.Wire == 'A')\
         .filter(Connection.End == Port.End, Connection.Card == Port.Card,Connection.Port == Port.Port).all()
     logger.info('get_circuit_details_by_netbox gave length: %d', len(result))
@@ -58,7 +58,7 @@ def get_circuit_details_by_netbox(end):
 
 
 def get_circuit_details_by_room(room):
-    logger.info('get_circuit_details_by_room called')
+    logger.info('get_circuit_details_by_room called with %s', room)
     result = session.query(RoutingCable, Cable).filter(or_(Cable.End_A == room, Cable.End_B == room))\
         .filter(RoutingCable.Cable == Cable.Cable, RoutingCable.Wire == 'A').all()
     logger.info('get_circuit_details_by_room gave length: %d', len(result))
@@ -76,7 +76,7 @@ def get_circuits_by_end(end):
 
 
 def get_customer_by_id(custid):
-    logger.info('get_customer_by_id called')
+    logger.info('get_customer_by_id called with %s', custid)
     result = session.query(Customer).filter(Customer.CustId == custid).one()
     logger.info('get_customer_by_id gave length: %d', len(result))
     return result
@@ -86,28 +86,28 @@ def get_customer_by_id(custid):
 #   return session.query(Customer).filter(Customer.CustId == name).all()
 
 def get_connections_by_circuit(circuit):
-    logger.info('get_connections_by_circuit called')
+    logger.info('get_connections_by_circuit called with %s', circuit)
     result = session.query(Connection).filter(Connection.Circuit == circuit, Connection.Wire == 'A')
     logger.info('get_connections_by_circuit gave length: %d', len(result))
     return result
 
 
 def get_owner_by_id(owner):
-    logger.info('get_owner_by_id called')
+    logger.info('get_owner_by_id called with %s', owner)
     result = session.query(Owner).filter(Owner.Owner == owner).one()
     logger.info('get_owner_by_id gave length: %d', len(result))
     return result
 
 
 def get_routingcables_by_cable(cable):
-    logger.info('get_routingcables_by_cable called')
+    logger.info('get_routingcables_by_cable called with %s', cable)
     result = session.query(RoutingCable).filter(RoutingCable.Cable == cable, RoutingCable.Wire == 'A').all()
     logger.info('get_routingcables_by_cable gave length: %d', len(result))
     return result
 
 
 def get_routingcables_by_circuit(circuit):
-    logger.info('get_routingcables_by_circuit called')
+    logger.info('get_routingcables_by_circuit called with %s', circuit)
     result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Wire == 'A').all()
     logger.info('get_routingcables_by_circuit gave length: %d', len(result))
     return result
