@@ -22,9 +22,9 @@ session = Session()
 
 
 def get_cable_by_id(cable):
-    logger.info('get_cable_by_id gave length called with %s', cable)
+    logger.info('get_cable_by_id called with %s', cable)
     result = session.query(Cable).filter(Cable.Cable == cable).one()
-    logger.info('get_cable_by_id gave length: %d', len(result))
+    logger.info('get_cable_by_id returned: %d', result.Cable)
     return result
 
 def get_cables_by_end(end):
@@ -37,14 +37,14 @@ def get_cables_by_end(end):
 def get_circuit_by_id(circuit):
     logger.info('get_circuit_by_id called with %s', circuit)
     result = session.query(Circuit).filter(Circuit.Circuit == circuit.upper()).one()
-    logger.info('get_circuit_by_id gave length: %d', len(result))
+    logger.info('get_circuit_by_id returned: %d', result.Circuit)
     return result
 
 
 def get_circuit_details():
     logger.info('get_circuit_details called')
     result = session.query(Connection, Port).filter(Connection.End == Port.End, Connection.Card == Port.Card,
-                                                  Connection.Port == Port.Port)
+                                                  Connection.Port == Port.Port).all()
     logger.info('get_circuit_details gave length: %d', len(result))
     return result
 
@@ -78,7 +78,7 @@ def get_circuits_by_end(end):
 def get_customer_by_id(custid):
     logger.info('get_customer_by_id called with %s', custid)
     result = session.query(Customer).filter(Customer.CustId == custid).one()
-    logger.info('get_customer_by_id gave length: %d', len(result))
+    logger.info('get_customer_by_id returned: %d', result.CustId)
     return result
 
 
@@ -87,7 +87,7 @@ def get_customer_by_id(custid):
 
 def get_connections_by_circuit(circuit):
     logger.info('get_connections_by_circuit called with %s', circuit)
-    result = session.query(Connection).filter(Connection.Circuit == circuit, Connection.Wire == 'A')
+    result = session.query(Connection).filter(Connection.Circuit == circuit, Connection.Wire == 'A').all()
     logger.info('get_connections_by_circuit gave length: %d', len(result))
     return result
 
@@ -95,7 +95,7 @@ def get_connections_by_circuit(circuit):
 def get_owner_by_id(owner):
     logger.info('get_owner_by_id called with %s', owner)
     result = session.query(Owner).filter(Owner.Owner == owner).one()
-    logger.info('get_owner_by_id gave length: %d', len(result))
+    logger.info('get_owner_by_id returned: %d', result.Owner)
     return result
 
 
