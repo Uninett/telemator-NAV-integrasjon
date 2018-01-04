@@ -9,18 +9,18 @@
             <th>Interface ID</th>
             <th>Interface name</th>
             <th>Channel</th>
-    </tr>
-    {% for circuit_detail in circuit_details %}
-    <tr>
-        <td><a href="{{ circuit_detail.0.circuit.get_absolute_url }}">{{circuit_detail.0.Circuit}}</a></td>
-        {% comment %}
-        <td>{{circuit_detail.index}}</td>
-        <td>{{circuit_detail.circuit.alias}}</td>
-        {% endcomment %}
-        <td>{{circuit_detail.1.Port}}</td>
-        <td>{{circuit_detail.1.Label}}</td>
-        <td>{{circuit_detail.1.Channel}}</td>
-    </tr>
-    {% endfor %}
-        </table>
+        </tr>
+        {% for circuit_detail in circuit_details %}
+        <tr>
+            <td><a href="{{ circuit_detail.0.circuit.get_absolute_url }}">{{circuit_detail.0.Circuit}}</a></td>
+            {% comment %}
+            <td>{{circuit_detail.index}}</td>
+            <td>{{circuit_detail.circuit.alias}}</td>
+            {% endcomment %}
+            <td>{{circuit_detail.1.Port}}</td>
+            <td>{{circuit_detail.1.Label}}</td>
+            <td>{{circuit_detail.1.Channel}}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
