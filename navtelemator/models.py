@@ -187,7 +187,7 @@ class Connection(Base):
     )
 
     RowKey = Column(Integer, primary_key=True)
-    End = Column(String(30, 'Danish_Norwegian_CI_AS'), nullable=False)
+    End = Column(String(30, 'Danish_Norwegian_CI_AS'), ForeignKey('EndReg.End'), nullable=False)
     Card = Column(String(22, 'Danish_Norwegian_CI_AS'), nullable=False)
     Port = Column(Numeric(4, 0), nullable=False)
     Pin = Column(Numeric(2, 0), nullable=False)
@@ -207,6 +207,7 @@ class Connection(Base):
     UpdUser = Column(String(20, 'Danish_Norwegian_CI_AS'))
 
     circuit = relationship('Circuit', back_populates='connections')
+    end = relationship('End', back_populates='connections')
 
 
 class Customer(Base):
@@ -357,9 +358,12 @@ class End(Base):
     MapRef = Column(String(1, 'Danish_Norwegian_CI_AS'))
 
     ports = relationship('Port', back_populates='end')
+    connections = relationship('Connection', back_populates='end')
 
     def get_absolute_url(self):
         if self.IsEquipm == 1:
+            if self.Type == 'CWDM':
+                return reverse('telemator-netbox-info', args=[str(self.End)])
             return reverse('ipdevinfo-details-by-name', args=[str(self.End.lower())])
         return reverse('room-info', args=[str(self.End.lower())])
 

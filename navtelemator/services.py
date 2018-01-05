@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
-from navtelemator.models import Cable, Circuit, Connection, Customer, Owner, Port, RoutingCable
+from navtelemator.models import Cable, Circuit, Connection, Customer, End, Owner, Port, RoutingCable
 from django.conf import settings
 import logging
 
@@ -89,6 +89,13 @@ def get_connections_by_circuit(circuit):
     logger.info('get_connections_by_circuit called with %s', circuit)
     result = session.query(Connection).filter(Connection.Circuit == circuit, Connection.Wire == 'A').all()
     logger.info('get_connections_by_circuit gave length: %d', len(result))
+    return result
+
+
+def get_end_by_id(end):
+    logger.info('get_end_by_id called with %s', end)
+    result = session.query(End).filter(End.End == end).one()
+    logger.info('get_end_by_id returned: %d', result.End)
     return result
 
 
