@@ -3,7 +3,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms_foundation.layout import Layout, Row, Column, Submit, Field
 from django.core.urlresolvers import reverse
 from collections import namedtuple
-from navtelemator.models import Circuit, Cable, Owner
+from navtelemator.models import Circuit, Cable, Owner, End
 from navtelemator import services
 from sqlalchemy import or_
 
@@ -104,6 +104,24 @@ class CircuitSearchProvider(SearchProvider):
         for result in results:
             self.results.append(SearchResult(
                 reverse('circuit-info', kwargs={'circuitid': result.Circuit}),
+                result)
+            )
+
+
+class CWDMSearchProvider(SearchProvider):
+    """Searchprovider for circuits"""
+    name = "CWDM"
+    headers = [
+        ('Netbox', 'End'),
+        ('Alias', 'Reference')
+    ]
+    link = 'Netbox'
+
+    def fetch_results(self):
+        results = services.session.query(End).filter(End.End.ilike('%{}%'.format(self.query)))
+        for result in results:
+            self.results.append(SearchResult(
+                reverse('telemator-netbox-info', kwargs={'netbox_sysname': result.End}),
                 result)
             )
 

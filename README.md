@@ -24,6 +24,7 @@ The following needs to be added to the settings and urls, preferedly in their re
     SEARCHPROVIDERS += (
         'navtelemator.search.CableSearchProvider',
         'navtelemator.search.CircuitSearchProvider',
+        'navtelemator.search.CWDMSearchProvider',
         'navtelemator.search.OwnerSearchProvider',
     )
 
