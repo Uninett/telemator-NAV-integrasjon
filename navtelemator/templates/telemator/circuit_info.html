@@ -12,6 +12,7 @@
     </tr>
 </table>
 
+{% if circuit.customers %}
 <h5>List of customers</h5>
 <table>
     <tr>
@@ -25,7 +26,9 @@
     </tr>
     {% endfor %}
 </table>
-    {% comment %}
+{% endif %}
+
+{% if circuit_details %}
 <h5>List of steps in circuit</h5>
 <table>
     <tr>
@@ -43,7 +46,9 @@
     </tr>
     {% endfor %}
 </table>
-{% endcomment %}
+{% endif %}
+
+{% if routingcables %}
 <h5>List of cables in circuit</h5>
 <table>
     <tr>
@@ -57,7 +62,9 @@
     </tr>
     {% endfor %}
 </table>
+{% endif %}
 
+{% if connections %}
 <h5>List of netboxes in circuit</h5>
 <table>
     <tr>
@@ -65,10 +72,10 @@
     </tr>
     {% for connection in connections %}
     <tr>
-        <td><a href="{{ connection.End.get_absolute_url }}">{{connection.End}}</a></td>
+        <td><a href="{{ connection.end.get_absolute_url }}">{{connection.End}}</a></td>
     </tr>
     {% endfor %}
 </table>
-
+{% endif %}
 
 {% endblock %}

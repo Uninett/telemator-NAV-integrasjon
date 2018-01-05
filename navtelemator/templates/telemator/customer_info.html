@@ -17,11 +17,13 @@
         <th>Address</th>
         <td>{{ customer.Addr2 }}</td>
     </tr>
-        <tr>
+    <tr>
         <th>KIND</th>
         <td><a href="https://kind.cs.uninett.no/org/edit_org.html?id={{customer.CustId}};">Link</a> </td>
     </tr>
 </table>
+
+{% if customer.circuits %}
 <h5>List of circuits</h5>
 <table>
     <tr>
@@ -35,4 +37,6 @@
     </tr>
     {% endfor %}
 </table>
+{% endif %}
+
 {% endblock %}

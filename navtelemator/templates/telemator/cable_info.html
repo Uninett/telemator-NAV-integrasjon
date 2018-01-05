@@ -1,31 +1,33 @@
 {% extends "base.html" %}
 {% block base_content %}
 <table>
-      <tr>
-          <th>Name</th>
-          <td>{{ cable.Cable }}</td>
-      </tr>
-          <tr>
-          <th>Reference</th>
-          <td>{{ cable.reference }}</td>
-      </tr>
-      <tr>
-          <th>End A</th>
-          <td><a href="{{ cable.end_a.get_absolute_url }}">{{cable.end_a.End}}</a></td>
-      </tr>
-      <tr>
-          <th>End B</th>
-          <td><a href="{{ cable.end_b.get_absolute_url }}">{{cable.end_b.End}}</a></td>
-      </tr>
-      <tr>
+    <tr>
+        <th>Name</th>
+        <td>{{ cable.Cable }}</td>
+    </tr>
+    <tr>
+        <th>Reference</th>
+        <td>{{ cable.reference }}</td>
+    </tr>
+    <tr>
+        <th>End A</th>
+        <td><a href="{{ cable.end_a.get_absolute_url }}">{{cable.end_a.End}}</a></td>
+    </tr>
+    <tr>
+        <th>End B</th>
+        <td><a href="{{ cable.end_b.get_absolute_url }}">{{cable.end_b.End}}</a></td>
+    </tr>
+    <tr>
         <th>Owner</th>
         <td><a href="{{ cable.owner.get_absolute_url }}">{{ cable.owner.Name }}</a></td>
-      </tr>
+    </tr>
     <tr>
         <th>Comment</th>
         <td>{{cable.RemarkM}}</td>
     </tr>
-    </table>
+</table>
+
+{% if routingcables %}
 <h5>Circuits on this Cable</h5>
 <table>
     <tr>
@@ -39,4 +41,6 @@
     </tr>
     {% endfor %}
 </table>
+{% endif %}
+
 {% endblock %}
