@@ -234,7 +234,7 @@ class Customer(Base):
     UpdUser = Column(String(20, 'Danish_Norwegian_CI_AS'))
     RemarkM = Column(String(collation='Danish_Norwegian_CI_AS'))
 
-    circuits = relationship('CustomerCircuit', back_populates='customer')
+    circuits = relationship('CustomerCircuit', back_populates='customer', order_by='Circuit.Circuit')
 
     def get_absolute_url(self):
         return reverse('customer-info', args=[str(self.CustId)])
@@ -393,8 +393,8 @@ class Owner(Base):
     UpdWhen = Column(DateTime)
     UpdUser = Column(String(20, 'Danish_Norwegian_CI_AS'))
 
-    circuits = relationship('Circuit', back_populates='owner')
-    cables = relationship('Cable', back_populates='owner')
+    circuits = relationship('Circuit', back_populates='owner', order_by='Circuit.Circuit')
+    cables = relationship('Cable', back_populates='owner', order_by='Cable.Cable')
 
     def get_absolute_url(self):
         return reverse('owner-info', args=[str(self.Owner)])
