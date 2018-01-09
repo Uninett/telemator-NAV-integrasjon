@@ -28,19 +28,25 @@
 </table>
 
 {% if routingcables %}
-<h5>Circuits on this Cable</h5>
+<h5>Circuits on this cable</h5>
 <table>
     <tr>
         <th>Circuit</th>
         <th>Reference</th>
+        <th>Core</th>
+        <th>Wavelength</th>
     </tr>
     {% for routingcable in routingcables %}
     <tr>
         <td><a href="{{ routingcable.circuit.get_absolute_url }}">{{routingcable.Circuit}}</a></td>
         <td>{{routingcable.circuit.Reference}}</td>
+        <td>{{routingcable.Core}}/{{routingcable.Core|add:'1'}}</td>
+        <td>{{routingcable.circuit.Wavelength}}</td>
     </tr>
     {% endfor %}
 </table>
 {% endif %}
+
+
 
 {% endblock %}
