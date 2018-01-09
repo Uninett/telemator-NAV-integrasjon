@@ -69,10 +69,12 @@
 <table>
     <tr>
         <th>Netbox</th>
+        <th>Port</th>
     </tr>
     {% for connection in connections %}
     <tr>
-        <td><a href="{{ connection.end.get_absolute_url }}">{{connection.End}}</a></td>
+        <td><a href="{{ connection.end.get_absolute_url }}">{{connection.1.End}}</a></td>
+        <td>{{connection.1.Label}}</td>
     </tr>
     {% endfor %}
 </table>

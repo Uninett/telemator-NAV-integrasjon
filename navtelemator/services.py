@@ -87,7 +87,8 @@ def get_customer_by_id(custid):
 
 def get_connections_by_circuit(circuit):
     logger.info('get_connections_by_circuit called with %s', circuit)
-    result = session.query(Connection).filter(Connection.Circuit == circuit, Connection.Wire == 'A').all()
+    result = session.query(Connection, Port).filter(Connection.Circuit == circuit, Connection.Wire == 'A') \
+        .filter(Connection.End == Port.End, Connection.Card == Port.Card, Connection.Port == Port.Port).all()
     logger.info('get_connections_by_circuit gave length: %d', len(result))
     return result
 
