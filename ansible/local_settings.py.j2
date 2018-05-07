@@ -1,0 +1,35 @@
+LOCAL_SETTINGS = True
+from nav.django.settings import *
+
+TEMPLATE_LOADERS = (
+    'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.filesystem.Loader'
+)
+
+INSTALLED_APPS += (
+    'navtelemator',
+)
+    
+# Telemator search providers
+SEARCHPROVIDERS += (
+    'navtelemator.search.CableSearchProvider',
+    'navtelemator.search.CircuitSearchProvider',
+    'navtelemator.search.OwnerSearchProvider',
+)
+
+### Telemator Config ###
+# Server to connect to
+TM_HOST = '158.38.212.167'
+#TM_HOST = 'srv-telemator.ikt.uninett.no'
+# Port number
+TM_PORT = '1433'
+
+# Username
+TM_USER = 'tmreader'
+# Password
+
+# FIXME
+TM_PASSWORD = 'EvzFJNYq33jtMGNSiA5w'
+
+# Name of database to use
+TM_DBNAME = 'TM_UNINETT'

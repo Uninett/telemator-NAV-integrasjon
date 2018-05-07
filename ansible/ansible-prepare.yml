@@ -1,0 +1,46 @@
+- hosts: nav_nav_1
+  connection: docker
+  tasks:
+    - name: Create dir
+      file:
+        path: /etc/nav/python
+        state: directory
+        
+        #     - name: Create local_settings.py
+        #       template:
+        #         src: local_settings.py.j2
+        #         dest: /etc/nav/python/local_settings.py
+        #       notify: Restart apache
+        #       
+        #     - name: Create local_urls.py
+        #       template:
+        #         src: local_urls.py.j2
+        #         dest: /etc/nav/python/local_urls.py
+        #       notify: Restart apache
+            
+    - name: Install packages (apt)
+      apt:
+        name: "{{ item }}"
+        state: installed
+      with_items:
+        - python-sqlalchemy
+      notify: Restart apache
+      
+    - name: Install packages (PIP)
+      pip:
+        name: "{{ item }}"
+      with_items:
+        - pymssql
+      notify: Restart apache
+      
+    - name: Fix Python include path
+      lineinfile:
+        dest: /etc/python2.7/sitecustomize.py
+        line: "sys.path.append('/tmsource')"
+        # regexp: '^sys.path.append\(
+      notify: Restart apache
+        
+
+  handlers:
+    - name: Restart apache
+      command: supervisorctl restart apache2

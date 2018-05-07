@@ -1,0 +1,5 @@
+# Lookup plugin for Hashicorp Vault  
+- name: ansible-vault
+  src: https://github.com/jhaals/ansible-vault.git
+
+  

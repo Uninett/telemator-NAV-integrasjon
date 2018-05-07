@@ -5,3 +5,5 @@ __pycache__/
 build/
 dist/
 telemator_export/local_db_settings.py
+/.imported_roles
+/ansible/.imported_roles

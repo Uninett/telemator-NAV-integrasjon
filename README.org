@@ -1,0 +1,139 @@
+* nav-telemator
+
+Contribution for Telemator additions in NAV
+
+** Development environment using docker-compose
+
+*** Checkout NAV
+#+BEGIN_SRC sh
+    cd /usr/local/src
+    git clone https://github.com/UNINETT/nav.git
+    cd nav
+    git checkout tags/4.8.3
+#+END_SRC
+
+*** Prepare the NAV source
+
+For ease of development, ensure our current directory is mounted
+inside the NAV container
+
+#+BEGIN_SRC sh
+
+    ./fix-nav-docker.py /local/src/nav
+
+#+END_SRC
+
+*** Start NAV docker containers
+
+#+BEGIN_SRC sh
+    ( cd /local/src/nav; docker-compose up )
+#+END_SRC
+
+
+*** Install ourselves into the NAV container
+
+#+BEGIN_SRC sh
+
+    ansible-playbook ansible/install-roles.yml
+
+    ansible-playbook -i nav_nav_1, ansible/ansible-prepare.yml
+
+
+    # wait for container to start...
+
+    ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nav_nav_1)
+
+#+END_SRC
+
+** Local files
+
+The following needs to be added to the settings and urls, preferedly in
+their respective local files.
+
+ - /etc/nav/python/local_settings.py
+
+#+BEGIN_SRC python
+    LOCAL_SETTINGS = True
+    from nav.django.settings import *
+
+    TEMPLATE_LOADERS = (
+        'django.template.loaders.app_directories.Loader',
+        'django.template.loaders.filesystem.Loader'
+    )
+
+    INSTALLED_APPS += (
+        'navtelemator',
+    )
+        
+    # Telemator search providers
+    SEARCHPROVIDERS += (
+        'navtelemator.search.CableSearchProvider',
+        'navtelemator.search.CircuitSearchProvider',
+        'navtelemator.search.OwnerSearchProvider',
+    )
+
+    ### Telemator Config ###
+    # Server to connect to
+    TM_HOST = ''
+    # Port number
+    TM_PORT = '1433'
+
+    # Username
+    TM_USER = ''
+    # Password
+    TM_PASSWORD = ''
+
+    # Name of database to use
+    TM_DBNAME = ''
+#+END_SRC
+
+- /etc/nav/python/local_urls.py
+
+#+BEGIN_SRC python
+    from django.conf.urls import url, patterns, include
+    import navtelemator
+    urlpatterns = patterns(
+        '',
+        (r'^telemator/', include('navtelemator.urls')),
+    )
+#+END_SRC
+
+*** Build
+
+#+BEGIN_SRC sh
+python ./setup.py build sdist
+#+END_SRC
+
+
+*** Install
+#+BEGIN_SRC sh
+pip install dist/*
+#+END_SRC
+
+
+Remember to update the version number, or else =pip= will not do
+anything. You can also do
+
+#+BEGIN_SRC sh
+pip -v install --upgrade dist/*
+#+END_SRC
+
+to *force* the upgrade, but this will also upgrade dependencies already
+installed.
+
+*** Uninstall
+
+#+BEGIN_SRC sh
+pip uninstall nav-contrib-telemator
+#+END_SRC
+
+
+*** Hacks
+
+Because I couldn't get local-files working, I instead added the values
+to their respective file.
+
+The url include is added on the end of the list with the other includes,
+and navtelemator was added at the START of the installed apps (it caused
+a problem when added at the end. Propably because they are loaded in
+order.
