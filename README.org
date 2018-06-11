@@ -25,6 +25,8 @@ inside the NAV container. yaml is a prerequisite for this.
 
 *** Start NAV docker containers
 
+Make sure access to docker is granted to your user. You can check with "id".
+
 #+BEGIN_SRC sh
     ( cd /local/src/nav; docker-compose up )
 #+END_SRC
