@@ -15,9 +15,10 @@ Contribution for Telemator additions in NAV
 *** Prepare the NAV source
 
 For ease of development, ensure our current directory is mounted
-inside the NAV container
+inside the NAV container. yaml is required fo rthis.
 
 #+BEGIN_SRC sh
+    pip install pyyaml
 
     ./fix-nav-docker.py /local/src/nav
 
