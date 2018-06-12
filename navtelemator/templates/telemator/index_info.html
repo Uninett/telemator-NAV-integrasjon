@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block base_content %}
 
-<h1>Contents of Telemator</h1>
+<h3>Lists in Telemator</h3>
 
-<h2><a href="{% url 'circuit-list' %}">Circuit List</a></h2>
+<a href="{% url 'circuit-list' %}">Circuit List</a><br>
+<a href="{% url 'customer-list' %}">Customer List</a>
+
 
 {% endblock %}
