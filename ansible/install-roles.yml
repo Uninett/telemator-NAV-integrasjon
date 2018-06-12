@@ -14,7 +14,7 @@
 
     - name: Ensure that ./imported_roles is ignored by git
       lineinfile:
-        dest:   ../.gitignore
+        dest:   .gitignore
         regexp: '^\/.imported_roles$'
         line:   '/.imported_roles'
         state:  present

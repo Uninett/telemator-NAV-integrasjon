@@ -39,6 +39,12 @@
         line: "sys.path.append('/tmsource')"
         # regexp: '^sys.path.append\(
       notify: Restart apache
+
+    - name: Symlink local_urls.py
+      file:
+        src: /tmsource/local_urls.py
+        dest: /etc/nav/python/local_urls.py
+        state: link
         
 
   handlers:

@@ -2,11 +2,11 @@
 
 Contribution for Telemator additions in NAV
 
-** Development environment using docker-compose
+** Setting up development environment
 
 *** Checkout NAV
 #+BEGIN_SRC sh
-    cd /usr/local/src
+    cd ~/src
     git clone https://github.com/UNINETT/nav.git
     cd nav
     git checkout tags/4.8.3
@@ -14,43 +14,41 @@ Contribution for Telemator additions in NAV
 
 *** Prepare the NAV source
 
-For ease of development, ensure our current directory is mounted
-inside the NAV container. yaml is a prerequisite for this.
+For ease of development, we mount our current directory inside the NAV
+container. This is done by altering ~docker-compose.yml~. Our current
+directory will then be available inside the container at =~/tmsource=.
 
 #+BEGIN_SRC sh
+    cd ~/src/telemator-NAV-integrasjon
     pip install pyyaml
-    ./fix-nav-docker.py /local/src/nav
-
+    ./fix-nav-docker.py ~/src/nav
 #+END_SRC
 
 *** Start NAV docker containers
 
-Make sure access to docker is granted to your user. You can check with "id".
+Make sure access to docker is granted to your user, typically by
+adding yourselv to the ~docker~ group. 
 
 #+BEGIN_SRC sh
-    ( cd /local/src/nav; docker-compose up )
+    ( cd ~/src/nav; docker-compose up )
 #+END_SRC
 
 
 *** Install ourselves into the NAV container
 
+The ansible playbooks below will install necessary packages (via ~apt~
+and ~pip~) and will also append =~/tmsource= to pythons load path
+(by altering ~/etc/python2.7/sitecustomize.py~)
+
 #+BEGIN_SRC sh
-
+    cd ~/src/telemator-NAV-integrasjon
     ansible-playbook ansible/install-roles.yml
-
     ansible-playbook -i nav_nav_1, ansible/ansible-prepare.yml
-
-
-    # wait for container to start...
-
-    ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nav_nav_1)
-
 #+END_SRC
 
-** Local files
+** Installing for production
 
-The following needs to be added to the settings and urls, preferedly in
-their respective local files.
+The following files needs to be added.
 
  - /etc/nav/python/local_settings.py
 
