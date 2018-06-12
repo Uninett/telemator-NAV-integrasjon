@@ -9,7 +9,7 @@ Contribution for Telemator additions in NAV
     cd ~/src
     git clone https://github.com/UNINETT/nav.git
     cd nav
-    git checkout tags/4.8.3
+    git checkout tags/4.8.4
 #+END_SRC
 
 *** Prepare the NAV source
