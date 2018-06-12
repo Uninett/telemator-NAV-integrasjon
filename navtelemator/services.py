@@ -75,6 +75,12 @@ def get_circuits_by_end(end):
     pass
 
 
+def get_customers():
+    logger.info('get_customers called')
+    result = session.query(Customer).order_by(Customer.Name).all()
+    logger.info('get_customers gave length: %d', len(result))
+    return result
+
 def get_customer_by_id(custid):
     logger.info('get_customer_by_id called with %s', custid)
     result = session.query(Customer).filter(Customer.CustId == custid).one()
