@@ -234,7 +234,7 @@ class Customer(Base):
     UpdUser = Column(String(20, 'Danish_Norwegian_CI_AS'))
     RemarkM = Column(String(collation='Danish_Norwegian_CI_AS'))
 
-    circuits = relationship('CustomerCircuit', back_populates='customer', order_by='Circuit.Circuit')
+    circuits = relationship('CustomerCircuit', back_populates='customer')
 
     def get_absolute_url(self):
         return reverse('customer-info', args=[str(self.CustId)])
