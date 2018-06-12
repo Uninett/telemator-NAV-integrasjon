@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block base_content %}
+
+<h3>List of Customers</h3>
+<table>
+    <tr>
+        <th>Customer</th>
+    </tr>
+    {% for customer in customers %}
+    <tr>
+        <td><a href="{{ customer.get_absolute_url }}">{{customer.Name}}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
