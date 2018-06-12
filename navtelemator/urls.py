@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, url
-from views import circuit, owner, cable, customer, netbox
+from views import index, circuit, owner, cable, customer, netbox
 
 urlpatterns = patterns('',
+                       url(r'^$', index.render_index, name='index-list'),
                        url(r'^cables/(?P<cableid>.+)', cable.render_cable, name='cable-info'),
                        url(r'^circuits/(?P<circuitid>.+)', circuit.render_circuit, name='circuit-info'),
                        url(r'^circuits/', circuit.render_circuits, name='circuit-list'),
