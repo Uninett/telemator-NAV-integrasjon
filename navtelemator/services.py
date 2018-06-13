@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, or_
+from sqlalchemy import create_engine, or_, func
 from sqlalchemy.orm import sessionmaker
 from navtelemator.models import Cable, Circuit, Connection, Customer, End, Owner, Port, RoutingCable
 from django.conf import settings
@@ -10,7 +10,13 @@ TM_HOST = getattr(settings, "TM_HOST", None)
 TM_PORT = getattr(settings, "TM_PORT", '1433')
 TM_DBNAME = getattr(settings, "TM_DBNAME", None)
 
+# writes to spam.log in NAV directory
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler('spam.log')
+fh.setLevel(logging.DEBUG)
+logger.addHandler(fh)
+
 
 # Get parameters from the config, used for connecting to the server
 db_params = 'mssql+pymssql://' + TM_USER + ':' + TM_PASSWORD + '@' + TM_HOST + ':' + TM_PORT + '/' + TM_DBNAME
@@ -75,16 +81,31 @@ def get_circuits_by_end(end):
     pass
 
 
+def get_circuit_amount():
+    logger.info('get_circuit_amount called')
+    result = session.query(func.count(Circuit.RowKey)).scalar()
+    logger.info('get_circuit_amount gave: %d', result)
+    return result
+
+
 def get_customers():
     logger.info('get_customers called')
     result = session.query(Customer).order_by(Customer.Name).all()
     logger.info('get_customers gave length: %d', len(result))
     return result
 
+
 def get_customer_by_id(custid):
     logger.info('get_customer_by_id called with %s', custid)
     result = session.query(Customer).filter(Customer.CustId == custid).one()
     logger.info('get_customer_by_id returned: %d', result.CustId)
+    return result
+
+
+def get_customer_amount():
+    logger.info('get_customer_amount called')
+    result = session.query(Customer).count()
+    logger.info('get_customer_amount gave: %d', result)
     return result
 
 
