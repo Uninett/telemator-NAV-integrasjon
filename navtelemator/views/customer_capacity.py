@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from navtelemator import services
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 
 
 def render_customer_capacity(request, customerid):
@@ -14,6 +14,6 @@ def render_customer_capacity(request, customerid):
             circuit_capacity[circuit.Circuit] = circuit.Speed
         return JsonResponse(circuit_capacity)
     except:
-        return JsonResponse({'Error: No customer found with ID': customerid})
+        raise Http404
 
 
