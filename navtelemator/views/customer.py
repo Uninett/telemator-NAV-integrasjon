@@ -11,6 +11,7 @@ def render_customer(request, customerid):
                   }
                   )
 
+
 def render_customer_list(request):
     customers = services.get_customers()
     return render(request,
