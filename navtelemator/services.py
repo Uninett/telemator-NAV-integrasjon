@@ -65,8 +65,14 @@ def get_circuit_details_by_netbox(end):
 
 def get_circuit_details_by_room(room):
     logger.info('get_circuit_details_by_room called with %s', room)
-    result = session.query(RoutingCable, Cable).filter(or_(Cable.End_A == room, Cable.End_B == room))\
+    temp = session.query(RoutingCable, Cable).filter(or_(Cable.End_A == room, Cable.End_B == room))\
         .filter(RoutingCable.Cable == Cable.Cable, RoutingCable.Wire == 'A').order_by(RoutingCable.Circuit).all()
+    result = []
+    taken_list = []
+    for entry in temp:
+        if entry.RoutingCable.Circuit not in taken_list:
+            taken_list.append(entry.RoutingCable.Circuit)
+            result.append(entry)
     logger.info('get_circuit_details_by_room gave length: %d', len(result))
     return result
 
