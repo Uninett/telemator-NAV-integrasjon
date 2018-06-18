@@ -3,8 +3,6 @@ from sqlalchemy.orm import sessionmaker
 from navtelemator.models import Cable, Circuit, Connection, Customer, End, Owner, Port, RoutingCable
 from django.conf import settings
 import logging
-from django.http import HttpResponse
-from sqlalchemy import exc
 
 TM_USER = getattr(settings, "TM_USER", None)
 TM_PASSWORD = getattr(settings, "TM_PASSWORD", None)
@@ -27,16 +25,6 @@ db_params = 'mssql+pymssql://' + TM_USER + ':' + TM_PASSWORD + '@' + TM_HOST + '
 engine = create_engine(db_params)
 Session = sessionmaker(bind=engine)
 session = Session()
-
-def test_connection():
-    try:
-        session.connection()
-    except exc.OperationalError as e:
-        return HttpResponse("Oops! Seems like something went wrong on the database connection. Try checking"
-                            " your settings configuration. <br><br><br> Full message:<br>" +
-                            e.message)
-test_connection()
-
 
 
 def get_cable_by_id(cable):

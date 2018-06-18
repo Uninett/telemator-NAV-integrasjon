@@ -1,8 +1,5 @@
 from django.shortcuts import render
 from navtelemator import services
-from django.http import HttpResponse
-from sqlalchemy import exc
-
 
 
 def render_index(request):
