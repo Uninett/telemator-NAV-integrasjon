@@ -39,7 +39,7 @@ def render_circuit(request, circuitid):
 
 def render_circuits(request):
     circuits = services.get_circuits()
-    raise ValueError("ther ewas this")
+    # raise ValueError("ther ewas this")
     return render(request,
                   'telemator/circuit_list.html',
                   {
