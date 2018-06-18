@@ -12,3 +12,4 @@ def render_index(request):
                       'total_customers': total_customers
                   }
                   )
+

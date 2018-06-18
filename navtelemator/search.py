@@ -6,6 +6,7 @@ from collections import namedtuple
 from navtelemator.models import Circuit, Cable, Owner, End
 from navtelemator import services
 from sqlalchemy import or_
+from sqlalchemy import exc
 
 
 class SearchForm(forms.Form):
@@ -77,15 +78,18 @@ class CableSearchProvider(SearchProvider):
     link = 'Cable'
 
     def fetch_results(self):
-        results = services.session.query(Cable).filter(
-            or_(Cable.Cable.ilike('%{}%'.format(self.query)), Cable.End_A.ilike('%{}%'.format(self.query)),
-                Cable.End_B.ilike('%{}%'.format(self.query))))
+        try:
+            results = services.session.query(Cable).filter(
+                or_(Cable.Cable.ilike('%{}%'.format(self.query)), Cable.End_A.ilike('%{}%'.format(self.query)),
+                    Cable.End_B.ilike('%{}%'.format(self.query))))
 
-        for result in results:
-            self.results.append(SearchResult(
-                reverse('cable-info', kwargs={'cableid': result.Cable}),
-                result)
-            )
+            for result in results:
+                self.results.append(SearchResult(
+                    reverse('cable-info', kwargs={'cableid': result.Cable}),
+                    result)
+                )
+        except exc.OperationalError:
+            return None
 
 
 class CircuitSearchProvider(SearchProvider):
@@ -98,14 +102,17 @@ class CircuitSearchProvider(SearchProvider):
     link = 'Circuit'
 
     def fetch_results(self):
-        results = services.session.query(Circuit).filter(
-            or_(Circuit.Circuit.ilike('%{}%'.format(self.query)), Circuit.Reference.ilike('%{}%'.format(self.query)),
-                Circuit.Owner.ilike('%{}%'.format(self.query))))
-        for result in results:
-            self.results.append(SearchResult(
-                reverse('circuit-info', kwargs={'circuitid': result.Circuit}),
-                result)
-            )
+        try:
+            results = services.session.query(Circuit).filter(
+                or_(Circuit.Circuit.ilike('%{}%'.format(self.query)), Circuit.Reference.ilike('%{}%'.format(self.query)),
+                    Circuit.Owner.ilike('%{}%'.format(self.query))))
+            for result in results:
+                self.results.append(SearchResult(
+                    reverse('circuit-info', kwargs={'circuitid': result.Circuit}),
+                    result)
+                )
+        except exc.OperationalError:
+            return None
 
 
 class CWDMSearchProvider(SearchProvider):
@@ -118,12 +125,15 @@ class CWDMSearchProvider(SearchProvider):
     link = 'Netbox'
 
     def fetch_results(self):
-        results = services.session.query(End).filter(End.End.ilike('%{}%'.format(self.query)))
-        for result in results:
-            self.results.append(SearchResult(
-                reverse('telemator-netbox-info', kwargs={'netbox_sysname': result.End}),
-                result)
-            )
+        try:
+            results = services.session.query(End).filter(End.End.ilike('%{}%'.format(self.query)))
+            for result in results:
+                self.results.append(SearchResult(
+                    reverse('telemator-netbox-info', kwargs={'netbox_sysname': result.End}),
+                    result)
+                )
+        except exc.OperationalError:
+            return None
 
 
 class OwnerSearchProvider(SearchProvider):
@@ -136,11 +146,14 @@ class OwnerSearchProvider(SearchProvider):
     link = 'Owner'
 
     def fetch_results(self):
-        results = services.session.query(Owner).filter(
-            or_(Owner.Owner.ilike('%{}%'.format(self.query)), Owner.Name.ilike('%{}%'.format(self.query))))
+        try:
+            results = services.session.query(Owner).filter(
+                or_(Owner.Owner.ilike('%{}%'.format(self.query)), Owner.Name.ilike('%{}%'.format(self.query))))
 
-        for result in results:
-            self.results.append(SearchResult(
-                reverse('owner-info', kwargs={'ownerid': result.Owner}),
-                result)
-            )
+            for result in results:
+                self.results.append(SearchResult(
+                    reverse('owner-info', kwargs={'ownerid': result.Owner}),
+                    result)
+                )
+        except exc.OperationalError:
+            return None

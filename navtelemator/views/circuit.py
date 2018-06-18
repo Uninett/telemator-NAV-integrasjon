@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from navtelemator import services
 
-
 def room_circuits(request, roomid):
     circuit_details = services.get_circuit_details_by_room(roomid)
     return render(request,
@@ -40,6 +39,7 @@ def render_circuit(request, circuitid):
 
 def render_circuits(request):
     circuits = services.get_circuits()
+    # raise ValueError("ther ewas this")
     return render(request,
                   'telemator/circuit_list.html',
                   {
