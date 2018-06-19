@@ -71,12 +71,14 @@
         <th>Cable</th>
         <th>Start</th>
         <th>End</th>
+        <th>Order</th>
     </tr>
     {% for cable in cables %}
     <tr>
         <td><a href="{{ cable.get_absolute_url }}">{{cable.0.Cable}}</a></td>
         <td>{{cable.1.0}}</td>
         <td>{{cable.1.1}}</td>
+        <td>{{cable.1.2}}</td>
     </tr>
     {% endfor %}
 </table>
