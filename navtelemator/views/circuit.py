@@ -25,7 +25,7 @@ def render_circuit(request, circuitid):
     circuit = services.get_circuit_by_id(circuitid)
     connections = services.get_connections_by_circuit(circuitid)
     routingcables = services.get_routingcables_by_circuit(circuitid)
-    cables = services.do_magic(circuitid)
+    cables = services.get_sorted_cables_by_circuit(circuitid)
     # circuit_details = CircuitDetail.objects.filter(circuit=circuitid)
     return render(request,
                   'telemator/circuit_info.html',

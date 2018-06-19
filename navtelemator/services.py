@@ -155,45 +155,31 @@ def get_routingcables_by_circuit(circuit):
     return result
 
 
-# SORT CABLES
-def do_magic(circuit):
+def get_sorted_cables_by_circuit(circuit):
     start_place = (str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1).all())[0].End).split('-'))[0]
-    end_place = (str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2).all())[0].End).split('-'))[0]
+    # end_place = (str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2).all())[0].End).split('-'))[0]
     cables = get_routingcables_by_circuit(circuit)
-    cables1 = collections.OrderedDict
+    cables_length = len(cables)
     start_end = []
-    logger.info(cables1)
-    logger.info(cables)
-    logger.info(cables1)
     order = []
-    temp = start_place
-
-    while len(order) is not len(cables):
+    last_place = start_place
+    counter = 0
+    while counter < cables_length or len(cables) is not 0:
         for cable in cables:
-            if cable.cable.End_A == temp:
-                logger.info("Place: " + cable.cable.End_A)
+            if cable.cable.End_A == last_place:
                 order.append(cable.cable)
                 start_end.append([str(cable.cable.End_A), str(cable.cable.End_B)])
-                # cables1[cable] = cable.cable.End_A
-                # cables1[cable] = cable.cable.End_B
-                temp = cable.cable.End_B
-                logger.info("Changing obj to: " + cable.cable.End_B)
-                logger.info("len: " + str(len(order)) + " and: " + str(len(cables)))
-                # if len(order) == len(cables):
-                #     break
-                # break
-            elif cable.cable.End_B == temp:
-                logger.info("Place: " + cable.cable.End_B)
+                last_place = cable.cable.End_B
+            elif cable.cable.End_B == last_place:
                 order.append(cable.cable)
                 start_end.append([str(cable.cable.End_B), str(cable.cable.End_A)])
-                temp = cable.cable.End_A
-                logger.info("Changing obj to: " + cable.cable.End_A)
-                logger.info("len: " + str(len(order)) + " and: " + str(len(cables)))
-                # if len(order) == len(cables):
-                #     break
-                # break
-
-    final_list = zip(order, start_end)
-    logger.info(order)
-    logger.info(final_list)
-    return final_list
+                last_place = cable.cable.End_A
+        for cable in order:
+            for routingcable in cables:
+                if routingcable.cable == cable:
+                    cables.remove(routingcable)
+        counter += 1
+    result = zip(order, start_end)
+    if len(order) is not cables_length:
+        return None
+    return result
