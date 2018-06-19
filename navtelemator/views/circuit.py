@@ -25,6 +25,7 @@ def render_circuit(request, circuitid):
     circuit = services.get_circuit_by_id(circuitid)
     connections = services.get_connections_by_circuit(circuitid)
     routingcables = services.get_routingcables_by_circuit(circuitid)
+    temp = services.do_magic(circuitid)
     # circuit_details = CircuitDetail.objects.filter(circuit=circuitid)
     return render(request,
                   'telemator/circuit_info.html',
@@ -33,13 +34,13 @@ def render_circuit(request, circuitid):
                       # 'circuit_details': circuit_details,
                       'connections': connections,
                       'routingcables': routingcables,
+                      'temp': temp,
                   }
                   )
 
 
 def render_circuits(request):
     circuits = services.get_circuits()
-    # raise ValueError("ther ewas this")
     return render(request,
                   'telemator/circuit_list.html',
                   {

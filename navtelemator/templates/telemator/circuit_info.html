@@ -64,6 +64,24 @@
 </table>
 {% endif %}
 
+{% if temp %}
+<h5>List of cables in ORDERED circuit</h5>
+<table>
+    <tr>
+        <th>Cable</th>
+        <th>Start</th>
+        <th>End</th>
+    </tr>
+    {% for temp in temp %}
+    <tr>
+        <td><a href="{{ routingcable.cable.get_absolute_url }}">{{temp.Cable}}</a></td>
+        <td>{{temp.End_A}}</td>
+        <td>{{temp.End_B}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
 {% if connections %}
 <h5>List of netboxes in circuit</h5>
 <table>

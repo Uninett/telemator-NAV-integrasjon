@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, or_, func
 from sqlalchemy.orm import sessionmaker
-from navtelemator.models import Cable, Circuit, Connection, Customer, End, Owner, Port, RoutingCable
+from navtelemator.models import Cable, Circuit, CircuitEnd, Connection, Customer, End, Owner, Port, RoutingCable
 from django.conf import settings
 import logging
 
@@ -152,3 +152,40 @@ def get_routingcables_by_circuit(circuit):
     result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Wire == 'A').order_by(RoutingCable.Cable).all()
     logger.info('get_routingcables_by_circuit gave length: %d', len(result))
     return result
+
+
+# SORT CABLES
+def do_magic(circuit):
+    start_place = (str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1).all())[0].End).split('-'))[0]
+    end_place = (str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2).all())[0].End).split('-'))[0]
+    cables = get_routingcables_by_circuit(circuit)
+    cables1 = cables
+    logger.info(cables)
+    logger.info(cables1)
+    order = []
+    temp = start_place
+
+    while len(order) is not len(cables):
+        for cable in cables:
+            if cable.cable.End_A == temp:
+                logger.info("Place: " + cable.cable.End_A)
+                order.append(cable.cable)
+                temp = cable.cable.End_B
+                logger.info("Changing obj to: " + cable.cable.End_B)
+                logger.info("len: " + str(len(order)) + " and: " + str(len(cables)))
+                # if len(order) == len(cables):
+                #     break
+                # break
+            elif cable.cable.End_B == temp:
+                logger.info("Place: " + cable.cable.End_B)
+                order.append(cable.cable)
+                temp = cable.cable.End_A
+                logger.info("Changing obj to: " + cable.cable.End_A)
+                logger.info("len: " + str(len(order)) + " and: " + str(len(cables)))
+                # if len(order) == len(cables):
+                #     break
+                # break
+
+
+    logger.info(order)
+    return order
