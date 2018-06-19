@@ -64,19 +64,19 @@
 </table>
 {% endif %}
 
-{% if temp %}
-<h5>List of cables in ORDERED circuit</h5>
+{% if cables %}
+<h5>List of cables in circuit</h5>
 <table>
     <tr>
         <th>Cable</th>
         <th>Start</th>
         <th>End</th>
     </tr>
-    {% for temp in temp %}
+    {% for cable in cables %}
     <tr>
-        <td><a href="{{ routingcable.cable.get_absolute_url }}">{{temp.Cable}}</a></td>
-        <td>{{temp.End_A}}</td>
-        <td>{{temp.End_B}}</td>
+        <td><a href="{{ cable.get_absolute_url }}">{{cable.0.Cable}}</a></td>
+        <td>{{cable.1.0}}</td>
+        <td>{{cable.1.1}}</td>
     </tr>
     {% endfor %}
 </table>

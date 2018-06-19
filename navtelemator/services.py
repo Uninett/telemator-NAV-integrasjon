@@ -3,6 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from navtelemator.models import Cable, Circuit, CircuitEnd, Connection, Customer, End, Owner, Port, RoutingCable
 from django.conf import settings
 import logging
+import collections
 
 TM_USER = getattr(settings, "TM_USER", None)
 TM_PASSWORD = getattr(settings, "TM_PASSWORD", None)
@@ -159,7 +160,9 @@ def do_magic(circuit):
     start_place = (str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1).all())[0].End).split('-'))[0]
     end_place = (str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2).all())[0].End).split('-'))[0]
     cables = get_routingcables_by_circuit(circuit)
-    cables1 = cables
+    cables1 = collections.OrderedDict
+    start_end = []
+    logger.info(cables1)
     logger.info(cables)
     logger.info(cables1)
     order = []
@@ -170,6 +173,9 @@ def do_magic(circuit):
             if cable.cable.End_A == temp:
                 logger.info("Place: " + cable.cable.End_A)
                 order.append(cable.cable)
+                start_end.append([str(cable.cable.End_A), str(cable.cable.End_B)])
+                # cables1[cable] = cable.cable.End_A
+                # cables1[cable] = cable.cable.End_B
                 temp = cable.cable.End_B
                 logger.info("Changing obj to: " + cable.cable.End_B)
                 logger.info("len: " + str(len(order)) + " and: " + str(len(cables)))
@@ -179,6 +185,7 @@ def do_magic(circuit):
             elif cable.cable.End_B == temp:
                 logger.info("Place: " + cable.cable.End_B)
                 order.append(cable.cable)
+                start_end.append([str(cable.cable.End_B), str(cable.cable.End_A)])
                 temp = cable.cable.End_A
                 logger.info("Changing obj to: " + cable.cable.End_A)
                 logger.info("len: " + str(len(order)) + " and: " + str(len(cables)))
@@ -186,6 +193,7 @@ def do_magic(circuit):
                 #     break
                 # break
 
-
+    final_list = zip(order, start_end)
     logger.info(order)
-    return order
+    logger.info(final_list)
+    return final_list
