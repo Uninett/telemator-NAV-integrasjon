@@ -155,59 +155,12 @@ def get_routingcables_by_circuit(circuit):
     return result
 
 
-def get_sorted_cables_by_circuit(circuit):
-    start_place = (str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1).all())[0].End).split('-'))[0]
-    end_place = (str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2).all())[0].End).split('-'))[0]
-
-    cables = get_routingcables_by_circuit(circuit)
-    cables_length = len(cables)
-    start_end = []
-    order = []
-    start_list = []
-    start_end_list = []
-    end_list = []
-    end_start_list = []
-    first_place = start_place
-    last_place = end_place
-    counter = 0
-
-    while True:
-        for cable in cables:
-            if cable.cable.End_A == first_place and cable.Cable not in [x.Cable for x in end_list]:
-                start_list.append(cable.cable)
-                start_end_list.append([str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list))])
-                first_place = cable.cable.End_B
-            elif cable.cable.End_B == first_place and cable.Cable not in [x.Cable for x in end_list]:
-                start_list.append(cable.cable)
-                start_end_list.append([str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list))])
-                first_place = cable.cable.End_A
-        for cable in cables:
-            if cable.cable.End_A == last_place and cable.Cable not in [x.Cable for x in start_list]:
-                end_start_list.insert(0, [str(cable.cable.End_B), str(cable.cable.End_A), str(cables_length - len(end_list))])
-                end_list.insert(0, cable.cable)
-                last_place = cable.cable.End_B
-            elif cable.cable.End_B == last_place and cable.Cable not in [x.Cable for x in start_list]:
-                end_start_list.insert(0, [str(cable.cable.End_A), str(cable.cable.End_B), str(cables_length - len(end_list))])
-                end_list.insert(0, cable.cable)
-                last_place = cable.cable.End_A
-        for cable in start_list + end_list:
-            for routingcable in cables:
-                if routingcable.cable == cable:
-                    cables.remove(routingcable)
-        counter += 1
-        if counter > cables_length:
-            remaining_cables = [cable.cable for cable in cables]
-            remaining_start_end = []
-            for remainder in remaining_cables:
-                remaining_start_end.append([str(remainder.End_A), str(remainder.End_B), '?'])
-            order = start_list + remaining_cables + end_list
-            start_end = start_end_list + remaining_start_end + end_start_list
-            break
-        if len(cables) is 0:
-            order = start_list + end_list
-            start_end = start_end_list + end_start_list
-            break
-    result = zip(order, start_end)
-    if len(order) is not cables_length:
-        return result
+def get_start_end_place_by_circuit(circuit):
+    result = []
+    result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1)
+                        .all())[0].End).split('-'))[0])
+    result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2)
+                      .all())[0].End).split('-'))[0])
     return result
+
+
