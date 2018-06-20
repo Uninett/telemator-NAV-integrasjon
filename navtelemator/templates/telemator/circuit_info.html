@@ -53,18 +53,18 @@
 <h5>List of cables in circuit</h5>
 <table>
     <tr>
+        <th>Order</th>
         <th>Cable</th>
         <th>Start</th>
         <th>End</th>
-        <th>Order</th>
         <th>Port</th>
     </tr>
     {% for cable in cables.0 %}
     <tr>
+        <td>{{cable.1.2}}</td>
         <td><a href="{{ cable.get_absolute_url }}">{{cable.0.Cable}}</a></td>
         <td>{{cable.1.0}}</td>
         <td>{{cable.1.1}}</td>
-        <td>{{cable.1.2}}</td>
         <td>{{cable.1.3}}/{{cable.1.4}}</td>
     </tr>
     {% endfor %}
@@ -78,10 +78,10 @@
     {% endif %}
     {% for cable in cables.2 %}
     <tr>
+        <td bgcolor="#ff9999">{{cable.1.2}}</td>
         <td bgcolor="#ff9999"><a href="{{ cable.get_absolute_url }}">{{cable.0.Cable}}</a></td>
         <td bgcolor="#ff9999">{{cable.1.0}}</td>
         <td bgcolor="#ff9999">{{cable.1.1}}</td>
-        <td bgcolor="#ff9999">{{cable.1.2}}</td>
         <td bgcolor="#ff9999">{{cable.1.3}}/{{cable.1.4}}</td>
 
     </tr>
@@ -96,10 +96,10 @@
     {% endif %}
     {% for cable in cables.1 %}
     <tr>
+        <td>{{cable.1.2}}</td>
         <td><a href="{{ cable.get_absolute_url }}">{{cable.0.Cable}}</a></td>
         <td>{{cable.1.0}}</td>
         <td>{{cable.1.1}}</td>
-        <td>{{cable.1.2}}</td>
         <td>{{cable.1.3}}/{{cable.1.4}}</td>
     </tr>
     {% endfor %}

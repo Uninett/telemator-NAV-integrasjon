@@ -110,7 +110,7 @@ def get_sorted_cables_by_circuit(circuit):
             for remainder in remaining_cables:
                 port_A = services.get_ports_by_circuit(circuit, remainder.Cable, 'A')
                 port_B = services.get_ports_by_circuit(circuit, remainder.Cable, 'B')
-                remainder_locations_list.append([str(remainder.End_A), str(remainder.End_B), '?', 
+                remainder_locations_list.append([str(remainder.End_A), str(remainder.End_B), '?',
                                                  str(port_A.Core), str(port_B.Core)])
                 # result = start_list + remaining_cables + end_list
             remainder_list = zip(remaining_cables, remainder_locations_list)
