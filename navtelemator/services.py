@@ -164,3 +164,7 @@ def get_start_end_place_by_circuit(circuit):
     return result
 
 
+def get_ports_by_circuit(circuit, cable, ab):
+    result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Cable == cable, RoutingCable.Wire == ab).one()
+    return result
+

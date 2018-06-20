@@ -1,13 +1,6 @@
 from django.shortcuts import render
 from navtelemator import services
-import logging
 
-# writes to spam.log in NAV directory
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-fh = logging.FileHandler('spam.log')
-fh.setLevel(logging.DEBUG)
-logger.addHandler(fh)
 
 def room_circuits(request, roomid):
     circuit_details = services.get_circuit_details_by_room(roomid)
@@ -80,21 +73,29 @@ def get_sorted_cables_by_circuit(circuit):
 
     while True:
         for cable in cables:
+            port_A = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'A')
+            port_B = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'B')
             if cable.cable.End_A == start_location and cable.Cable not in [x.Cable for x in end_list]:
                 start_list.append(cable.cable)
-                start_locations_list.append([str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list))])
+                start_locations_list.append([str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list)),
+                                             str(port_A.Core), str(port_B.Core)])
                 start_location = cable.cable.End_B
             elif cable.cable.End_B == start_location and cable.Cable not in [x.Cable for x in end_list]:
                 start_list.append(cable.cable)
-                start_locations_list.append([str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list))])
+                start_locations_list.append([str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                                             str(port_A.Core), str(port_B.Core)])
                 start_location = cable.cable.End_A
         for cable in cables:
+            port_A = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'A')
+            port_B = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'B')
             if cable.cable.End_A == end_location and cable.Cable not in [x.Cable for x in start_list]:
-                end_locations_list.insert(0, [str(cable.cable.End_B), str(cable.cable.End_A), str(number_of_cables - len(end_list))])
+                end_locations_list.insert(0, [str(cable.cable.End_B), str(cable.cable.End_A),
+                                              str(number_of_cables - len(end_list)), str(port_A.Core), str(port_B.Core)])
                 end_list.insert(0, cable.cable)
                 end_location = cable.cable.End_B
             elif cable.cable.End_B == end_location and cable.Cable not in [x.Cable for x in start_list]:
-                end_locations_list.insert(0, [str(cable.cable.End_A), str(cable.cable.End_B), str(number_of_cables - len(end_list))])
+                end_locations_list.insert(0, [str(cable.cable.End_A), str(cable.cable.End_B),
+                                              str(number_of_cables - len(end_list)), str(port_A.Core), str(port_B.Core)])
                 end_list.insert(0, cable.cable)
                 end_location = cable.cable.End_A
 
@@ -107,7 +108,10 @@ def get_sorted_cables_by_circuit(circuit):
         if counter > number_of_cables:
             remaining_cables = [cable.cable for cable in cables]
             for remainder in remaining_cables:
-                remainder_locations_list.append([str(remainder.End_A), str(remainder.End_B), '?'])
+                port_A = services.get_ports_by_circuit(circuit, remainder.Cable, 'A')
+                port_B = services.get_ports_by_circuit(circuit, remainder.Cable, 'B')
+                remainder_locations_list.append([str(remainder.End_A), str(remainder.End_B), '?', 
+                                                 str(port_A.Core), str(port_B.Core)])
                 # result = start_list + remaining_cables + end_list
             remainder_list = zip(remaining_cables, remainder_locations_list)
             # start_end_order = start_locations_list + remaining_start_end + end_locations_list
