@@ -72,6 +72,7 @@ def get_sorted_cables_by_circuit(circuit):
     counter = 0
 
     while True:
+        # iterates forward
         for cable in cables:
             port_A = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'A')
             port_B = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'B')
@@ -85,6 +86,7 @@ def get_sorted_cables_by_circuit(circuit):
                 start_locations_list.append([str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
                                              str(port_A.Core), str(port_B.Core)])
                 start_location = cable.cable.End_A
+        # iterates backward
         for cable in cables:
             port_A = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'A')
             port_B = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'B')
@@ -98,7 +100,7 @@ def get_sorted_cables_by_circuit(circuit):
                                               str(number_of_cables - len(end_list)), str(port_A.Core), str(port_B.Core)])
                 end_list.insert(0, cable.cable)
                 end_location = cable.cable.End_A
-
+        # removes ordered cables from list
         for cable in start_list + end_list:
             for routingcable in cables:
                 if routingcable.cable == cable:
@@ -106,6 +108,7 @@ def get_sorted_cables_by_circuit(circuit):
         counter += 1
 
         if counter > number_of_cables:
+            # makes a list of remaining unordered cables
             remaining_cables = [cable.cable for cable in cables]
             for remainder in remaining_cables:
                 port_A = services.get_ports_by_circuit(circuit, remainder.Cable, 'A')
