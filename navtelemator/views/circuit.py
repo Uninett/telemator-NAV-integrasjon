@@ -125,5 +125,6 @@ def get_sorted_cables_by_circuit(circuit):
             break
 
     result = [zip(start_list, start_locations_list), zip(end_list, end_locations_list), remainder_list]
+    logger.info(result)
     return result
 

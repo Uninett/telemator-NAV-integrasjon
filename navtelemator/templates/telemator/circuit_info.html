@@ -48,24 +48,8 @@
 </table>
 {% endif %}
 
-<!--{% if routingcables %}-->
-<!--<h5>List of cables in circuit</h5>-->
-<!--<table>-->
-    <!--<tr>-->
-        <!--<th>Cable</th>-->
-        <!--<th>Reference</th>-->
-    <!--</tr>-->
-    <!--{% for routingcable in routingcables %}-->
-    <!--<tr>-->
-        <!--<td><a href="{{ routingcable.cable.get_absolute_url }}">{{routingcable.Cable}}</a></td>-->
-        <!--<td>{{routingcable.cable.reference}}</td>-->
-    <!--</tr>-->
-    <!--{% endfor %}-->
-<!--</table>-->
-<!--{% endif %}-->
 
-
-{% if cables %}
+{% if cables.0 or cables.1 or cables.2 %}
 <h5>List of cables in circuit</h5>
 <table>
     <tr>

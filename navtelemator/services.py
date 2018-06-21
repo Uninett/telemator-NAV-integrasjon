@@ -157,10 +157,16 @@ def get_routingcables_by_circuit(circuit):
 
 def get_start_end_place_by_circuit(circuit):
     result = []
-    result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1)
+    try:
+        result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1)
                         .all())[0].End).split('-GW'))[0])
-    result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2)
+    except:
+        result.append("Null")
+    try:
+        result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2)
                       .all())[0].End).split('-GW'))[0])
+    except:
+        result.append("Null")
     return result
 
 
