@@ -12,7 +12,12 @@ def render_customer_circuits(request, customerid):
             circuits.append(circuit.circuit)
         for circuit in circuits:
             customer_circuits[circuit.Circuit] = circuit.Speed
-        return JsonResponse(customer_circuits)
+        response = JsonResponse(customer_circuits)
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response["Access-Control-Max-Age"] = "1000"
+        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+        return response
     except:
         raise Http404
 
