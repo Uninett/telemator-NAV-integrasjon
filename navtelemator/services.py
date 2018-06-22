@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, or_, func
 from sqlalchemy.orm import sessionmaker
-from navtelemator.models import Cable, Circuit, CircuitEnd, Connection, Customer, End, Owner, Port, RoutingCable
+from navtelemator.models import Cable, Circuit, CircuitEnd, Connection, Customer, End, Owner, Port, RoutingCable, Setting
 from django.conf import settings
 import logging
 import collections
@@ -26,6 +26,14 @@ db_params = 'mssql+pymssql://' + TM_USER + ':' + TM_PASSWORD + '@' + TM_HOST + '
 engine = create_engine(db_params)
 Session = sessionmaker(bind=engine)
 session = Session()
+
+
+# Hardcoded database version from what is expected.
+def correct_database_version():
+    logger.info('get_database_version called')
+    version = session.query(Setting).filter(Setting.VALUENAME == 'Version::DBFversion').one()
+    if str(version.VALUEDATA) != '285212672':
+        return version.VALUEDATA
 
 
 def get_cable_by_id(cable):

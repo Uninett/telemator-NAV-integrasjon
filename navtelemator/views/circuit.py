@@ -27,6 +27,7 @@ def render_circuit(request, circuitid):
     connections = services.get_connections_by_circuit(circuitid)
     routingcables = services.get_routingcables_by_circuit(circuitid)
     cables = get_sorted_cables_by_circuit(circuitid)
+    version = services.correct_database_version()
     return render(request,
                   'telemator/circuit_info.html',
                   {
@@ -35,6 +36,7 @@ def render_circuit(request, circuitid):
                       'connections': connections,
                       'routingcables': routingcables,
                       'cables': cables,
+                      'version': version,
                   }
                   )
 
