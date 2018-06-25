@@ -8,3 +8,4 @@ telemator_export/local_db_settings.py
 /.imported_roles
 /ansible/.imported_roles
 local_settings.py
+.vscode/
