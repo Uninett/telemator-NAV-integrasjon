@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine, or_, func
 from sqlalchemy.orm import sessionmaker
-from navtelemator.models import Cable, Circuit, Connection, Customer, End, Owner, Port, RoutingCable
+from navtelemator.models import Cable, Circuit, CircuitEnd, Connection, Customer, End, Owner, Port, RoutingCable, Setting
 from django.conf import settings
 import logging
+import collections
 
 TM_USER = getattr(settings, "TM_USER", None)
 TM_PASSWORD = getattr(settings, "TM_PASSWORD", None)
@@ -25,6 +26,14 @@ db_params = 'mssql+pymssql://' + TM_USER + ':' + TM_PASSWORD + '@' + TM_HOST + '
 engine = create_engine(db_params)
 Session = sessionmaker(bind=engine)
 session = Session()
+
+
+# Hardcoded database version from what is expected.
+def correct_database_version():
+    logger.info('get_database_version called')
+    version = session.query(Setting).filter(Setting.VALUENAME == 'Version::DBFversion').one()
+    if str(version.VALUEDATA) != '285212672':
+        return version.VALUEDATA
 
 
 def get_cable_by_id(cable):
@@ -152,3 +161,24 @@ def get_routingcables_by_circuit(circuit):
     result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Wire == 'A').order_by(RoutingCable.Cable).all()
     logger.info('get_routingcables_by_circuit gave length: %d', len(result))
     return result
+
+
+def get_start_end_place_by_circuit(circuit):
+    result = []
+    try:
+        result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1)
+                        .all())[0].End).split('-GW'))[0])
+    except:
+        result.append("Null")
+    try:
+        result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2)
+                      .all())[0].End).split('-GW'))[0])
+    except:
+        result.append("Null")
+    return result
+
+
+def get_ports_by_circuit(circuit, cable, ab):
+    result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Cable == cable, RoutingCable.Wire == ab).one()
+    return result
+

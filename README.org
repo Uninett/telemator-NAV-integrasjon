@@ -137,3 +137,10 @@ The url include is added on the end of the list with the other includes,
 and navtelemator was added at the START of the installed apps (it caused
 a problem when added at the end. Propably because they are loaded in
 order.
+
+
+*** Comparing databases
+
+Every once in a while, the Telemator database will have updates. This may bring changes to the database schema. Currently, the database version is hardcoded into the program, and anything different from the hardcoded version will result in a red error message on all pages in /telemator. The database version is in the Settings table under Version::DBFversion. 
+
+When there is a new update to the schematics, a script found in navtelemator/misc/database_comparator.py will allow you to see the differences in the schema. Note that this should only be used for doing manual changes to models.py. A url to both the previous database and the new database is required. An HTML file will be produced to easily show differences.
