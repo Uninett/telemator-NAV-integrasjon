@@ -21,11 +21,12 @@ def get_telemator_equipment(id):
 def nav_but_not_telemator():
     response = requests.get(nav_base + '?page_size=300', headers={
                'Authorization': 'Token 7850fdbb4bef6649d58a13483a00579b0cf0aedd'})
-    response_data = json.loads(response.text)
+    response_data = json.loads(response.content)
 
     entry_id = []
     for entry in response_data['results']:
-        entry_id.append(str(entry['sysname']).encode("utf-8"))
+        if entry['category']['id'] == 'GW' or entry['category']['id'] == 'GSW':
+            entry_id.append(str(entry['sysname']).encode("utf-8"))
 
     in_telemator = []
     not_in_telemator = []
