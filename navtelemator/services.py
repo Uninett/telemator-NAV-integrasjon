@@ -30,7 +30,6 @@ session = Session()
 
 # Hardcoded database version from what is expected.
 def correct_database_version():
-    logger.info('get_database_version called')
     version = session.query(Setting).filter(Setting.VALUENAME == 'Version::DBFversion').one()
     if str(version.VALUEDATA) != '285212672':
         return version.VALUEDATA
@@ -167,12 +166,12 @@ def get_start_end_place_by_circuit(circuit):
     result = []
     try:
         result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1)
-                        .all())[0].End).split('-GW'))[0])
+                        .all())[0].End)))
     except:
         result.append("Null")
     try:
         result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2)
-                      .all())[0].End).split('-GW'))[0])
+                      .all())[0].End)))
     except:
         result.append("Null")
     return result
@@ -181,4 +180,6 @@ def get_start_end_place_by_circuit(circuit):
 def get_ports_by_circuit(circuit, cable, ab):
     result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Cable == cable, RoutingCable.Wire == ab).one()
     return result
+
+
 

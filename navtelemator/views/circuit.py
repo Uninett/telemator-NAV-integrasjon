@@ -1,6 +1,13 @@
 from django.shortcuts import render
 from navtelemator import services
+import logging
 
+# writes to spam.log in NAV directory
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler('spam.log')
+fh.setLevel(logging.DEBUG)
+logger.addHandler(fh)
 
 def room_circuits(request, roomid):
     circuit_details = services.get_circuit_details_by_room(roomid)
@@ -28,6 +35,10 @@ def render_circuit(request, circuitid):
     routingcables = services.get_routingcables_by_circuit(circuitid)
     cables = get_sorted_cables_by_circuit(circuitid)
     version = services.correct_database_version()
+    try:
+        netbox = get_start_end_netbox(circuitid)
+    except:
+        pass
     return render(request,
                   'telemator/circuit_info.html',
                   {
@@ -37,6 +48,7 @@ def render_circuit(request, circuitid):
                       'routingcables': routingcables,
                       'cables': cables,
                       'version': version,
+                      'netbox': netbox,
                   }
                   )
 
@@ -50,10 +62,28 @@ def render_circuits(request):
                   }
                   )
 
+def get_start_end_netbox(circuit):
+    start_place = services.get_start_end_place_by_circuit(circuit)[0].split('-GW')[0]
+    end_place = services.get_start_end_place_by_circuit(circuit)[1].split('-GW')[0]
+
+    start_netbox = None
+    end_netbox = None
+
+    netboxes = services.get_connections_by_circuit(circuit)
+    for netbox in netboxes:
+        if netbox.Connection.End.split('-GW')[0] == start_place:
+            start_netbox = netbox.Port
+        if netbox.Connection.End.split('-GW')[0] == end_place:
+            end_netbox = netbox.Port
+
+    logger.info(start_netbox.Label)
+    return start_netbox, end_netbox, start_place, end_place
+
+logger.info(get_start_end_netbox('UN-L000054'))
 
 def get_sorted_cables_by_circuit(circuit):
-    start_place = services.get_start_end_place_by_circuit(circuit)[0]
-    end_place = services.get_start_end_place_by_circuit(circuit)[1]
+    start_place = services.get_start_end_place_by_circuit(circuit)[0].split('-GW')[0]
+    end_place = services.get_start_end_place_by_circuit(circuit)[1].split('-GW')[0]
 
     cables = services.get_routingcables_by_circuit(circuit)
     number_of_cables = len(cables)
@@ -128,4 +158,6 @@ def get_sorted_cables_by_circuit(circuit):
 
     result = [zip(start_list, start_locations_list), zip(end_list, end_locations_list), remainder_list]
     return result
+
+
 
