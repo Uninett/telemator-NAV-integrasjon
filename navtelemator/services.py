@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, or_, func
 from sqlalchemy.orm import sessionmaker
-from navtelemator.models import Cable, Circuit, CircuitEnd, Connection, Customer, End, Owner, Port, RoutingCable, Setting
+from navtelemator.models import Cable, Circuit, CircuitEnd, Connection, Customer, End, Owner, Port, RoutingCable, Setting, KabTer
 from django.conf import settings
 import logging
 import collections
@@ -179,6 +179,11 @@ def get_start_end_place_by_circuit(circuit):
 
 def get_ports_by_circuit(circuit, cable, ab):
     result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Cable == cable, RoutingCable.Wire == ab).one()
+    return result
+
+
+def get_kabter_by_cable(cable):
+    result = session.query(KabTer).filter(KabTer.Cable == cable.Cable)
     return result
 
 

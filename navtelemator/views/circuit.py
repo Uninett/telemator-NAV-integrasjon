@@ -37,20 +37,30 @@ def render_circuit(request, circuitid):
     version = services.correct_database_version()
     try:
         netbox = get_start_end_netbox(circuitid)
+        return render(request,
+                      'telemator/circuit_info.html',
+                      {
+                          'circuit': circuit,
+                          # 'circuit_details': circuit_details,
+                          'connections': connections,
+                          'routingcables': routingcables,
+                          'cables': cables,
+                          'version': version,
+                          'netbox': netbox,
+                      }
+                      )
     except:
-        pass
-    return render(request,
-                  'telemator/circuit_info.html',
-                  {
-                      'circuit': circuit,
-                      # 'circuit_details': circuit_details,
-                      'connections': connections,
-                      'routingcables': routingcables,
-                      'cables': cables,
-                      'version': version,
-                      'netbox': netbox,
-                  }
-                  )
+        return render(request,
+                      'telemator/circuit_info.html',
+                      {
+                          'circuit': circuit,
+                          # 'circuit_details': circuit_details,
+                          'connections': connections,
+                          'routingcables': routingcables,
+                          'cables': cables,
+                          'version': version,
+                      }
+                      )
 
 
 def render_circuits(request):
@@ -80,6 +90,9 @@ def get_start_end_netbox(circuit):
     return start_netbox, end_netbox, start_place, end_place
 
 logger.info(get_start_end_netbox('UN-L000054'))
+
+def get_cables(cable):
+    services.get_kabter_by_cable()
 
 def get_sorted_cables_by_circuit(circuit):
     start_place = services.get_start_end_place_by_circuit(circuit)[0].split('-GW')[0]
