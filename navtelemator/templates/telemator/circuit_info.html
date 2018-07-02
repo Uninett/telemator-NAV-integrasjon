@@ -16,16 +16,32 @@
     </tr>
     {% endif %}
 
+
+
+
+
+
+
+
     {% if cables.0 or cables.1 or cables.2 %}
     {% for cable in cables.0 %}
     <tr>
         <td> * ___[{{cable.1.0}}]</td>
-        <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
+        <td>{{cable.1.5}}</td>
+        <td>{{cable.1.6}}</td>
+    </tr>
+    <tr>
+        <td>|__<a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
     </tr>
     <tr>
         <td>|__{{cable.1.3}}/{{cable.1.4}}</td>
     </tr>
     {% endfor %}
+
+
+
+
+
     {% if cables.2 %}
     <tr>
         <td></td>
@@ -41,6 +57,13 @@
         <td bgcolor="#ff9999">|__{{cable.1.3}}/{{cable.1.4}}</td>
     </tr>
     {% endfor %}
+
+
+
+
+
+
+
     {% if cables.2 %}
     <tr>
         <td></td>
@@ -58,6 +81,18 @@
     {% endfor %}
 
 {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
 
     {% if netbox %}
     <tr>

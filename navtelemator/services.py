@@ -182,8 +182,8 @@ def get_ports_by_circuit(circuit, cable, ab):
     return result
 
 
-def get_kabter_by_cable(cable):
-    result = session.query(KabTer).filter(KabTer.Cable == cable.Cable)
+def get_kabter_by_cable(cable, port, place):
+    result = session.query(KabTer).filter(KabTer.Cable == cable.Cable, KabTer.FromCore == port, KabTer.End == place).first()
     return result
 
 
