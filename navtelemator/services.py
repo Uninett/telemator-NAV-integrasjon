@@ -141,6 +141,12 @@ def get_end_by_id(end):
     return result
 
 
+def get_end_kum_by_id(end):
+    logger.info('get_end_by_id called with %s', end)
+    result = session.query(End).filter(End.End == end, End.Type == 'KUM').first()
+    return result
+
+
 def get_owner_by_id(owner):
     logger.info('get_owner_by_id called with %s', owner)
     result = session.query(Owner).filter(Owner.Owner == owner).one()

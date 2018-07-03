@@ -138,76 +138,97 @@ def get_sorted_cables_by_circuit(circuit):
             port_A = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'A')
             port_B = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'B')
             if cable.cable.End_A == start_location and cable.Cable not in [x.Cable for x in end_list]:
-                kabter = services.get_kabter_by_cable(cable, port_A.Core, start_location)
-                connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)], int(kabter.PinPrPos))
+                kabter = services.get_kabter_by_cable(cable, port_A.Core, cable.cable.End_A)
                 start_list.append(cable.cable)
                 if kabter is not None:
                     if kabter.Plinth is not None:
-                        start_locations_list.append([str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list)),
-                                                     str(port_A.Core), str(port_B.Core), str(kabter.Plinth), str(connector)])
+                        connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
+                                            int(kabter.PinPrPos))
+                        start_locations_list.append([str("*"), str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list)),
+                                                     str(port_A.Core), str(port_B.Core), str(kabter.Plinth), str(connector), str(kabter.PosType)])
                     else:
                         start_locations_list.append(
-                            [str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                            [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
                              str(port_A.Core), str(port_B.Core)])
                 else:
-                    start_locations_list.append([str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list)),
+                    start_locations_list.append([str("*"), str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list)),
                                                  str(port_A.Core), str(port_B.Core)])
                 start_location = cable.cable.End_B
             elif cable.cable.End_B == start_location and cable.Cable not in [x.Cable for x in end_list]:
-                kabter = services.get_kabter_by_cable(cable, port_A.Core, start_location)
-                connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
-                                    int(kabter.PinPrPos))
+                kabter = services.get_kabter_by_cable(cable, port_A.Core, cable.cable.End_A)
                 start_list.append(cable.cable)
-                if kabter is not None:
-                    if kabter.Plinth is not None:
-                        start_locations_list.append([str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                                                     str(port_A.Core), str(port_B.Core), str(kabter.Plinth), str(connector)])
+                try:
+                    end = services.get_end_kum_by_id(cable.cable.End_B)
+                    if kabter is not None and end:
+                        if kabter.Plinth is not None:
+                            connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
+                                                int(kabter.PinPrPos))
+                            start_locations_list.append(
+                                [str("/\\"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                                 str(port_A.Core), str(port_B.Core), str(kabter.Plinth), str(connector),
+                                 str(kabter.PosType)])
+                        else:
+                            start_locations_list.append(
+                                [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                                 str(port_A.Core), str(port_B.Core)])
                     else:
                         start_locations_list.append(
-                            [str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                            [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
                              str(port_A.Core), str(port_B.Core)])
-                else:
-                    start_locations_list.append([str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                                                 str(port_A.Core), str(port_B.Core)])
+                except:
+                    logger.info("it was passed")
+                    if kabter is not None:
+                        if kabter.Plinth is not None:
+                            connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
+                                                int(kabter.PinPrPos))
+                            start_locations_list.append([str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                                                         str(port_A.Core), str(port_B.Core), str(kabter.Plinth), str(connector), str(kabter.PosType)])
+                        else:
+                            start_locations_list.append(
+                                [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                                 str(port_A.Core), str(port_B.Core)])
+                    else:
+                        start_locations_list.append([str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                                                     str(port_A.Core), str(port_B.Core)])
                 start_location = cable.cable.End_A
         # iterates backward
         for cable in cables:
             port_A = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'A')
             port_B = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'B')
             if cable.cable.End_A == end_location and cable.Cable not in [x.Cable for x in start_list]:
-                kabter = services.get_kabter_by_cable(cable, port_A.Core, end_location)
-                connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
-                                    int(kabter.PinPrPos))
+                kabter = services.get_kabter_by_cable(cable, port_A.Core, cable.cable.End_A)
                 if kabter is not None:
                     if kabter.Plinth is not None:
-                        end_locations_list.insert(0, [str(cable.cable.End_B), str(cable.cable.End_A),
+                        connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
+                                            int(kabter.PinPrPos))
+                        end_locations_list.insert(0, [str("*"), str(cable.cable.End_B), str(cable.cable.End_A),
                                                       str(number_of_cables - len(end_list)), str(port_A.Core), str(port_B.Core)
-                                                      , str(kabter.Plinth), str(connector)])
+                                                      , str(kabter.Plinth), str(connector), str(kabter.PosType)])
                     else:
                         start_locations_list.append(
-                            [str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                            [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
                              str(port_A.Core), str(port_B.Core)])
                 else:
-                    end_locations_list.insert(0, [str(cable.cable.End_B), str(cable.cable.End_A),
+                    end_locations_list.insert(0, [str("*"), str(cable.cable.End_B), str(cable.cable.End_A),
                                                   str(number_of_cables - len(end_list)), str(port_A.Core),
                                                   str(port_B.Core)])
                 end_list.insert(0, cable.cable)
                 end_location = cable.cable.End_B
             elif cable.cable.End_B == end_location and cable.Cable not in [x.Cable for x in start_list]:
-                kabter = services.get_kabter_by_cable(cable, port_A.Core, end_location)
+                kabter = services.get_kabter_by_cable(cable, port_A.Core, cable.cable.End_A)
                 if kabter is not None:
-                    connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
-                                        int(kabter.PinPrPos))
                     if kabter.Plinth is not None:
-                        end_locations_list.insert(0, [str(cable.cable.End_A), str(cable.cable.End_B),
+                        connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
+                                            int(kabter.PinPrPos))
+                        end_locations_list.insert(0, [str("*"), str(cable.cable.End_A), str(cable.cable.End_B),
                                                       str(number_of_cables - len(end_list)), str(port_A.Core), str(port_B.Core)
-                                                      , str(kabter.Plinth), str(connector)])
+                                                      , str(kabter.Plinth), str(connector), str(kabter.PosType)])
                     else:
                         start_locations_list.append(
-                            [str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
+                            [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
                              str(port_A.Core), str(port_B.Core)])
                 else:
-                    end_locations_list.insert(0, [str(cable.cable.End_A), str(cable.cable.End_B),
+                    end_locations_list.insert(0, [str("*"), str(cable.cable.End_A), str(cable.cable.End_B),
                                                   str(number_of_cables - len(end_list)), str(port_A.Core),
                                                   str(port_B.Core)])
                 end_list.insert(0, cable.cable)
