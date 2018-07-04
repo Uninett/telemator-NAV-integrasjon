@@ -86,9 +86,6 @@ def get_start_end_netbox(circuit):
     return start_netbox, end_netbox, start_place, end_place
 
 
-def abc(num, prpos):
-    return "%s%s" % (((num-1)/prpos)+1, chr(((num-1) % prpos) + ord("A")))
-
 
 def abclist(nums, prpos):
     lastcon = 0

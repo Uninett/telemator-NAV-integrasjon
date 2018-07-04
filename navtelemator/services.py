@@ -169,6 +169,7 @@ def get_routingcables_by_circuit(circuit):
 
 
 def get_start_end_place_by_circuit(circuit):
+    logger.info('get_start_end_place_by_circuit called with %s', circuit)
     result = []
     try:
         result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1)
@@ -189,6 +190,7 @@ def get_ports_by_circuit(circuit, cable, ab):
 
 
 def get_kabter_by_cable(cable, port, place):
+    logger.info('get_kabter_by_cable called with %s %s %s', cable.Cable, port, place)
     result = session.query(KabTer).filter(KabTer.Cable == cable.Cable, KabTer.FromCore == port, KabTer.End == place).first()
     return result
 

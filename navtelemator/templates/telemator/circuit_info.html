@@ -4,10 +4,16 @@
 
 
     <!--beginning of linecard-->
+
+
 <div style="position: absolute; width: 60%; right: 10px">
 <h3>Linecard</h3>
 <table>
+
+
     <!--start netbox-->
+
+
     {% if netbox %}
     <tr>
         <td>S</td>
@@ -21,6 +27,8 @@
 
     {% if cables.0 or cables.1 or cables.2 %}
     <!--forward iterating list-->
+
+
     {% for cable in cables.0 %}
     {% if cable.1.0 == '/\\' %}
     <tr>
@@ -63,8 +71,6 @@
     {% endfor %}
 
 
-
-
     <!--things without an order in the list-->
     {% if cables.2 %}
     {% endif %}
@@ -88,6 +94,7 @@
     {% if cables.2 %}
     {% endif %}
 
+
     <!--backward iterating in the list-->
     {% for cable in cables.1 %}
     <tr>
@@ -108,6 +115,7 @@
 
 {% endif %}
 
+
     <!--end netbox-->
     {% if netbox %}
     <tr>
@@ -121,6 +129,7 @@
 </table>
 </div>
     <!--end of linecard-->
+
 
 <h3>Circuit: {{circuit.Circuit}}</h3>
 <table>
