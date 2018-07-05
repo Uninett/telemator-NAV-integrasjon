@@ -169,9 +169,8 @@ def get_sorted_cables_by_circuit(circuit):
                                  str(port_A.Core), str(port_B.Core)])
                     else:
                         start_locations_list.append([str("*"), str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list)),
-                                                     str(port_A.Core), str(port_B.Core)])
+                                                     str(port_A.Core), str(port_B.Core), str("Tamp")])
                 except:
-                    logger.info("except was run")
                     if kabter is not None:
                         if kabter.Plinth is not None:
                             connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
@@ -183,11 +182,11 @@ def get_sorted_cables_by_circuit(circuit):
                         else:
                             start_locations_list.append(
                                 [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                                 str(port_A.Core), str(port_B.Core)])
+                                 str(port_A.Core), str(port_B.Core), str("Tamp")])
                     else:
                         start_locations_list.append(
                             [str("*"), str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list)),
-                             str(port_A.Core), str(port_B.Core)])
+                             str(port_A.Core), str(port_B.Core), str("Tamp")])
                 start_location = cable.cable.End_B
 
 
@@ -219,7 +218,7 @@ def get_sorted_cables_by_circuit(circuit):
                     else:
                         start_locations_list.append(
                             [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                             str(port_A.Core), str(port_B.Core)])
+                             str(port_A.Core), str(port_B.Core), str("Tamp")])
                 except:
                     if kabter is not None:
                         if kabter.Plinth is not None:
@@ -230,10 +229,10 @@ def get_sorted_cables_by_circuit(circuit):
                         else:
                             start_locations_list.append(
                                 [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                                 str(port_A.Core), str(port_B.Core)])
+                                 str(port_A.Core), str(port_B.Core), str("Tamp")])
                     else:
                         start_locations_list.append([str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                                                     str(port_A.Core), str(port_B.Core)])
+                                                     str(port_A.Core), str(port_B.Core), str("Tamp")])
                 start_location = cable.cable.End_A
 
 
@@ -264,11 +263,11 @@ def get_sorted_cables_by_circuit(circuit):
                         else:
                             start_locations_list.append(
                                 [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                                 str(port_A.Core), str(port_B.Core)])
+                                 str(port_A.Core), str(port_B.Core), str("Tamp")])
                     else:
                         end_locations_list.insert(0, [str("*"), str(cable.cable.End_B), str(cable.cable.End_A),
                                                       str(number_of_cables - len(end_list)), str(port_A.Core),
-                                                      str(port_B.Core)])
+                                                      str(port_B.Core), str("Tamp")])
                 except:
                     if kabter is not None:
                         if kabter.Plinth is not None:
@@ -280,11 +279,11 @@ def get_sorted_cables_by_circuit(circuit):
                         else:
                             start_locations_list.append(
                                 [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                                 str(port_A.Core), str(port_B.Core)])
+                                 str(port_A.Core), str(port_B.Core), str("Tamp")])
                     else:
                         end_locations_list.insert(0, [str("*"), str(cable.cable.End_B), str(cable.cable.End_A),
                                                       str(number_of_cables - len(end_list)), str(port_A.Core),
-                                                      str(port_B.Core)])
+                                                      str(port_B.Core), str("Tamp")])
                 end_list.insert(0, cable.cable)
                 end_location = cable.cable.End_B
             elif cable.cable.End_B == end_location and cable.Cable not in [x.Cable for x in start_list]:
@@ -308,11 +307,11 @@ def get_sorted_cables_by_circuit(circuit):
                         else:
                             start_locations_list.append(
                                 [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                                 str(port_A.Core), str(port_B.Core)])
+                                 str(port_A.Core), str(port_B.Core), str("Tamp")])
                     else:
                         end_locations_list.insert(0, [str("*"), str(cable.cable.End_A), str(cable.cable.End_B),
                                                       str(number_of_cables - len(end_list)), str(port_A.Core),
-                                                      str(port_B.Core)])
+                                                      str(port_B.Core), str("Tamp")])
                 except:
                     if kabter is not None:
                         if kabter.Plinth is not None:
@@ -324,11 +323,11 @@ def get_sorted_cables_by_circuit(circuit):
                         else:
                             start_locations_list.append(
                                 [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
-                                 str(port_A.Core), str(port_B.Core)])
+                                 str(port_A.Core), str(port_B.Core), str("Tamp")])
                     else:
                         end_locations_list.insert(0, [str("*"), str(cable.cable.End_A), str(cable.cable.End_B),
                                                       str(number_of_cables - len(end_list)), str(port_A.Core),
-                                                      str(port_B.Core)])
+                                                      str(port_B.Core), str("Tamp")])
                 end_list.insert(0, cable.cable)
                 end_location = cable.cable.End_A
 

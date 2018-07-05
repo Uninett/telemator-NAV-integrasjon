@@ -16,8 +16,8 @@
 
     {% if netbox %}
     <tr>
-        <td>S</td>
         <td>[{{netbox.2}}]</td>
+        <td>S</td>
         <td><a href="{{ netbox.0.end.get_absolute_url }}">{{netbox.0.End}}</a></td>
         <td>{{netbox.0.Card}}</td>
         <td>{{netbox.0.Label}}</td>
@@ -32,38 +32,43 @@
     {% for cable in cables.0 %}
     {% if cable.1.0 == '/\\' %}
     <tr>
+        <td>{{cable.1.1}}</td>
         <td>{{cable.1.0}}</td>
-        <td>Skjøtt med kabel: </td>
-        <td>[{{cable.1.1}}]</td>
+        <td>Skjøtt med kabel </td>
+
 
     </tr>
-    <tr><td>\/</td></tr>
+    <tr><td></td><td>\/</td></tr>
     <tr>
+        <td></td>
         <td>|</td>
         <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
     </tr>
     <tr>
+        <td></td>
         <td>|</td>
         <td>{{cable.1.4}}+{{cable.1.5}}</td>
     </tr>
     <tr>
+        <td>{{cable.1.2}}</td>
         <td>*</td>
-        <td>[{{cable.1.2}}]</td>
         <td>{{cable.1.6}}</td>
         <td>{{cable.1.7}} {{cable.1.8}}</td>
     </tr>
     {% else %}
     <tr>
+        <td>{{cable.1.1}}</td>
         <td>{{cable.1.0}}</td>
-        <td>[{{cable.1.1}}]</td>
         <td>{{cable.1.6}}</td>
         <td>{{cable.1.7}}  {{cable.1.8}}</td>
     </tr>
     <tr>
+        <td></td>
         <td>|</td>
         <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
     </tr>
     <tr>
+        <td></td>
         <td>|</td>
         <td>{{cable.1.4}}+{{cable.1.5}}</td>
     </tr>
@@ -76,17 +81,19 @@
     {% endif %}
     {% for cable in cables.2 %}
     <tr>
-        <td bgcolor="#ff9999">{{cable.1.0}}</td>
-        <td bgcolor="#ff9999"> [{{cable.1.1}}]</td>
+        <td bgcolor="#ff9999">{{cable.1.1}}</td>
+        <td bgcolor="#ff9999"> {{cable.1.1}}</td>
         <td bgcolor="#ff9999">{{cable.1.6}}</td>
         <td bgcolor="#ff9999">{{cable.1.7}} {{cable.1.8}}</td>
     </tr>
     <tr>
+        <td></td>
         <td bgcolor="#ff9999">|</td>
         <td bgcolor="#ff9999"><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
 
     </tr>
     <tr>
+        <td></td>
         <td bgcolor="#ff9999">|</td>
         <td bgcolor="#ff9999">{{cable.1.4}}+{{cable.1.5}}</td>
     </tr>
@@ -97,20 +104,47 @@
 
     <!--backward iterating in the list-->
     {% for cable in cables.1 %}
+    {% if cable.1.0 == '/\\' %}
     <tr>
-        <td>*</td>
-        <td>[{{cable.1.1}}]</td>
-        <td>{{cable.1.6}}</td>
-        <td>{{cable.1.7}} {{cable.1.8}}</td>
+        <td>{{cable.1.1}}</td>
+        <td>{{cable.1.0}}</td>
+        <td>Skjøtt med kabel</td>
     </tr>
+    <tr><td></td><td>\/</td></tr>
     <tr>
+        <td></td>
         <td>|</td>
         <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
     </tr>
     <tr>
+        <td></td>
         <td>|</td>
         <td>{{cable.1.4}}+{{cable.1.5}}</td>
     </tr>
+    <tr>
+        <td>{{cable.1.2}}</td>
+        <td>*</td>
+        <td>{{cable.1.6}}</td>
+        <td>{{cable.1.7}} {{cable.1.8}}</td>
+    </tr>
+    {% else %}
+    <tr>
+        <td>{{cable.1.1}}</td>
+        <td>{{cable.1.0}}</td>
+        <td>{{cable.1.6}}</td>
+        <td>{{cable.1.7}} {{cable.1.8}}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>|</td>
+        <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>|</td>
+        <td>{{cable.1.4}}+{{cable.1.5}}</td>
+    </tr>
+    {% endif %}
     {% endfor %}
 
 {% endif %}
@@ -119,8 +153,8 @@
     <!--end netbox-->
     {% if netbox %}
     <tr>
-        <td>E</td>
         <td>[{{netbox.3}}]</td>
+        <td>E</td>
         <td><a href="{{ netbox.1.end.get_absolute_url }}">{{netbox.1.End}}</a></td>
         <td>{{netbox.1.Card}}</td>
         <td>{{netbox.1.Label}}</td>
