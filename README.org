@@ -48,6 +48,8 @@ and ~pip~) and will also append =~/tmsource= to pythons load path
 
 ** Installing for production
 
+Note: The beginnings of a deploy script exists: ~deploy.sh~
+
 The following files needs to be added.
 
  - /etc/nav/python/local_settings.py
