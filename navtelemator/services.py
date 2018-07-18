@@ -191,7 +191,11 @@ def get_ports_by_circuit(circuit, cable, ab):
 
 def get_kabter_by_cable(cable, port, place):
     logger.info('get_kabter_by_cable called with %s %s %s', cable.Cable, port, place)
-    result = session.query(KabTer).filter(KabTer.Cable == cable.Cable, KabTer.FromCore == port, KabTer.End == place).first()
+    entries = session.query(KabTer).filter(KabTer.Cable == cable.Cable, KabTer.End == place).all()
+    result = None
+    for entry in entries:
+        if entry.FromCore <= port > result and (entry.FromCore + entry.NumCores > port):
+            result = entry
     return result
 
 

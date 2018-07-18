@@ -146,7 +146,9 @@ def get_sorted_cables_by_circuit(circuit):
             port_A = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'A')
             port_B = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'B')
             if cable.cable.End_A == start_location and cable.Cable not in [x.Cable for x in end_list]:
-                kabter = services.get_kabter_by_cable(cable, port_A.Core, cable.cable.End_A)
+                kabter = services.get_kabter_by_cable(cable, port_A.Core, cable.cable.End_B)
+                logger.info(kabter.Plinth)
+                logger.info(cable.cable.End_B)
                 start_list.append(cable.cable)
                 try:
                     end = services.get_end_kum_by_id(cable.cable.End_A)
@@ -159,6 +161,8 @@ def get_sorted_cables_by_circuit(circuit):
                         elif kabter.Plinth is not None:
                             connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
                                                 int(kabter.PinPrPos))
+                            logger.info(connector)
+                            logger.info(abclist([15, 16], 2))
                             start_locations_list.append(
                                 [str("*"), str(cable.cable.End_A), str(cable.cable.End_B), str(len(start_list)),
                                  str(port_A.Core), str(port_B.Core), str(kabter.Plinth), str(connector),
@@ -207,6 +211,9 @@ def get_sorted_cables_by_circuit(circuit):
                         elif kabter.Plinth is not None:
                             connector = abclist([(port_A.Core % kabter.NumCores), (port_B.Core % kabter.NumCores)],
                                                 int(kabter.PinPrPos))
+                            logger.info(connector)
+                            logger.info(abclist([7, 8], 1))
+                            logger.info(cable.cable.Cable)
                             start_locations_list.append(
                                 [str("*"), str(cable.cable.End_B), str(cable.cable.End_A), str(len(start_list)),
                                  str(port_A.Core), str(port_B.Core), str(kabter.Plinth), str(connector),
@@ -241,7 +248,7 @@ def get_sorted_cables_by_circuit(circuit):
             port_A = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'A')
             port_B = services.get_ports_by_circuit(circuit, cable.cable.Cable, 'B')
             if cable.cable.End_A == end_location and cable.Cable not in [x.Cable for x in start_list]:
-                kabter = services.get_kabter_by_cable(cable, port_A.Core, cable.cable.End_A)
+                kabter = services.get_kabter_by_cable(cable, port_A.Core, cable.cable.End_B)
                 try:
                     end = services.get_end_kum_by_id(cable.cable.End_B)
                     if kabter is not None:
