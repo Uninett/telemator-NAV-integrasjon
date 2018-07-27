@@ -46,6 +46,17 @@ and ~pip~) and will also append =~/tmsource= to pythons load path
     ansible-playbook -i nav_nav_1, ansible/ansible-prepare.yml
 #+END_SRC
 
+*** Edit /etc/nav/local_settings.py
+
+The database password for the Telemator database must contain the
+correct password
+
+*** Restart apache in the container
+
+#+BEGIN_SRC 
+supervisorctl restart apache2
+#+END_SRC
+
 ** Installing for production
 
 Note: The beginnings of a deploy script exists: ~deploy.sh~

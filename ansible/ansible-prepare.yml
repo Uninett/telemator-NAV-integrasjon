@@ -1,23 +1,27 @@
 - hosts: nav_nav_1
   connection: docker
+  vars_files:
+    - [ 'secret.yml', 'vars.yml']
+    
+  vars:
+    - tm_password: '<put-secret-password-here>'
   tasks:
     - name: Create dir
       file:
         path: /etc/nav/python
         state: directory
         
-        #     - name: Create local_settings.py
-        #       template:
-        #         src: local_settings.py.j2
-        #         dest: /etc/nav/python/local_settings.py
-        #       notify: Restart apache
-        #       
-        #     - name: Create local_urls.py
-        #       template:
-        #         src: local_urls.py.j2
-        #         dest: /etc/nav/python/local_urls.py
-        #       notify: Restart apache
-            
+    - name: Create local_settings.py
+      template:
+        src: local_settings.py.j2
+        dest: /etc/nav/python/local_settings.py
+      notify: Restart apache
+               
+    - name: Hint about setting password
+      debug:
+        msg: "NB-NB ==== Remember to edit /tmsource/local_settings.py === NB-NB"
+      when: tm_password == '<put-secret-password-here>'
+
     - name: Install packages (apt)
       apt:
         name: "{{ item }}"
