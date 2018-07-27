@@ -36,9 +36,12 @@ adding yourselv to the ~docker~ group.
 
 *** Install ourselves into the NAV container
 
-The ansible playbooks below will install necessary packages (via ~apt~
-and ~pip~) and will also append =~/tmsource= to pythons load path
-(by altering ~/etc/python2.7/sitecustomize.py~)
+The ansible playbooks below will 
+
+ - install necessary packages (via ~apt~ and ~pip~)
+ - append =~/tmsource= to pythons load path (by altering
+   ~/etc/python2.7/sitecustomize.py~)
+ - generate the file ~/etc/nav/local_settings.py~
 
 #+BEGIN_SRC sh
     cd ~/src/telemator-NAV-integrasjon
@@ -48,8 +51,7 @@ and ~pip~) and will also append =~/tmsource= to pythons load path
 
 *** Edit /etc/nav/local_settings.py
 
-The database password for the Telemator database must contain the
-correct password
+The database password for the Telemator database must be added to ~/etc/nav/local_settings.py~
 
 *** Restart apache in the container
 
