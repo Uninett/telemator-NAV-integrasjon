@@ -141,12 +141,6 @@ def get_end_by_id(end):
     return result
 
 
-def get_end_kum_by_id(end):
-    logger.info('get_end_by_id called with %s', end)
-    result = session.query(End).filter(End.End == end, End.Type == 'KUM').first()
-    return result
-
-
 def get_owner_by_id(owner):
     logger.info('get_owner_by_id called with %s', owner)
     result = session.query(Owner).filter(Owner.Owner == owner).one()
@@ -170,25 +164,44 @@ def get_routingcables_by_circuit(circuit):
 
 def get_start_end_place_by_circuit(circuit):
     logger.info('get_start_end_place_by_circuit called with %s', circuit)
-    result = []
+    start_point = None
+    end_point = None
+    start_netbox = None
+    end_netbox = None
     try:
-        result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1)
-                        .all())[0].End)))
-    except:
-        result.append("Null")
+        circuit_start = session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit,
+                                                         CircuitEnd.Parallel == 1).first()
+        start_netbox = circuit_start
+        point_info_start = session.query(End).filter(End.End == circuit_start.End).first()
+        if point_info_start.IsEquipm == 1:
+            start_point = point_info_start.EqLinkToPt
+        else:
+            start_point = point_info_start.End
+
+    except Exception as e:
+        logger.info(e)
     try:
-        result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2)
-                      .all())[0].End)))
+        circuit_end = session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit,
+                                                       CircuitEnd.Parallel == 2).first()
+        end_netbox = circuit_end
+        point_info_end = session.query(End).filter(End.End == circuit_end.End).first()
+        if point_info_end.IsEquipm == 1:
+            end_point = point_info_end.EqLinkToPt
+        else:
+            end_point = point_info_end.End
     except:
-        result.append("Null")
+        pass
+
+    return start_point, end_point, start_netbox, end_netbox
+
+
+# returns a list of ports (fiber) in a cable
+def get_ports_by_circuit(circuit, cable):
+    result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Cable == cable).all()
     return result
 
 
-def get_ports_by_circuit(circuit, cable, ab):
-    result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Cable == cable, RoutingCable.Wire == ab).one()
-    return result
-
-
+# returns odf for cable towards an end
 def get_kabter_by_cable(cable, port, place):
     logger.info('get_kabter_by_cable called with %s %s %s', cable.Cable, port, place)
     entries = session.query(KabTer).filter(KabTer.Cable == cable.Cable, KabTer.End == place).all()
@@ -198,5 +211,16 @@ def get_kabter_by_cable(cable, port, place):
             result = entry
     return result
 
+
+# returns true if spliced (sjøtt) towards an end
+def get_spliced(cable, end):
+    logger.info('get_spliced called with %s', end)
+    try:
+        result = session.query(KabTer).filter(KabTer.Cable == cable.Cable, KabTer.End == end).first()
+        if result.TrmTxt == 6:
+            return True
+    except:
+        pass
+    return False
 
 

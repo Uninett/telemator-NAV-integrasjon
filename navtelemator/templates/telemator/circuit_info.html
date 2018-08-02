@@ -5,18 +5,29 @@
 
     <!--beginning of linecard-->
 
+<style>
+    .linecard td {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        margin: 0 !important;
+    }
+    .linecard tr:nth-child(even){
+        background-color: transparent !important;
+    }
+    .linecard tr:nth-child(odd){
+        background-color: transparent !important;
+    }
+</style>
 
 <div style="position: absolute; width: 60%; right: 10px">
 <h3>Linecard</h3>
-<table>
+<table class="linecard">
 
 
     <!--start netbox-->
-
-
     {% if netbox %}
     <tr>
-        <td>[{{netbox.2}}]</td>
+        <td style="text-align: right">[{{netbox.2}}]</td>
         <td>S</td>
         <td><a href="{{ netbox.0.end.get_absolute_url }}">{{netbox.0.End}}</a></td>
         <td>{{netbox.0.Card}}</td>
@@ -24,134 +35,67 @@
     </tr>
     {% endif %}
 
+    <!--linecard-->
+    {% if cables %}
+    {% for cable in cables %}
+    {% if cable.first_cable and not cable.first_slice %}
+    <tr style="">
+        <td>&nbsp;</td>
+    </tr>
+    <tr style="">
+        <td>&nbsp;</td>
+        <td>?</td>
+    </tr>
+    <tr style="">
+        <td>&nbsp;</td>
+    </tr>
+    {% endif %}
+    {% if not cable.spliced_prev %}
+    <tr>
+        <td style="text-align: right">{{cable.prev_end}}</td>
+        <td>&#9486;</td>
+        <td>{{cable.prev_odf}}</td>
+        <td>{{cable.connector_prev}}</td>
+        <td>{{cable.prev_odf_type}}</td>
+    </tr>
+    {% endif %}
+    {% if cable.spliced_prev %}
+        <td style="text-align: right">{{cable.prev_end}}</td>
+        <td>&#9670</td>
+        <td>Fiberskjøt</td>
+    {% endif %}
 
-    {% if cables.0 or cables.1 or cables.2 %}
-    <!--forward iterating list-->
-
-
-    {% for cable in cables.0 %}
-    {% if cable.1.0 == '/\\' %}
-    <tr>
-        <td>{{cable.1.1}}</td>
-        <td>{{cable.1.0}}</td>
-        <td>Skjøtt med kabel </td>
-    </tr>
-    <tr><td></td><td>\/</td></tr>
     <tr>
         <td></td>
-        <td>|</td>
-        <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
+        <td>&#9475;</td>
+        <td><a href="{{ cable.cable.get_absolute_url }}">{{cable.cable.Cable}}</a></td>
     </tr>
     <tr>
         <td></td>
-        <td>|</td>
-        <td>{{cable.1.4}}+{{cable.1.5}}</td>
+        <td>&#9475;</td>
+        <td>
+        {% for port in cable.ports %}
+            {{ port.Core }} {% if not forloop.last %}+{% endif %}
+        {% endfor %}
+        </td>
     </tr>
+    {% if not cable.spliced_next %}
     <tr>
-        <td>{{cable.1.2}}</td>
-        <td>*</td>
-        <td>{{cable.1.6}}</td>
-        <td>{{cable.1.7}} {{cable.1.8}}</td>
-    </tr>
-    {% else %}
-    <tr>
-        <td>{{cable.1.1}}</td>
-        <td>{{cable.1.0}}</td>
-        <td>{{cable.1.6}}</td>
-        <td>{{cable.1.7}}  {{cable.1.8}}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>|</td>
-        <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>|</td>
-        <td>{{cable.1.4}}+{{cable.1.5}}</td>
+        <td style="text-align: right">{{cable.next_end}}</td>
+        <td>&#9494;</td>
+        <td>{{cable.next_odf}}</td>
+        <td>{{cable.connector_next}}</td>
+        <td>{{cable.next_odf_type}}</td>
     </tr>
     {% endif %}
     {% endfor %}
-
-
-    <!--things without an order in the list-->
-    {% if cables.2 %}
-    {% endif %}
-    {% for cable in cables.2 %}
-    <tr>
-        <td bgcolor="#ff9999">{{cable.1.1}}</td>
-        <td bgcolor="#ff9999"> {{cable.1.0}}</td>
-        <td bgcolor="#ff9999">{{cable.1.6}}</td>
-        <td bgcolor="#ff9999">{{cable.1.7}} {{cable.1.8}}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td bgcolor="#ff9999">|</td>
-        <td bgcolor="#ff9999"><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
-
-    </tr>
-    <tr>
-        <td></td>
-        <td bgcolor="#ff9999">|</td>
-        <td bgcolor="#ff9999">{{cable.1.4}}+{{cable.1.5}}</td>
-    </tr>
-    {% endfor %}
-    {% if cables.2 %}
-    {% endif %}
-
-
-    <!--backward iterating in the list-->
-    {% for cable in cables.1 %}
-    {% if cable.1.0 == '/\\' %}
-    <tr>
-        <td>{{cable.1.1}}</td>
-        <td>{{cable.1.0}}</td>
-        <td>Skjøtt med kabel</td>
-    </tr>
-    <tr><td></td><td>\/</td></tr>
-    <tr>
-        <td></td>
-        <td>|</td>
-        <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>|</td>
-        <td>{{cable.1.4}}+{{cable.1.5}}</td>
-    </tr>
-    <tr>
-        <td>{{cable.1.2}}</td>
-        <td>*</td>
-        <td>{{cable.1.6}}</td>
-        <td>{{cable.1.7}} {{cable.1.8}}</td>
-    </tr>
-    {% else %}
-    <tr>
-        <td>{{cable.1.1}}</td>
-        <td>{{cable.1.0}}</td>
-        <td>{{cable.1.6}}</td>
-        <td>{{cable.1.7}} {{cable.1.8}}</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>|</td>
-        <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>|</td>
-        <td>{{cable.1.4}}+{{cable.1.5}}</td>
-    </tr>
-    {% endif %}
-    {% endfor %}
-
 {% endif %}
 
 
     <!--end netbox-->
     {% if netbox %}
     <tr>
-        <td>[{{netbox.3}}]</td>
+        <td style="text-align: right">[{{netbox.3}}]</td>
         <td>E</td>
         <td><a href="{{ netbox.1.end.get_absolute_url }}">{{netbox.1.End}}</a></td>
         <td>{{netbox.1.Card}}</td>
@@ -212,49 +156,17 @@
 {% endif %}
 
 
-{% if cables.0 or cables.1 or cables.2 %}
+{% if cables %}
 <h5>List of cables in circuit</h5>
 <table>
     <tr>
-        <th>Order</th>
         <th>Cable</th>
         <th>Start/End</th>
     </tr>
-    {% for cable in cables.0 %}
+    {% for cable in cables %}
     <tr>
-        <td>{{cable.1.3}}</td>
-        <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
-        <td>{{cable.1.1}}<br>{{cable.1.2}}</td>
-    </tr>
-    {% endfor %}
-    {% if cables.2 %}
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    {% endif %}
-    {% for cable in cables.2 %}
-    <tr>
-        <td bgcolor="#ff9999">{{cable.1.3}}</td>
-        <td bgcolor="#ff9999"><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
-        <td bgcolor="#ff9999">{{cable.1.1}}<br>{{cable.1.2}}</td>
-    </tr>
-    {% endfor %}
-    {% if cables.2 %}
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    {% endif %}
-    {% for cable in cables.1 %}
-    <tr>
-        <td>{{cable.1.3}}</td>
-        <td><a href="{{ cable.0.get_absolute_url }}">{{cable.0.Cable}}</a></td>
-        <td>{{cable.1.1}}<br>{{cable.1.2}}</td>
+        <td><a href="{{ cable.cable.get_absolute_url }}">{{cable.cable.Cable}}</a></td>
+        <td>{{cable.prev_end}}<br>{{cable.next_end}}</td>
     </tr>
     {% endfor %}
 </table>
