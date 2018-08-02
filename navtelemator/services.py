@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, or_, func
 from sqlalchemy.orm import sessionmaker
-from navtelemator.models import Cable, Circuit, CircuitEnd, Connection, Customer, End, Owner, Port, RoutingCable, Setting
+from navtelemator.models import Cable, Circuit, CircuitEnd, Connection, Customer, End, Owner, Port, RoutingCable, Setting, KabTer
 from django.conf import settings
 import logging
 import collections
@@ -30,7 +30,6 @@ session = Session()
 
 # Hardcoded database version from what is expected.
 def correct_database_version():
-    logger.info('get_database_version called')
     version = session.query(Setting).filter(Setting.VALUENAME == 'Version::DBFversion').one()
     if str(version.VALUEDATA) != '285212672':
         return version.VALUEDATA
@@ -164,21 +163,64 @@ def get_routingcables_by_circuit(circuit):
 
 
 def get_start_end_place_by_circuit(circuit):
-    result = []
+    logger.info('get_start_end_place_by_circuit called with %s', circuit)
+    start_point = None
+    end_point = None
+    start_netbox = None
+    end_netbox = None
     try:
-        result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 1)
-                        .all())[0].End).split('-GW'))[0])
-    except:
-        result.append("Null")
+        circuit_start = session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit,
+                                                         CircuitEnd.Parallel == 1).first()
+        start_netbox = circuit_start
+        point_info_start = session.query(End).filter(End.End == circuit_start.End).first()
+        if point_info_start.IsEquipm == 1:
+            start_point = point_info_start.EqLinkToPt
+        else:
+            start_point = point_info_start.End
+
+    except Exception as e:
+        logger.info(e)
     try:
-        result.append((str((session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit, CircuitEnd.Parallel == 2)
-                      .all())[0].End).split('-GW'))[0])
+        circuit_end = session.query(CircuitEnd).filter(CircuitEnd.Circuit == circuit,
+                                                       CircuitEnd.Parallel == 2).first()
+        end_netbox = circuit_end
+        point_info_end = session.query(End).filter(End.End == circuit_end.End).first()
+        if point_info_end.IsEquipm == 1:
+            end_point = point_info_end.EqLinkToPt
+        else:
+            end_point = point_info_end.End
     except:
-        result.append("Null")
+        pass
+
+    return start_point, end_point, start_netbox, end_netbox
+
+
+# returns a list of ports (fiber) in a cable
+def get_ports_by_circuit(circuit, cable):
+    result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Cable == cable).all()
     return result
 
 
-def get_ports_by_circuit(circuit, cable, ab):
-    result = session.query(RoutingCable).filter(RoutingCable.Circuit == circuit, RoutingCable.Cable == cable, RoutingCable.Wire == ab).one()
+# returns odf for cable towards an end
+def get_kabter_by_cable(cable, port, place):
+    logger.info('get_kabter_by_cable called with %s %s %s', cable.Cable, port, place)
+    entries = session.query(KabTer).filter(KabTer.Cable == cable.Cable, KabTer.End == place).all()
+    result = None
+    for entry in entries:
+        if entry.FromCore <= port > result and (entry.FromCore + entry.NumCores > port):
+            result = entry
     return result
+
+
+# returns true if spliced (sjøtt) towards an end
+def get_spliced(cable, end):
+    logger.info('get_spliced called with %s', end)
+    try:
+        result = session.query(KabTer).filter(KabTer.Cable == cable.Cable, KabTer.End == end).first()
+        if result.TrmTxt == 6:
+            return True
+    except:
+        pass
+    return False
+
 
