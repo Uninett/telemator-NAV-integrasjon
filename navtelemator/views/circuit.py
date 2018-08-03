@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from navtelemator import services
 
+
 def room_circuits(request, roomid):
     circuit_details = services.get_circuit_details_by_room(roomid)
     return render(request,
@@ -228,12 +229,15 @@ def get_sorted_cables_by_circuit(circuit):
         cabledata[index] = cable
         cablelist.append([cable.cable.End_A, cable.cable.End_B, index])
     cableslices = get_slices(cablelist)
+
     sorted_slices = sort_slices(cableslices, start_place, end_place)
 
     previous = start_place
     out_list = []
     counter = 0
-    for (index, slice) in enumerate(sorted_slices):
+    for (index, slice2) in enumerate(sorted_slices):
+
+        slice = sort_slice(slice2)
 
         # slices may need to be reversed
         if start_place not in slice[0] and index == 0:
@@ -269,6 +273,7 @@ def get_sorted_cables_by_circuit(circuit):
             previous = cable
             result_dict.update({'prev_end': ends[0], 'next_end': ends[1]})
             out_list.append(result_dict)
+
 
         # main for loop
         for (cable_index, cable) in enumerate(slice):
