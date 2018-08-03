@@ -191,10 +191,11 @@ def sort_slices(slices, start, stop):
         return out
     return slices
 
-def sort_slice(slice):
+def sort_slice(unsorted_slice):
     outslice = []
     current_index = 0
 
+    slice = unsorted_slice[:]
     # Add first element into output array
     outslice.append(slice.pop())
 
