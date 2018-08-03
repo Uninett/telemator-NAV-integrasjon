@@ -212,7 +212,7 @@ def get_kabter_by_cable(cable, port, place):
     return result
 
 
-# returns true if spliced (sjøtt) towards an end
+# returns true if spliced (sjott) towards an end
 def get_spliced(cable, end):
     logger.info('get_spliced called with %s', end)
     try:
