@@ -26,5 +26,5 @@ setup(name='nav-contrib-telemator',
       author_email='bflugon@gmail.com',
       url='http://www.example.com',
       packages=['navtelemator'],
-      install_requires=['sqlalchemy','pymssql',],
+      install_requires=['sqlalchemy','pymssql==2.1.3',],
       include_package_data=True)

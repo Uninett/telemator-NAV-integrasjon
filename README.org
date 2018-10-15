@@ -116,11 +116,13 @@ The following files needs to be added.
 *** Build
 
 #+BEGIN_SRC sh
+apt-get install python-dev freetds-dev
 python ./setup.py build sdist
 #+END_SRC
 
 
 *** Install
+
 #+BEGIN_SRC sh
 pip install dist/*
 #+END_SRC

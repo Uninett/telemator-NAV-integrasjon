@@ -16,7 +16,7 @@ cd telemator-NAV-integrasjon
 rm dist/*
 
 # FIXME
-# Must copy local_urls.py, local_settings.py also
+# Must copy local_urls.py, local_settings.py also to /etc/nav/python
 
 python ./setup.py build sdist
 sudo pip install dist/*
