@@ -80,8 +80,8 @@ class CableSearchProvider(SearchProvider):
     def fetch_results(self):
         try:
             results = services.session.query(Cable).filter(
-                or_(Cable.Cable.ilike('%{}%'.format(self.query)), Cable.End_A.ilike('%{}%'.format(self.query)),
-                    Cable.End_B.ilike('%{}%'.format(self.query))))
+                or_(Cable.Cable.ilike(u'%{}%'.format(self.query)), Cable.End_A.ilike(u'%{}%'.format(self.query)),
+                    Cable.End_B.ilike(u'%{}%'.format(self.query))))
 
             for result in results:
                 self.results.append(SearchResult(
@@ -104,8 +104,8 @@ class CircuitSearchProvider(SearchProvider):
     def fetch_results(self):
         try:
             results = services.session.query(Circuit).filter(
-                or_(Circuit.Circuit.ilike('%{}%'.format(self.query)), Circuit.Reference.ilike('%{}%'.format(self.query)),
-                    Circuit.Owner.ilike('%{}%'.format(self.query))))
+                or_(Circuit.Circuit.ilike(u'%{}%'.format(self.query)), Circuit.Reference.ilike(u'%{}%'.format(self.query)),
+                    Circuit.Owner.ilike(u'%{}%'.format(self.query))))
             for result in results:
                 self.results.append(SearchResult(
                     reverse('circuit-info', kwargs={'circuitid': result.Circuit}),
@@ -126,7 +126,7 @@ class CWDMSearchProvider(SearchProvider):
 
     def fetch_results(self):
         try:
-            results = services.session.query(End).filter(End.End.ilike('%{}%'.format(self.query)))
+            results = services.session.query(End).filter(End.End.ilike(u'%{}%'.format(self.query)))
             for result in results:
                 self.results.append(SearchResult(
                     reverse('telemator-netbox-info', kwargs={'netbox_sysname': result.End}),
@@ -148,7 +148,7 @@ class OwnerSearchProvider(SearchProvider):
     def fetch_results(self):
         try:
             results = services.session.query(Owner).filter(
-                or_(Owner.Owner.ilike('%{}%'.format(self.query)), Owner.Name.ilike('%{}%'.format(self.query))))
+                or_(Owner.Owner.ilike(u'%{}%'.format(self.query)), Owner.Name.ilike(u'%{}%'.format(self.query))))
 
             for result in results:
                 self.results.append(SearchResult(
