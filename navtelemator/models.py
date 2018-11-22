@@ -280,7 +280,7 @@ class End(Base):
     Usage = Column(String(15, 'Danish_Norwegian_CI_AS'))
     Drawing = Column(String(25, 'Danish_Norwegian_CI_AS'))
     Manufact = Column(String(30, 'Danish_Norwegian_CI_AS'))
-    Material = Column(String(15, 'Danish_Norwegian_CI_AS'))
+    Model = Column(String(15, 'Danish_Norwegian_CI_AS'))
     NumMater = Column(Numeric(3, 0))
     Latitude = Column(Numeric(15, 6))
     Longitude = Column(Numeric(15, 6))
@@ -355,7 +355,6 @@ class End(Base):
     UpdUser = Column(String(20, 'Danish_Norwegian_CI_AS'))
     RemarkM = Column(String(collation='Danish_Norwegian_CI_AS'))
     AccToSiteM = Column(String(collation='Danish_Norwegian_CI_AS'))
-    MapRef = Column(String(1, 'Danish_Norwegian_CI_AS'))
 
     ports = relationship('Port', back_populates='end')
     connections = relationship('Connection', back_populates='end')
