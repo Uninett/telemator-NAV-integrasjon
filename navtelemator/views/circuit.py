@@ -113,6 +113,7 @@ def get_slices(connections):
         #   returns all slice indexes that match
         inslice = []
         for (index, slice) in enumerate(slices):
+            # Traverse all slices to try to detect if node is in one of them.
             for c in slice:
                 if current[0] in c or current[1] in c:
                     inslice.append(index)
@@ -130,9 +131,12 @@ def get_slices(connections):
         elif len(inslice) == 2:
             # Slice matching returned TWO elements
             # Wee need to merge both slices and add current element
-            slices[inslice[0]].append(current)
-            slices[inslice[0]] += slices[inslice[1]]
-            del slices[inslice[1]]
+            if inslice[0] == inslice[1]:
+                slices[inslice[0]].append(current)
+            else:
+                slices[inslice[0]].append(current)
+                slices[inslice[0]] += slices[inslice[1]]
+                del slices[inslice[1]]
         else:
             raise (Exception("Unfindable element in table, this shuld not happen.."))
 
