@@ -31,6 +31,9 @@ def realmain ():
     c = get_customer_by_id(140);
     print c.Name
     
+def get_ports_all(a):
+    return session.query(Port).all()
+
 def get_cable_by_id(cable):
     return session.query(Cable).filter(Cable.Cable == cable).one()
 
