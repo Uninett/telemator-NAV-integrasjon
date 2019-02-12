@@ -25,7 +25,7 @@
     - name: Install packages (apt)
       apt:
         name: "{{ item }}"
-        state: installed
+        state: present
       with_items:
         - python-sqlalchemy
       notify: Restart apache
