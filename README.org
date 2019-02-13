@@ -2,6 +2,39 @@
 
 Contribution for Telemator additions in NAV
 
+** User-visible changes
+
+*** New url <nav-url>/telemator
+A new page is available at <nav-url>/telemator. The page contains a
+summary of registered Circuits and Customers. 
+
+*** New url <nav-url>/telemator/circuits
+Presents a list of registered circuits
+
+*** New url <nav-url>/telemator/circuits/<circuitid>
+
+Show details about a given circuit
+
+*** New url <nav-url>/telemator/cables/<cableid>
+Show details about a given cable
+
+*** New url <nav-url>/telemator/customers/
+Presents a list of customers
+
+*** New url <nav-url>/telemator/customers/<customerid>
+Shows details about a given customer
+
+*** New url <nav-url>/telemator/api/
+Shows a list of API endpoints
+
+*** New url <nav-url>/telemator/api/1.0/customer_circuits/<customerid>
+REST API endpoint for all circuits for a given customer
+
+*** New url <nav-url>telemator/owners/<ownerid>
+
+Shows details about an owner a list of cables owned
+
+
 ** Setting up development environment
 
 *** Checkout NAV
