@@ -37,13 +37,14 @@ Shows details about an owner a list of cables owned
 
 ** Setting up development environment
 
-*** Checkout NAV
-#+BEGIN_SRC sh
-    cd ~/src
+*** Checkout a suitable NAV version
+#+BEGIN_SRC sh :async
+    cd /local/src
     git clone https://github.com/UNINETT/nav.git
     cd nav
-    git checkout tags/4.8.4
+    git checkout 4.9.x
 #+END_SRC
+
 
 *** Prepare the NAV source
 
@@ -51,19 +52,20 @@ For ease of development, we mount our current directory inside the NAV
 container. This is done by altering ~docker-compose.yml~. Our current
 directory will then be available inside the container at =~/tmsource=.
 
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :async :results verbatim
     cd ~/src/telemator-NAV-integrasjon
     pip install pyyaml
-    ./fix-nav-docker.py ~/src/nav
+    ./fix-nav-docker.py /local/src/nav
 #+END_SRC
+
 
 *** Start NAV docker containers
 
 Make sure access to docker is granted to your user, typically by
 adding yourselv to the ~docker~ group. 
 
-#+BEGIN_SRC sh
-    ( cd ~/src/nav; docker-compose up )
+#+BEGIN_SRC sh :async :results verbatim
+    ( cd /local/src/nav; docker-compose up )
 #+END_SRC
 
 
@@ -76,21 +78,17 @@ The ansible playbooks below will
    ~/etc/python2.7/sitecustomize.py~)
  - generate the file ~/etc/nav/local_settings.py~
 
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :async :results verbatim
     cd ~/src/telemator-NAV-integrasjon
     ansible-playbook ansible/install-roles.yml
     ansible-playbook -i nav_nav_1, ansible/ansible-prepare.yml
 #+END_SRC
 
+
+
 *** Edit /etc/nav/local_settings.py
 
 The database password for the Telemator database must be added to ~/etc/nav/local_settings.py~
-
-*** Restart apache in the container
-
-#+BEGIN_SRC 
-supervisorctl restart apache2
-#+END_SRC
 
 ** Installing for production
 
