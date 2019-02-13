@@ -16,7 +16,7 @@
       template:
         src: local_settings.py.j2
         dest: /etc/nav/python/local_settings.py
-      notify: Restart apache
+      notify: Restart web
                
     - name: Hint about setting password
       debug:
@@ -29,14 +29,14 @@
         state: present
       with_items:
         - python-sqlalchemy
-      notify: Restart apache
+      notify: Restart web
       
     - name: Install packages (PIP)
       pip:
         name: "{{ item }}"
       with_items:
         - pymssql
-      notify: Restart apache
+      notify: Restart web
       
     - name: Fix Python include path
       lineinfile:
@@ -52,5 +52,5 @@
         
 
   handlers:
-    - name: Restart apache
-      command: supervisorctl restart apache2
+    - name: Restart web
+      command: supervisorctl restart web
