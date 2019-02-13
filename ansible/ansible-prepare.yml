@@ -5,6 +5,7 @@
     
   vars:
     - tm_password: '<put-secret-password-here>'
+    - python_version: 2.7
   tasks:
     - name: Create dir
       file:
@@ -39,10 +40,9 @@
       
     - name: Fix Python include path
       lineinfile:
-        dest: /etc/python2.7/sitecustomize.py
-        line: "sys.path.append('/tmsource')"
-        # regexp: '^sys.path.append\(
-      notify: Restart apache
+        dest: /etc/python{{ python_version }}/sitecustomize.py
+        line: "import sys; sys.path.append('/tmsource')"
+      notify: Restart web
 
     - name: Symlink local_urls.py
       file:
