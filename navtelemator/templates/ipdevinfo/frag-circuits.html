@@ -17,8 +17,10 @@
             <td>{{circuit_detail.index}}</td>
             {% endcomment %}
             <td>{{circuit_detail.0.circuit.Reference}}</td>
-            <td>{{circuit_detail.1.Port}}</td>
-            <td>{{circuit_detail.1.Label}}</td>
+            <td>{{circuit_detail.1.Port}}</td> 
+            <td><a href="{% url 'ipdevinfo-interface-details-by-name' netbox_sysname circuit_detail.1.Label|lower %}">
+                {{circuit_detail.1.Label}}</a>
+            </td> 
             <td>{{circuit_detail.1.Channel}}</td>
         </tr>
         {% endfor %}
