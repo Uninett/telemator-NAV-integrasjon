@@ -17,7 +17,8 @@ def netbox_circuits(request, netbox_sysname):
     return render(request,
                   'ipdevinfo/frag-circuits.html',
                   {
-                      'circuit_details': circuit_details
+                      'circuit_details': circuit_details,
+                      'netbox_sysname': netbox_sysname
                   }
                   )
 
