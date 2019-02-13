@@ -10,7 +10,11 @@
     </tr>
     <tr>
         <th>ID</th>
-        <td>{{ customer.CustId }}</td>
+        <td><a href="https://kind.uninett.no/org/edit_org.html?id={{customer.CustId}}">{{ customer.CustId }}</a></td>
+    </tr>
+    <tr>
+        <th>Orgnr</th>
+        <td><a href="http://w2.brreg.no/enhet/sok/detalj.jsp?orgnr={{ customer.OrgNum }}">{{ customer.OrgNum }}</a></td>
     </tr>
     <tr>
         <th>Department</th>
@@ -19,10 +23,6 @@
     <tr>
         <th>Address</th>
         <td>{{ customer.Addr2 }}</td>
-    </tr>
-    <tr>
-        <th>KIND</th>
-        <td><a href="https://kind.cs.uninett.no/org/edit_org.html?id={{customer.CustId}};">Link</a> </td>
     </tr>
 </table>
 
