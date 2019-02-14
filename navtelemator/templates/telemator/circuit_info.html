@@ -182,7 +182,9 @@
     {% for connection in connections %}
     <tr>
         <td><a href="{{ connection.1.end.get_absolute_url }}">{{connection.1.End}}</a></td>
-        <td>{{connection.1.Label}}</td>
+        <td><a href="{% url 'ipdevinfo-interface-details-by-name' connection.1.End|lower connection.1.Label|lower %}">
+            {{connection.1.Label}}
+        </a></td>
     </tr>
     {% endfor %}
 </table>
