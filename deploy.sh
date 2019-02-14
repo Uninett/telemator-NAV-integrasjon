@@ -6,6 +6,10 @@
 # -----------------------------------------------------------------------
 #set -x # Uncomment to debug
 
+# FIXME: add some logic to synchronize version number in setup.py with git tag.
+# Perhaps something like this:
+# https://gist.github.com/jpmens/6248478
+
 gitrepo='git@scm.uninett.no:verktoy/telemator-NAV-integrasjon.git'
 srcdir=~/src
 
