@@ -5,8 +5,14 @@
 <h3>Owner: {{owner.Name}}</h3>
 <table>
     <tr>
-        <th>Name</th>
-        <td>{{ owner.Name }}</td>
+      <th>Name</th>
+      <td>
+        {% if cmdb_orgbyname_url %}
+          <a href="{{ cmdb_orgbyname_url }}{{owner.Name}}">{{ owner.Name }}</a>
+        {% else %}
+          {{ owner.Name }}
+        {% endif %}
+      </td>
     </tr>
     <tr>
         <th>ID</th>
@@ -20,10 +26,6 @@
         <th>Email</th>
         <td>{{ owner.Email }}</td>
       </tr>
-    <tr>
-        <th>KIND</th>
-        <td><a href="https://kind.uninett.no/soek.html?table=org&skjema=org&navn={{ owner.Name }}&navn_inc=1;">Link</a> </td>
-    </tr>
 </table>
 
 {% if owner.cables %}

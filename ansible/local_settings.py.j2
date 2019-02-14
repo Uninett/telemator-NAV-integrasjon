@@ -18,18 +18,17 @@ SEARCHPROVIDERS += (
 )
 
 ### Telemator Config ###
-# Server to connect to
-TM_HOST = '158.38.212.167'
-#TM_HOST = 'srv-telemator.ikt.uninett.no'
-# Port number
-TM_PORT = '1433'
+# MS SQL Server settings
+TM_HOST = '{{ tm_host }}'
+TM_PORT = '{{ tm_port }}'
+TM_USER = '{{ tm_user }}'
+TM_PASSWORD = '{{ tm_password }}'
 
-# Username
-TM_USER = 'tmreader'
-# Password
+# Name of Telemator database to use
+TM_DBNAME = '{{ tm_dbname }}'
 
-# FIXME
-TM_PASSWORD = '{{tm_password}}'
+# Given an org id, use this URL to link to a CRM/CMDB entry
+TM_CMDB_ORGBYID_URL = '{{ tm_cmdb_orgbyid_url }}'
 
-# Name of database to use
-TM_DBNAME = 'TM_UNINETT'
+# Given an org name, use this URL to link to a CRM/CMDB entry
+TM_CMDB_ORGBYNAME_URL = '{{ tm_cmdb_orgbyname_url }}'

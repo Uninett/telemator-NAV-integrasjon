@@ -10,7 +10,13 @@
     </tr>
     <tr>
         <th>ID</th>
-        <td><a href="https://kind.uninett.no/org/edit_org.html?id={{customer.CustId}}">{{ customer.CustId }}</a></td>
+        <td>
+          {% if cmdb_orgbyid_url %}
+            <a href="{{ cmdb_orgbyid_url }}{{customer.CustId}}">{{ customer.CustId }}</a>
+          {% else %}
+            {{ customer.CustId }}
+          {% endif %}
+        </td>
     </tr>
     <tr>
         <th>Orgnr</th>

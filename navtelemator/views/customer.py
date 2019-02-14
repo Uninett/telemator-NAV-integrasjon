@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from navtelemator import services
+from django.conf import settings
 
 
 def render_customer(request, customerid):
@@ -8,6 +9,7 @@ def render_customer(request, customerid):
                   'telemator/customer_info.html',
                   {
                       'customer': customer,
+                      'cmdb_orgbyid_url': getattr(settings, 'TM_CMDB_ORGBYID_URL', None),
                   }
                   )
 
