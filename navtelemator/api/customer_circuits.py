@@ -15,6 +15,10 @@ def render_customer_circuits(request, customerid):
             customer_circuits["Circuit"] = circuit.Circuit
             customer_circuits["Speed"] = circuit.Speed
             customer_circuits["Reference"] = circuit.Reference
+            customer_circuits["DtOrdered"] = circuit.DtOrdered
+            customer_circuits["DtRdyToUse"] = circuit.DtRdyToUse
+            customer_circuits["DtTakeDown"] = circuit.DtTakeDown
+            customer_circuits["DtShutDown"] = circuit.DtShutDown
             return_list.append(customer_circuits)
         response = JsonResponse(return_list, safe=False)
         response["Access-Control-Allow-Origin"] = "*"
