@@ -20,7 +20,7 @@
 from setuptools import setup
 
 setup(name='nav-contrib-telemator',
-      version='0.2.8dev',
+      version='0.2.12dev',
       description='NAV contrib for Telemator',
       author='Bård Schjander Flugon',
       author_email='bflugon@gmail.com',
